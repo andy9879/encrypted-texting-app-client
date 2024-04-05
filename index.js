@@ -4,6 +4,8 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("node:path");
 
+app.commandLine.appendSwitch("ignore-certificate-errors");
+
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({

@@ -1,7 +1,30 @@
 <script setup>
 const fs = window.electron.fs;
 
-console.log(fs.readFileSync("./index.js", { encoding: "utf8" }));
+// console.log(fs.readFileSync("./index.js", { encoding: "utf8" }));
+
+import io from "socket.io-client";
+
+// Connect to the Socket.IO server with the self-signed certificate
+const socket = io("https://localhost", {});
+
+// Event handler for disconnection
+socket.on("disconnect", () => {
+	console.log("Disconnected from server");
+});
+
+// Function to handle incoming messages from the server
+socket.on("chat message", function (msg) {
+	console.log("Received message:", msg);
+});
+
+// Function to send messages to the server
+function sendMessage(message) {
+	socket.emit("chat message", message);
+}
+
+// Example usage: sending a message to the server
+sendMessage("Hello, server!");
 </script>
 
 <template>
