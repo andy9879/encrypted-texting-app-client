@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+const fs = window.electron.fs;
+
+console.log(fs.readFileSync("./index.js", { encoding: "utf8" }));
+</script>
 
 <template>
 	<header>
