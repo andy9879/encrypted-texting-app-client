@@ -3,27 +3,30 @@ import { ref } from "vue";
 
 // const fs = window.electron.fs;
 
-// // console.log(fs.readFileSync("./index.js", { encoding: "utf8" }));
+import io, { connect } from "socket.io-client";
 
-// import io from "socket.io-client";
+async function connectToServer(url, port) {
+	loadingWheel.value = true;
+	console.log(url);
+	console.log(port);
 
-// // Connect to the Socket.IO server with the self-signed certificate
-// const socket = io("https://localhost", {});
+	//TODO Add error handling
 
-// // Event handler for disconnection
-// socket.on("disconnect", () => {
-// 	console.log("Disconnected from server");
-// });
+	let socket = null;
 
-// // Function to handle incoming messages from the server
-// socket.on("chat message", function (msg) {
-// 	console.log("Received message:", msg);
-// });
+	function connected() {
+		return new Promise((resolve) => {
+			socket = io(url + ":" + port);
+			socket.on("connect", resolve);
+		});
+	}
 
-// // Function to send messages to the server
-// function sendMessage(message) {
-// 	socket.emit("chat message", message);
-// }
+	await connected();
+
+	console.log("Connected to Server");
+
+	return socket;
+}
 
 const loginForm = ref(true);
 
@@ -36,13 +39,58 @@ const loginFormData = ref({
 	rememberMe: false,
 });
 
+const loadingWheel = ref(false);
+
+const displayUserCreated = ref(false);
+
 const formError = ref("");
+async function createAccount() {
+	if (loginFormData.value.username == "") {
+		formError.value = "Username can not be blank";
+		return;
+	}
+
+	if (loginFormData.value.password == "") {
+		formError.value = "Password can not be blank";
+		return;
+	}
+
+	if (
+		new String(loginFormData.value.password).valueOf() !=
+		new String(loginFormData.value.repeatPassword).valueOf()
+	) {
+		formError.value = "Passwords do not match";
+		return;
+	}
+
+	//TODO put socket in store
+
+	let socket = await connectToServer(
+		"https://" + loginFormData.value.address,
+		loginFormData.value.port
+	);
+
+	socket.emit("newAccount", JSON.stringify(loginFormData.value));
+
+	socket.on("usernameExists", () => {
+		loadingWheel.value = false;
+		formError.value = "Username already exists";
+		socket.disconnect();
+	});
+
+	socket.on("userCreated", () => {
+		loadingWheel.value = false;
+		loginForm.value = true;
+		formError.value = "";
+		socket.disconnect();
+	});
+}
+
 function switchForms() {
 	loginForm.value = !loginForm.value;
 }
 
-// Example usage: sending a message to the server
-// sendMessage("Hello, server!");
+// $("#toast").toast();
 </script>
 
 <template>
@@ -57,6 +105,10 @@ function switchForms() {
 	</header>
 
 	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-4 userCreated">Sucssesfuly Created User</div>
+		</div>
+
 		<div class="row justify-content-center">
 			<div class="col-6">
 				<label class="form-label">Server Address</label>
@@ -105,8 +157,24 @@ function switchForms() {
 
 		<div class="row align-items-center justify-content-center">
 			<div class="col-2">
-				<button v-show="loginForm" class="btn btn-primary">Login</button>
-				<button v-show="!loginForm" class="btn btn-primary">Sign Up</button>
+				<button v-show="loginForm && !loadingWheel" class="btn btn-primary">
+					Login
+				</button>
+				<button
+					@click="createAccount()"
+					v-show="!loginForm && !loadingWheel"
+					class="btn btn-primary"
+				>
+					Sign Up
+				</button>
+
+				<div
+					v-show="loadingWheel"
+					class="spinner-border text-primary"
+					role="status"
+				>
+					<span class="sr-only"></span>
+				</div>
 			</div>
 			<div class="col-4">
 				<label style="margin-right: 10px" class="form-check-label"
