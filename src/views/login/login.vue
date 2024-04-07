@@ -97,9 +97,9 @@ function switchForms() {
 	<header>
 		<div class="row justify-content-center">
 			<div class="col-5" style="display: flex; justify-content: center">
-				<button @click="switchForms()" type="submit" class="btn btn-primary">
+				<b-button @click="switchForms()" type="submit">
 					Login / Sign Up
-				</button>
+				</b-button>
 			</div>
 		</div>
 	</header>
@@ -112,36 +112,35 @@ function switchForms() {
 		<div class="row justify-content-center">
 			<div class="col-6">
 				<label class="form-label">Server Address</label>
-				<input v-model="loginFormData.address" type="text" class="form-control" />
+				<b-input v-model="loginFormData.address" type="text"  />
 			</div>
 
 			<div class="col-2">
 				<label class="form-label">Port</label>
-				<input v-model="loginFormData.port" type="number" class="form-control" />
+				<b-input v-model="loginFormData.port" type="number"  />
 			</div>
 		</div>
 
 		<div class="row justify-content-center">
 			<div class="col-8">
 				<label>Username</label>
-				<input v-model="loginFormData.username" type="text" class="form-control" />
+				<b-input v-model="loginFormData.username" type="text" />
 			</div>
 		</div>
 
 		<div class="row justify-content-center">
 			<div class="col-8">
 				<label>Password</label>
-				<input
+				<b-input
 					v-model="loginFormData.password"
 					type="password"
-					class="form-control"
 				/>
 			</div>
 		</div>
 		<div v-show="!loginForm" class="row justify-content-center">
 			<div class="col-8">
 				<label>Repeat Password</label>
-				<input v-model="loginFormData.repeatPassword" type="password" class="form-control"/>
+				<b-input v-model="loginFormData.repeatPassword" type="password"/>
 			</div>
 		</div>
 
@@ -153,12 +152,12 @@ function switchForms() {
 
 		<div class="row align-items-center justify-content-center">
 			<div class="col-2">
-				<button v-show="loginForm && !loadingWheel" class="btn btn-primary">
+				<b-button v-show="loginForm && !loadingWheel">
 					Login
-				</button>
-					<button @click="createAccount()" v-show="!loginForm && !loadingWheel" class="btn btn-primary">
+				</b-button>
+					<b-button @click="createAccount()" v-show="!loginForm && !loadingWheel" >
 					Sign Up
-				</button>
+				</b-button>
 
 				<div v-show="loadingWheel" class="spinner-border text-primary" role="status">
 					<span class="sr-only"></span>

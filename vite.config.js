@@ -5,19 +5,29 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [vue(), vueJsx()],
 	resolve: {
 		alias: {
+			vue: "@vue/compat",
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
 		},
 	},
+	plugins: [
+		vue({
+			template: {
+				compilerOptions: {
+					compatConfig: {
+						MODE: 2,
+					},
+				},
+			},
+		}),
+		vueJsx(),
+	],
 	base: "",
 	css: {
 		preprocessorOptions: {
 			scss: {
 				additionalData: `
-				@import "bootstrap/scss/bootstrap.scss";
-				@import "bootstrap-icons/font/bootstrap-icons.css";
 				@import "@/assets/variables.scss";
 				`,
 			},
