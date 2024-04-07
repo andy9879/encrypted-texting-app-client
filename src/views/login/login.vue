@@ -141,11 +141,7 @@ function switchForms() {
 		<div v-show="!loginForm" class="row justify-content-center">
 			<div class="col-8">
 				<label>Repeat Password</label>
-				<input
-					v-model="loginFormData.repeatPassword"
-					type="password"
-					class="form-control"
-				/>
+				<input v-model="loginFormData.repeatPassword" type="password" class="form-control"/>
 			</div>
 		</div>
 
@@ -160,26 +156,16 @@ function switchForms() {
 				<button v-show="loginForm && !loadingWheel" class="btn btn-primary">
 					Login
 				</button>
-				<button
-					@click="createAccount()"
-					v-show="!loginForm && !loadingWheel"
-					class="btn btn-primary"
-				>
+					<button @click="createAccount()" v-show="!loginForm && !loadingWheel" class="btn btn-primary">
 					Sign Up
 				</button>
 
-				<div
-					v-show="loadingWheel"
-					class="spinner-border text-primary"
-					role="status"
-				>
+				<div v-show="loadingWheel" class="spinner-border text-primary" role="status">
 					<span class="sr-only"></span>
 				</div>
 			</div>
 			<div class="col-4">
-				<label style="margin-right: 10px" class="form-check-label"
-					>Remember me</label
-				>
+				<label style="margin-right: 10px" class="form-check-label">Remember me</label>
 				<input
 					v-model="loginFormData.rememberMe"
 					type="checkbox"
