@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "vite build && electron .",
+		"start": "cd vue-advanced-chat && vite build && cd ../ && vite build && electron .",
 		"dev": "vite",
-		"build": "vite build",
+		"build": "cd vue-advanced-chat && vite build && cd ../ && vite build",
 		"preview": "vite preview",
 		"make": "vite build && electron-forge make"
 	},
@@ -27,6 +27,7 @@
 		"pinia": "^2.1.7",
 		"socket.io-client": "^4.7.5",
 		"vue": "^3.1.0",
+		"vue-advanced-chat": "^2.0.11",
 		"vue-router": "^4.3.0"
 	},
 	"devDependencies": {

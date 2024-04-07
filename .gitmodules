@@ -1,0 +1,3 @@
+[submodule "vue-advanced-chat"]
+	path = vue-advanced-chat
+	url = git@github.com:andy9879/vue-advanced-chat.git
