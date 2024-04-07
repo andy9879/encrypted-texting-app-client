@@ -164,12 +164,10 @@ function switchForms() {
 				</div>
 			</div>
 			<div class="col-4">
-				<label style="margin-right: 10px" class="form-check-label">Remember me</label>
-				<input
+				<label style="margin-right: 10px; display:inline" class="form-check-label">Remember me</label>
+				<b-checkbox
+					style="display: inline;"
 					v-model="loginFormData.rememberMe"
-					type="checkbox"
-					class="form-check-input"
-					id="exampleCheck1"
 				/>
 			</div>
 			<div class="col-2"></div>
