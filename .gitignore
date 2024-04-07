@@ -34,3 +34,5 @@ out/
 .history
 
 certs
+
+*.env

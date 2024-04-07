@@ -3,13 +3,12 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
 const path = require("node:path");
-// const fs = fs.require("fs");
+const { encode } = require("node:punycode");
+require("dotenv").config();
 
-// if(!fs.existssync()){
-// 	fs.writeFileSync(JSON.stringify({}))
-// }
-
-// app.commandLine.appendSwitch("ignore-certificate-errors");
+if (process.env.ignoreCertificate) {
+	app.commandLine.appendSwitch("ignore-certificate-errors");
+}
 
 const createWindow = () => {
 	// Create the browser window.
