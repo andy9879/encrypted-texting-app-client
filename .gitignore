@@ -32,6 +32,5 @@ coverage
 out/
 
 .history
-package-lock.json
 
 certs
