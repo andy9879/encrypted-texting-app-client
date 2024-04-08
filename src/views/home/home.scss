@@ -26,7 +26,7 @@ $serverIconSize: 50px;
 .serverIconScroll {
 	overflow-y: scroll;
 	overflow-x: hidden;
-	height: calc(100vh - $serverIconSize - 10px);
+	height: calc(100vh - $serverIconSize - 20px);
 }
 
 .serverIconScroll::-webkit-scrollbar {
