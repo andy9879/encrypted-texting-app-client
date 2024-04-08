@@ -1,8 +1,17 @@
-.row{
-    margin-bottom: 15px;
-}
-
 header{
     margin-top: 20px;
 }
 
+.serverIcon {
+    border-radius: 100%;
+    width: 100px;
+    padding: 0;
+}
+
+.serverIconRow{
+    justify-content: center;
+}
+
+.removeColPadding{
+    padding: 0;
+}
