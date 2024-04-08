@@ -90,6 +90,18 @@ async function createAccount() {
 	});
 }
 
+async function login() {
+	loadingWheel.value = true;
+	let socket = await connectToServer(
+		"https://" + loginFormData.value.address,
+		loginFormData.value.port
+	);
+
+	socket.emit("login", loginFormData.value);
+
+	loadingWheel.value = false;
+}
+
 function switchForms() {
 	loginForm.value = !loginForm.value;
 }
@@ -151,7 +163,9 @@ function switchForms() {
 
 		<div class="row align-items-center">
 			<div class="col-2">
-				<b-button v-show="loginForm && !loadingWheel"> Login </b-button>
+				<b-button @click="login()" v-show="loginForm && !loadingWheel">
+					Login
+				</b-button>
 				<b-button @click="createAccount()" v-show="!loginForm && !loadingWheel">
 					Sign Up
 				</b-button>

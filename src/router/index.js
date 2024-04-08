@@ -7,8 +7,8 @@ const router = createRouter({
 	routes: [
 		{
 			path: "/",
-			name: "homeView",
-			component: homeView,
+			name: "loginView",
+			component: loginView,
 		},
 		{
 			path: "/about",
