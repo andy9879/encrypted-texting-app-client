@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-
 // const fs = window.electron.fs;
 
 import io, { connect } from "socket.io-client";
+import router from "@/router";
 
 async function connectToServer(url, port) {
 	loadingWheel.value = true;
@@ -29,7 +29,6 @@ async function connectToServer(url, port) {
 }
 
 const loginForm = ref(true);
-
 const loginFormData = ref({
 	username: "",
 	password: "",
@@ -38,13 +37,9 @@ const loginFormData = ref({
 	port: 443,
 	rememberMe: false,
 });
-
 const loadingWheel = ref(false);
-
 const displayUserCreated = ref(false);
-
 const formError = ref("");
-
 const userCreatedMsg = ref(false);
 
 async function createAccount() {
@@ -99,7 +94,17 @@ async function login() {
 
 	socket.emit("login", loginFormData.value);
 
-	loadingWheel.value = false;
+	socket.on("WrongUsernameOrPassword", () => {
+		socket.disconnect();
+		formError.value = "Wrong username or password";
+		loadingWheel.value = false;
+	});
+
+	socket.on("sucsefullyLogedIn", (userData) => {
+		console.log("Logged In");
+
+		router.push("/chat");
+	});
 }
 
 function switchForms() {
