@@ -1,15 +1,26 @@
-.row{
-    margin-bottom: 15px;
+.row {
+	margin-bottom: 15px;
+	margin-left: 0;
+	margin-right: 0;
 }
 
-header{
-    margin-top: 20px;
+header {
+	margin-top: 20px;
 }
 
-.formError{
-    color: $error;
+.formError {
+	color: $error;
 }
 
-.userCreated{
-    color: $sucsses;
+.userCreated {
+	color: $sucsses;
+}
+
+.centerText {
+	text-align: center;
+}
+
+.loginForm {
+	width: 70vw;
+	margin: auto;
 }

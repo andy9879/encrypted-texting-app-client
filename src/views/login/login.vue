@@ -44,6 +44,9 @@ const loadingWheel = ref(false);
 const displayUserCreated = ref(false);
 
 const formError = ref("");
+
+const userCreatedMsg = ref(false);
+
 async function createAccount() {
 	if (loginFormData.value.username == "") {
 		formError.value = "Username can not be blank";
@@ -82,6 +85,7 @@ async function createAccount() {
 		loadingWheel.value = false;
 		loginForm.value = true;
 		formError.value = "";
+		userCreatedMsg.value = true;
 		socket.disconnect();
 	});
 }
@@ -97,80 +101,75 @@ function switchForms() {
 	<header>
 		<div class="row justify-content-center">
 			<div class="col-5" style="display: flex; justify-content: center">
-				<b-button @click="switchForms()" type="submit">
-					Login / Sign Up
-				</b-button>
+				<b-button @click="switchForms()" type="submit"> Login / Sign Up </b-button>
 			</div>
 		</div>
 	</header>
 
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-4 userCreated">Sucssesfuly Created User</div>
+	<div class="loginForm">
+		<div v-show="userCreatedMsg" class="row">
+			<div class="col-12 userCreated centerText">Sucssesfuly Created User</div>
 		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-6">
-				<label class="form-label">Server Address</label>
-				<b-input v-model="loginFormData.address" type="text"  />
-			</div>
-
-			<div class="col-2">
-				<label class="form-label">Port</label>
-				<b-input v-model="loginFormData.port" type="number"  />
-			</div>
-		</div>
-
-		<div class="row justify-content-center">
+		<div class="row">
 			<div class="col-8">
+				<label class="form-label">Server Address</label>
+				<b-input v-model="loginFormData.address" type="text" />
+			</div>
+
+			<div class="col-4">
+				<label class="form-label">Port</label>
+				<b-input v-model="loginFormData.port" type="number" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-12">
 				<label>Username</label>
 				<b-input v-model="loginFormData.username" type="text" />
 			</div>
 		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-8">
+		<div class="row">
+			<div class="col-12">
 				<label>Password</label>
-				<b-input
-					v-model="loginFormData.password"
-					type="password"
-				/>
+				<b-input v-model="loginFormData.password" type="password" />
 			</div>
 		</div>
-		<div v-show="!loginForm" class="row justify-content-center">
-			<div class="col-8">
+		<div v-show="!loginForm" class="row">
+			<div class="col-12">
 				<label>Repeat Password</label>
-				<b-input v-model="loginFormData.repeatPassword" type="password"/>
+				<b-input v-model="loginFormData.repeatPassword" type="password" />
 			</div>
 		</div>
 
-		<div v-show="formError.length > 0" class="row justify-content-center">
-			<div class="col-4 formError">
+		<div v-show="formError.length > 0" class="row">
+			<div class="col-12 formError centerText">
 				{{ formError }}
 			</div>
 		</div>
 
-		<div class="row align-items-center justify-content-center">
+		<div class="row align-items-center">
 			<div class="col-2">
-				<b-button v-show="loginForm && !loadingWheel">
-					Login
-				</b-button>
-					<b-button @click="createAccount()" v-show="!loginForm && !loadingWheel" >
+				<b-button v-show="loginForm && !loadingWheel"> Login </b-button>
+				<b-button @click="createAccount()" v-show="!loginForm && !loadingWheel">
 					Sign Up
 				</b-button>
 
-				<div v-show="loadingWheel" class="spinner-border text-primary" role="status">
+				<div
+					v-show="loadingWheel"
+					class="spinner-border text-primary"
+					role="status"
+				>
 					<span class="sr-only"></span>
 				</div>
 			</div>
-			<div class="col-4">
-				<label style="margin-right: 10px; display:inline" class="form-check-label">Remember me</label>
-				<b-checkbox
-					style="display: inline;"
-					v-model="loginFormData.rememberMe"
-				/>
+			<div class="col-3">
+				<label style="margin-right: 10px; display: inline" class="form-check-label"
+					>Remember me</label
+				>
+				<b-checkbox style="display: inline" v-model="loginFormData.rememberMe" />
 			</div>
-			<div class="col-2"></div>
 		</div>
 	</div>
 </template>
