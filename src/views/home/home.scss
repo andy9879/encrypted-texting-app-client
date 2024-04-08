@@ -1,17 +1,46 @@
-header{
-    margin-top: 20px;
+header {
+	margin-top: 20px;
 }
+
+$serverIconSize: 50px;
 
 .serverIcon {
-    border-radius: 100%;
-    width: 100px;
-    padding: 0;
+	border-radius: 100%;
+	width: $serverIconSize;
+	height: $serverIconSize;
+	padding: 0;
+	margin-bottom: 10px;
 }
 
-.serverIconRow{
-    justify-content: center;
+.serverIconRow {
+	display: flex;
+	justify-content: center;
 }
 
-.removeColPadding{
-    padding: 0;
+.serverIconWrapper {
+	width: 2cm;
+	overflow-x: hidden;
+	margin-top: 10px;
+}
+
+.serverIconScroll {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: calc(100vh - $serverIconSize - 10px);
+}
+
+.serverIconScroll::-webkit-scrollbar {
+	display: none;
+}
+.serverSettingIconWrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.removeColPadding {
+	padding: 0;
+}
+
+.advancedChatWrapper {
+	width: 100wv;
 }

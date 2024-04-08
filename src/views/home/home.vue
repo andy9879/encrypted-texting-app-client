@@ -132,27 +132,30 @@ const roomActions = ref([
 </script>
 
 <template>
-	<div class="container"></div>
+	<div class="" style="margin: 0; display: flex">
+		<div class="serverIconWrapper">
+			<div class="serverSettingIconWrapper">
+				<img class="serverIcon" src="@/assets/testIcon2.jpg" />
+			</div>
 
-	<template>
-		<div class="row">
-			<div class="col-1 removePadding">
-				<div class="row serverIconRow removePadding" v-for="i in 10">
+			<div class="serverIconScroll" style="">
+				<div class="row serverIconRow" v-for="i in 100">
 					<img class="serverIcon" src="@/assets/testIcon.jpg" />
 				</div>
 			</div>
-			<div class="col-10 removePadding">
-				<vue-advanced-chat
-					theme="dark"
-					height="100vh"
-					:current-user-id="currentUserId"
-					:rooms="JSON.stringify(rooms)"
-					:messages="JSON.stringify(messages)"
-					:room-actions="JSON.stringify(roomActions)"
-				/>
-			</div>
 		</div>
-	</template>
+
+		<div class="advancedChatWrapper" style="width: 100vw">
+			<vue-advanced-chat
+				theme="dark"
+				height="100vh"
+				:current-user-id="currentUserId"
+				:rooms="JSON.stringify(rooms)"
+				:messages="JSON.stringify(messages)"
+				:room-actions="JSON.stringify(roomActions)"
+			/>
+		</div>
+	</div>
 </template>
 
 <style scoped>
