@@ -2,7 +2,7 @@
 import { ref } from "vue";
 // const fs = window.electron.fs;
 
-import io, { connect } from "socket.io-client";
+import { socket, socketInit } from "@/assets/socket";
 import router from "@/router";
 
 async function connectToServer(url, port) {
@@ -12,11 +12,10 @@ async function connectToServer(url, port) {
 
 	//TODO Add error handling
 
-	let socket = null;
-
 	function connected() {
 		return new Promise((resolve) => {
-			socket = io(url + ":" + port);
+			socketInit(url, port);
+
 			socket.on("connect", resolve);
 		});
 	}

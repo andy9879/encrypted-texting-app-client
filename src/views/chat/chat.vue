@@ -3,6 +3,8 @@ import { ref } from "vue";
 
 // const fs = window.electron.fs;
 
+import { socket, socketInit } from "@/assets/socket";
+
 import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
