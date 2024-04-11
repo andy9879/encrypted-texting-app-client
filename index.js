@@ -4,10 +4,88 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("node:path");
 const { encode } = require("node:punycode");
+const fs = require("fs");
+
 require("dotenv").config();
 
 if (process.env.ignoreCertificate) {
 	app.commandLine.appendSwitch("ignore-certificate-errors");
+}
+
+let dataPath = null;
+
+if (process.env.localData) {
+	dataPath = __dirname;
+} else {
+	dataPath = app.getPath("userData");
+}
+
+if (!fs.existsSync(dataPath)) {
+	fs.mkdirSync(dataPath);
+}
+
+dataPath = path.join(dataPath, "userData.json");
+
+//TODO Encript user data
+
+let defultData = {
+	servers: [
+		{
+			channels: [
+				{
+					messages: [],
+					channels: "id",
+					safetyKeyPos: 0,
+					users: [
+						{
+							username: "",
+							publicKeyPos: 0,
+							secrets: {
+								receiving: "",
+								sending: "",
+							},
+							id: 0,
+						},
+					],
+					pendingAddingUsers: {},
+				},
+			],
+			users: [
+				{
+					username: "name",
+					usernameHash: "",
+				},
+			],
+		},
+	],
+	contacts: [
+		[
+			{
+				username: "",
+				secrets: {
+					receiving: "",
+					sending: "",
+				},
+				id: 0,
+				safetyKeyPos: 0,
+			},
+		],
+	],
+	pendingMessages: [
+		{
+			username: "",
+			destination: "",
+			id: 0,
+			oKeyNumber: 0,
+			keys: {},
+		},
+	],
+};
+
+if (!fs.existsSync(dataPath)) {
+	fs.writeFileSync(dataPath, JSON.stringify(defultData), {
+		flag: "w",
+	});
 }
 
 const createWindow = () => {
@@ -19,8 +97,6 @@ const createWindow = () => {
 		minWidth: 1200,
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			enableRemoteModule: true,
 		},
 	});
 

@@ -36,3 +36,5 @@ out/
 certs
 
 *.env
+
+userData.json
