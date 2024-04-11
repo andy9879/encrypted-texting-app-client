@@ -3,15 +3,16 @@ import { ref } from "vue";
 
 // const fs = window.electron.fs;
 
-import { socket, socketInit } from "@/assets/socket";
+import { socket, socketInit } from "@/scripts/socket";
 
 import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
+
+import { getUserData } from "@/scripts/manageFiles";
+
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
 
 // import io, { connect } from "socket.io-client";
-
-socket.emit("ping");
 
 async function connectToServer(url, port) {
 	loadingWheel.value = true;

@@ -5,8 +5,8 @@
 
 const { contextBridge, ipcRenderer } = require("electron");
 
-// Expose specific Node.js modules or functions to the renderer process
-contextBridge.exposeInMainWorld("electron", {
-	// Expose methods or properties of the module
-	fs: require("fs"),
+contextBridge.exposeInMainWorld("manageFiles", {
+	getUserData: () => ipcRenderer.invoke("getUserData"),
+	writeUserData: (data) => ipcRenderer.invoke("writeUserData", data),
+	// we can also expose variables, not just functions
 });

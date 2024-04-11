@@ -2,8 +2,63 @@
 import { ref } from "vue";
 // const fs = window.electron.fs;
 
-import { socket, socketInit } from "@/assets/socket";
+import { socket, socketInit } from "@/scripts/socket";
+import { getUserData, writeUserData } from "@/scripts/manageFiles";
 import router from "@/router";
+
+let defultData = {
+	servers: [
+		{
+			channels: [
+				{
+					messages: [],
+					channels: "id",
+					safetyKeyPos: 0,
+					users: [
+						{
+							username: "",
+							publicKeyPos: 0,
+							secrets: {
+								receiving: "",
+								sending: "",
+							},
+							id: 0,
+						},
+					],
+					pendingAddingUsers: {},
+				},
+			],
+			users: [
+				{
+					username: "name",
+					usernameHash: "",
+				},
+			],
+		},
+	],
+	contacts: [
+		[
+			{
+				username: "",
+				secrets: {
+					receiving: "",
+					sending: "",
+				},
+				id: 0,
+				safetyKeyPos: 0,
+			},
+		],
+	],
+	pendingMessages: [
+		{
+			username: "",
+			destination: "",
+			id: 0,
+			oKeyNumber: 0,
+			keys: {},
+		},
+	],
+};
 
 async function connectToServer(url, port) {
 	loadingWheel.value = true;
@@ -80,6 +135,9 @@ async function createAccount() {
 		loginForm.value = true;
 		formError.value = "";
 		userCreatedMsg.value = true;
+
+		writeUserData(defultData);
+
 		socket.disconnect();
 	});
 }

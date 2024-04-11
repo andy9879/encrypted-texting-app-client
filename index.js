@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 const { encode } = require("node:punycode");
 const fs = require("fs");
@@ -28,62 +28,19 @@ dataPath = path.join(dataPath, "userData.json");
 
 //TODO Encript user data
 
-let defultData = {
-	servers: [
-		{
-			channels: [
-				{
-					messages: [],
-					channels: "id",
-					safetyKeyPos: 0,
-					users: [
-						{
-							username: "",
-							publicKeyPos: 0,
-							secrets: {
-								receiving: "",
-								sending: "",
-							},
-							id: 0,
-						},
-					],
-					pendingAddingUsers: {},
-				},
-			],
-			users: [
-				{
-					username: "name",
-					usernameHash: "",
-				},
-			],
-		},
-	],
-	contacts: [
-		[
-			{
-				username: "",
-				secrets: {
-					receiving: "",
-					sending: "",
-				},
-				id: 0,
-				safetyKeyPos: 0,
-			},
-		],
-	],
-	pendingMessages: [
-		{
-			username: "",
-			destination: "",
-			id: 0,
-			oKeyNumber: 0,
-			keys: {},
-		},
-	],
-};
+function getUserData() {
+	if (fs.existsSync(dataPath)) {
+		return fs.readFileSync(dataPath, {
+			encoding: "utf-8",
+			flag: "r",
+		});
+	} else {
+		return null;
+	}
+}
 
-if (!fs.existsSync(dataPath)) {
-	fs.writeFileSync(dataPath, JSON.stringify(defultData), {
+function writeUserData(data) {
+	fs.writeFileSync(dataPath, JSON.stringify(data), {
 		flag: "w",
 	});
 }
@@ -111,6 +68,8 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+	ipcMain.handle("getUserData", getUserData);
+	ipcMain.handle("writeUserData", writeUserData);
 	createWindow();
 
 	app.on("activate", () => {
