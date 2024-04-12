@@ -5,6 +5,12 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 const { encode } = require("node:punycode");
 const fs = require("fs");
+const {
+	createHash,
+	createCipheriv,
+	createDecipheriv,
+	randomFillSync,
+} = require("crypto");
 
 require("dotenv").config();
 
@@ -28,7 +34,7 @@ dataPath = path.join(dataPath, "userData.json");
 
 //TODO Encript user data
 
-function getUserData() {
+function getUserData(hash) {
 	if (fs.existsSync(dataPath)) {
 		return fs.readFileSync(dataPath, {
 			encoding: "utf-8",
@@ -39,8 +45,21 @@ function getUserData() {
 	}
 }
 
-function writeUserData(data) {
-	fs.writeFileSync(dataPath, JSON.stringify(data), {
+function writeUserData(data, hash) {
+	let key = Buffer.from(hash, "hex");
+
+	let iv = Buffer.alloc(16);
+	iv = randomFillSync(iv);
+
+	const cipher = createCipheriv("aes-256-cbc", key, iv);
+
+	let encrypted = cipher.update(JSON.stringify(data), "utf8", "base64");
+
+	encrypted += cipher.final("base64");
+
+	encrypted = iv.toString("base64") + ":" + encrypted;
+
+	fs.writeFileSync(dataPath, encrypted, {
 		flag: "w",
 	});
 }

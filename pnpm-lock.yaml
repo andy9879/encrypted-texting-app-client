@@ -26,6 +26,9 @@ dependencies:
   fs:
     specifier: ^0.0.1-security
     version: 0.0.1-security
+  js-sha256:
+    specifier: ^0.11.0
+    version: 0.11.0
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(vue@3.4.21)
@@ -2510,6 +2513,7 @@ packages:
 
   /function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
+    requiresBuild: true
     dev: true
 
   /galactus@1.0.0:
@@ -2945,6 +2949,10 @@ packages:
 
   /jquery@3.7.1:
     resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
+    dev: false
+
+  /js-sha256@0.11.0:
+    resolution: {integrity: sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==}
     dev: false
 
   /js-tokens@4.0.0:

@@ -3,8 +3,14 @@ import { ref } from "vue";
 // const fs = window.electron.fs;
 
 import { socket, socketInit } from "@/scripts/socket";
-import { getUserData, writeUserData } from "@/scripts/manageFiles";
+import {
+	getUserData,
+	writeUserData,
+	passwdHash,
+	setPasswordHash,
+} from "@/scripts/manageFiles";
 import router from "@/router";
+import sha256 from "js-sha256";
 
 let defultData = {
 	servers: [
@@ -136,7 +142,11 @@ async function createAccount() {
 		formError.value = "";
 		userCreatedMsg.value = true;
 
-		writeUserData(defultData);
+		debugger;
+
+		setPasswordHash(sha256(loginFormData.value.password));
+
+		writeUserData(passwdHash, defultData);
 
 		socket.disconnect();
 	});
