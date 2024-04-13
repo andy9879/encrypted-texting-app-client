@@ -7,7 +7,7 @@ import { socket, socketInit } from "@/scripts/socket";
 
 import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
 
-import { getUserData } from "@/scripts/manageFiles";
+import { getUserData, passwdHash } from "@/scripts/manageFiles";
 
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
@@ -36,6 +36,11 @@ async function connectToServer(url, port) {
 
 	return socket;
 }
+
+(async () => {
+	debugger;
+	console.log(await getUserData(passwdHash));
+})();
 
 const currentUserId = ref("1234");
 const rooms = ref([

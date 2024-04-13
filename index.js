@@ -10,6 +10,7 @@ const {
 	createCipheriv,
 	createDecipheriv,
 	randomFillSync,
+	constants,
 } = require("crypto");
 
 require("dotenv").config();
@@ -32,17 +33,47 @@ if (!fs.existsSync(dataPath)) {
 
 dataPath = path.join(dataPath, "userData.json");
 
-//TODO Encript user data
+//TODO Upgrade Hash
 
 function getUserData(hash) {
-	if (fs.existsSync(dataPath)) {
-		return fs.readFileSync(dataPath, {
-			encoding: "utf-8",
-			flag: "r",
-		});
-	} else {
-		return null;
-	}
+	return new Promise((resolve) => {
+		if (fs.existsSync(dataPath)) {
+			console.log(hash);
+			let key = Buffer.from(hash, "hex");
+
+			let encriptedDataArr = fs
+				.readFileSync(dataPath, {
+					encoding: "utf-8",
+					flag: "r",
+				})
+				.split(":");
+
+			let iv = Buffer.from(encriptedDataArr[0], "base64");
+			let encriptedData = encriptedDataArr[1];
+
+			const decipher = createDecipheriv("aes-256-cbc", key, iv);
+
+			let decrypted = "";
+			encrypted = encrypted.split(":")[1];
+
+			decipher.on("readable", () => {
+				let chunk;
+				while (null !== (chunk = decipher.read())) {
+					decrypted += chunk.toString("utf8");
+				}
+			});
+
+			decipher.on("end", () => {
+				resolve(decrypted);
+				// Prints: some clear text data
+			});
+
+			decipher.write("aes-256-cbc", "base64");
+			decipher.end();
+		} else {
+			return null;
+		}
+	});
 }
 
 function writeUserData(data, hash) {
