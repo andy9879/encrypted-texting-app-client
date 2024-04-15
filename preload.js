@@ -6,11 +6,11 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("manageFiles", {
-	getUserData: (hash) => {
-		return ipcRenderer.invoke("getUserData", hash);
-	},
-	writeUserData: (data, hash) => {
-		ipcRenderer.invoke("writeUserData", data, hash);
-	},
+	getUserData: (hash) => ipcRenderer.invoke("getUserData", hash),
+	writeUserData: (data, hash) => ipcRenderer.invoke("writeUserData", data, hash),
+
 	// we can also expose variables, not just functions
+});
+contextBridge.exposeInMainWorld("manageKeys", {
+	createKeyPair: () => ipcRenderer.invoke("createKeyPair"),
 });

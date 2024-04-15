@@ -13,6 +13,9 @@ const {
 	constants,
 } = require("crypto");
 
+let { secp256k1 } = require("@noble/curves/secp256k1");
+let { utf8ToBytes } = require("@noble/hashes/utils");
+
 require("dotenv").config();
 
 if (process.env.ignoreCertificate) {
@@ -93,6 +96,15 @@ function writeUserData(event, data, hash) {
 	});
 }
 
+function createKeyPair() {
+	let priv = secp256k1.utils.randomPrivateKey();
+	let pub = secp256k1.getPublicKey(priv);
+	return {
+		priv: priv.join(),
+		pub: pub.join(),
+	};
+}
+
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -118,6 +130,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
 	ipcMain.handle("getUserData", getUserData);
 	ipcMain.handle("writeUserData", writeUserData);
+	ipcMain.handle("createKeyPair", createKeyPair);
 	createWindow();
 
 	app.on("activate", () => {

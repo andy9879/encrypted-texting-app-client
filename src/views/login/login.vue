@@ -9,6 +9,9 @@ import {
 	passwdHash,
 	setPasswordHash,
 } from "@/scripts/manageFiles";
+
+import { createKeyPair } from "@/scripts/manageKeys";
+
 import router from "@/router";
 import sha256 from "js-sha256";
 
@@ -60,10 +63,10 @@ let defultData = {
 			username: "",
 			destination: "",
 			id: 0,
-			oKeyNumber: 0,
-			keys: {},
 		},
 	],
+	iK: {},
+	keyBundkes: [],
 };
 
 async function connectToServer(url, port) {
@@ -128,7 +131,17 @@ async function createAccount() {
 		loginFormData.value.port
 	);
 
-	socket.emit("newAccount", JSON.stringify(loginFormData.value));
+	let iK = await createKeyPair();
+
+	defultData.iK = iK;
+
+	socket.emit(
+		"newAccount",
+		JSON.stringify({
+			...loginFormData.value,
+			iK: iK.pub,
+		})
+	);
 
 	socket.on("usernameExists", () => {
 		loadingWheel.value = false;
