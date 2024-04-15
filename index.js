@@ -35,10 +35,9 @@ dataPath = path.join(dataPath, "userData.json");
 
 //TODO Upgrade Hash
 
-function getUserData(hash) {
+function getUserData(event, hash) {
 	return new Promise((resolve) => {
 		if (fs.existsSync(dataPath)) {
-			console.log(hash);
 			let key = Buffer.from(hash, "hex");
 
 			let encriptedDataArr = fs
@@ -49,12 +48,11 @@ function getUserData(hash) {
 				.split(":");
 
 			let iv = Buffer.from(encriptedDataArr[0], "base64");
-			let encriptedData = encriptedDataArr[1];
+			let encrypted = encriptedDataArr[1];
 
 			const decipher = createDecipheriv("aes-256-cbc", key, iv);
 
 			let decrypted = "";
-			encrypted = encrypted.split(":")[1];
 
 			decipher.on("readable", () => {
 				let chunk;
@@ -64,11 +62,11 @@ function getUserData(hash) {
 			});
 
 			decipher.on("end", () => {
-				resolve(decrypted);
+				resolve(JSON.parse(decrypted));
 				// Prints: some clear text data
 			});
 
-			decipher.write("aes-256-cbc", "base64");
+			decipher.write(encrypted, "base64");
 			decipher.end();
 		} else {
 			return null;
@@ -76,7 +74,7 @@ function getUserData(hash) {
 	});
 }
 
-function writeUserData(data, hash) {
+function writeUserData(event, data, hash) {
 	let key = Buffer.from(hash, "hex");
 
 	let iv = Buffer.alloc(16);

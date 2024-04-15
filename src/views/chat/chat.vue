@@ -38,7 +38,6 @@ async function connectToServer(url, port) {
 }
 
 (async () => {
-	debugger;
 	console.log(await getUserData(passwdHash));
 })();
 

@@ -142,11 +142,9 @@ async function createAccount() {
 		formError.value = "";
 		userCreatedMsg.value = true;
 
-		debugger;
-
 		setPasswordHash(sha256(loginFormData.value.password));
 
-		writeUserData(passwdHash, defultData);
+		writeUserData(defultData, passwdHash);
 
 		socket.disconnect();
 	});
