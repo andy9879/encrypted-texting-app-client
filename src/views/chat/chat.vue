@@ -9,10 +9,13 @@ import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs"
 
 import { user } from "@/scripts/manageFiles";
 
+import { checkPreKeyBundles } from "@/scripts/manageKeys";
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
 
 // import io, { connect } from "socket.io-client";
+
+checkPreKeyBundles();
 
 async function connectToServer(url, port) {
 	loadingWheel.value = true;

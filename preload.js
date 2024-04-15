@@ -13,4 +13,5 @@ contextBridge.exposeInMainWorld("manageFiles", {
 });
 contextBridge.exposeInMainWorld("manageKeys", {
 	createKeyPair: () => ipcRenderer.invoke("createKeyPair"),
+	signKey: (pub, priv) => ipcRenderer.invoke("signKey", pub, priv),
 });

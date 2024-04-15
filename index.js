@@ -105,6 +105,18 @@ function createKeyPair() {
 	};
 }
 
+function signKey(event, pub, priv) {
+	let sig = secp256k1.sign(
+		new Uint8Array(pub.split(",")),
+		new Uint8Array(priv.split(","))
+	);
+
+	sig.r = sig.r.toString();
+	sig.s = sig.s.toString();
+
+	return sig;
+}
+
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -131,6 +143,7 @@ app.whenReady().then(() => {
 	ipcMain.handle("getUserData", getUserData);
 	ipcMain.handle("writeUserData", writeUserData);
 	ipcMain.handle("createKeyPair", createKeyPair);
+	ipcMain.handle("signKey", signKey);
 	createWindow();
 
 	app.on("activate", () => {

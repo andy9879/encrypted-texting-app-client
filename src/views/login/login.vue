@@ -61,7 +61,7 @@ let defultData = {
 		},
 	],
 	iK: {},
-	keyBundkes: [],
+	keyBundles: [],
 };
 
 async function connectToServer(url, port) {
