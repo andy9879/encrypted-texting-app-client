@@ -1,15 +1,15 @@
-export let userData = null;
-
-export let passwdHash = null;
-
-export function setPasswordHash(hash) {
-	passwdHash = hash;
-}
-
-export async function getUserData(hash) {
-	userData = await window.manageFiles.getUserData(hash);
-}
-
-export async function writeUserData(data, hash) {
-	await window.manageFiles.writeUserData(data, hash);
-}
+export let user = {
+	passwdHash: "",
+	_data: null,
+	get data() {
+		return this._data;
+	},
+	//TODO make sure data file dosnt go back in time when flooded
+	set data(value) {
+		this._data = value;
+		window.manageFiles.writeUserData(this._data, this.passwdHash);
+	},
+	loadData: async function () {
+		this._data = await window.manageFiles.getUserData(this.passwdHash);
+	},
+};

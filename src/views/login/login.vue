@@ -3,12 +3,7 @@ import { ref } from "vue";
 // const fs = window.electron.fs;
 
 import { socket, socketInit } from "@/scripts/socket";
-import {
-	getUserData,
-	writeUserData,
-	passwdHash,
-	setPasswordHash,
-} from "@/scripts/manageFiles";
+import { user } from "@/scripts/manageFiles";
 
 import { createKeyPair } from "@/scripts/manageKeys";
 
@@ -155,9 +150,9 @@ async function createAccount() {
 		formError.value = "";
 		userCreatedMsg.value = true;
 
-		setPasswordHash(sha256(loginFormData.value.password));
+		user.passwdHash = sha256(loginFormData.value.password);
 
-		writeUserData(defultData, passwdHash);
+		user.data = defultData;
 
 		socket.disconnect();
 	});
