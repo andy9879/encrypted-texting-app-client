@@ -8,3 +8,4 @@ Environment Variables
 
 ignoreCertificate
 localData
+NoEncryptData

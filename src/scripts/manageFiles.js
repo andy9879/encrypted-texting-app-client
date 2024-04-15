@@ -12,4 +12,7 @@ export let user = {
 	loadData: async function () {
 		this._data = await window.manageFiles.getUserData(this.passwdHash);
 	},
+	writeData: async function () {
+		window.manageFiles.writeUserData(this._data, this.passwdHash);
+	},
 };

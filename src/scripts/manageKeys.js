@@ -31,6 +31,7 @@ export async function checkPreKeyBundles() {
 	}
 
 	user.data.keyBundles.push(keyBundle);
+	user.writeData();
 
 	let pubKeyBundle = JSON.parse(JSON.stringify(keyBundle));
 

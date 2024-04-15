@@ -173,7 +173,9 @@ async function login() {
 		loadingWheel.value = false;
 	});
 
-	socket.on("sucsefullyLogedIn", (userData) => {
+	socket.on("sucsefullyLogedIn", async (userData) => {
+		user.passwdHash = sha256(loginFormData.value.password);
+		await user.loadData();
 		console.log("Logged In");
 
 		router.push("/chat");

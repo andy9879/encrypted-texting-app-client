@@ -41,6 +41,13 @@ dataPath = path.join(dataPath, "userData.json");
 function getUserData(event, hash) {
 	return new Promise((resolve) => {
 		if (fs.existsSync(dataPath)) {
+			if (process.env.NoEncryptData) {
+				resolve(
+					JSON.parse(fs.readFileSync(dataPath, { flag: "r", encoding: "utf-8" }))
+				);
+				return;
+			}
+
 			let key = Buffer.from(hash, "hex");
 
 			let encriptedDataArr = fs
@@ -91,9 +98,13 @@ function writeUserData(event, data, hash) {
 
 	encrypted = iv.toString("base64") + ":" + encrypted;
 
-	fs.writeFileSync(dataPath, encrypted, {
-		flag: "w",
-	});
+	fs.writeFileSync(
+		dataPath,
+		!process.env.NoEncryptData ? encrypted : JSON.stringify(data),
+		{
+			flag: "w",
+		}
+	);
 }
 
 function createKeyPair() {
