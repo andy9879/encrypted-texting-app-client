@@ -143,7 +143,7 @@ const roomActions = ref([
 	<div class="" style="margin: 0; display: flex">
 		<div class="serverIconWrapper">
 			<div class="serverSettingIconWrapper">
-				<img class="serverIcon" src="@/assets/testIcon2.jpg" />
+				<b-icon class="serverIcon" icon="person-fill"></b-icon>
 			</div>
 
 			<div class="serverIconScroll" style="">
