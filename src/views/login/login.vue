@@ -178,7 +178,7 @@ async function login() {
 		await user.loadData();
 		console.log("Logged In");
 
-		router.push("/chat");
+		router.push("/chat/servers");
 	});
 }
 

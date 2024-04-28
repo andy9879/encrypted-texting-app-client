@@ -9,6 +9,11 @@ import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs"
 
 import { user } from "@/scripts/manageFiles";
 
+import { useRoute } from "vue-router";
+const route = useRoute();
+
+console.log(route.params.page);
+
 import { checkPreKeyBundles } from "@/scripts/manageKeys";
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
