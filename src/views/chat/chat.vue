@@ -8,11 +8,16 @@ import { socket, socketInit } from "@/scripts/socket";
 import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
 
 import { user } from "@/scripts/manageFiles";
+import router from "@/router";
+
+import addFriend from "@/components/addFriend/addFriend.vue";
 
 import { useRoute } from "vue-router";
 const route = useRoute();
 
-console.log(route.params.page);
+let page = ref(route.params.page);
+
+let showAddFriend = ref(false);
 
 import { checkPreKeyBundles } from "@/scripts/manageKeys";
 //https://www.npmjs.com/package/vue-advanced-chat
@@ -141,24 +146,53 @@ const roomActions = ref([
 	{ name: "deleteRoom", title: "Delete Room" },
 ]);
 
+function changeAddFriend(value) {
+	showAddFriend.value = value;
+}
+
 // $("#toast").toast();
 </script>
 
 <template>
 	<div class="" style="margin: 0; display: flex">
+		{{ showAddFriend }}
 		<div class="serverIconWrapper">
 			<div class="serverSettingIconWrapper">
-				<b-icon class="serverIcon" icon="person-fill"></b-icon>
+				<b-icon
+					v-show="page == 'servers'"
+					@click="page = 'friends'"
+					class="serverIcon"
+					icon="person-fill"
+				></b-icon>
+
+				<!-- TODO change this icon -->
+				<b-icon
+					v-show="page == 'friends'"
+					@click="page = 'servers'"
+					class="serverIcon"
+					icon="server"
+				></b-icon>
 			</div>
 
 			<div class="serverIconScroll" style="">
+				<div class="row serverIconRow">
+					<b-icon
+						v-show="page == 'friends'"
+						class="serverIcon"
+						icon="person-plus-fill"
+						@click="changeAddFriend(true)"
+					></b-icon>
+				</div>
+
 				<div class="row serverIconRow" v-for="i in 100">
 					<img class="serverIcon" src="@/assets/testIcon.jpg" />
 				</div>
 			</div>
 		</div>
 
-		<div class="advancedChatWrapper" style="width: 100vw">
+		<addFriend v-show="showAddFriend"></addFriend>
+
+		<div v-show="!showAddFriend" class="advancedChatWrapper" style="width: 100vw">
 			<vue-advanced-chat
 				theme="dark"
 				height="100vh"
