@@ -91,7 +91,7 @@ const loginFormData = ref({
 	username: "",
 	password: "",
 	repeatPassword: "",
-	address: "",
+	address: "localhost",
 	port: 443,
 	rememberMe: false,
 });
