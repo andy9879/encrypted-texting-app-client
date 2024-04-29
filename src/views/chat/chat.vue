@@ -146,8 +146,8 @@ const roomActions = ref([
 	{ name: "deleteRoom", title: "Delete Room" },
 ]);
 
-function changeAddFriend(value) {
-	showAddFriend.value = value;
+function toggleAddFriend() {
+	showAddFriend.value = !showAddFriend.value;
 }
 
 // $("#toast").toast();
@@ -155,7 +155,6 @@ function changeAddFriend(value) {
 
 <template>
 	<div class="" style="margin: 0; display: flex">
-		{{ showAddFriend }}
 		<div class="serverIconWrapper">
 			<div class="serverSettingIconWrapper">
 				<b-icon
@@ -180,7 +179,7 @@ function changeAddFriend(value) {
 						v-show="page == 'friends'"
 						class="serverIcon"
 						icon="person-plus-fill"
-						@click="changeAddFriend(true)"
+						@click="toggleAddFriend()"
 					></b-icon>
 				</div>
 
@@ -190,7 +189,10 @@ function changeAddFriend(value) {
 			</div>
 		</div>
 
-		<addFriend v-show="showAddFriend"></addFriend>
+		<addFriend
+			style="width: 100%; height: 100vh"
+			v-show="showAddFriend"
+		></addFriend>
 
 		<div v-show="!showAddFriend" class="advancedChatWrapper" style="width: 100vw">
 			<vue-advanced-chat

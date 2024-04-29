@@ -1,0 +1,27 @@
+.content{
+    margin: 0;
+    padding-top: 10px;
+    padding-left: 20px;
+    background-color: #181a1b;
+}
+
+$resultIconSize: 50px;
+
+.resultIcon {
+	border-radius: 100%;
+	width: $resultIconSize;
+	height: $resultIconSize;
+	padding: 0;
+}
+
+.result{
+    margin-top: 20px;
+}
+
+.resultText{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+
