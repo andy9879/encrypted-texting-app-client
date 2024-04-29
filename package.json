@@ -20,7 +20,7 @@
 		"@noble/curves": "^1.4.0",
 		"@noble/hashes": "^1.4.0",
 		"@vue/compat": "^3.1.0",
-		"bootstrap": "^5.3.3",
+		"bootstrap": "4",
 		"bootstrap-icons": "^1.11.3",
 		"bootstrap-vue": "^2.23.1",
 		"crypto": "^1.0.1",

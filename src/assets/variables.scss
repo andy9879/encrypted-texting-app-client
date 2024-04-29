@@ -2,4 +2,7 @@ $background:#131415;
 $text-color:#cccbcb;
 $error:#d71d1d;
 $sucsses:#2bbe06;
-;
+
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'bootstrap-vue/src/index.scss';
+
