@@ -3,6 +3,7 @@
     padding-top: 10px;
     padding-left: 20px;
     background-color: #181a1b;
+    height: 100%;
 }
 
 $resultIconSize: 50px;
@@ -24,4 +25,14 @@ $resultIconSize: 50px;
     flex-wrap: wrap;
 }
 
+.buttonWrapper{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.button{
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+}
 
