@@ -206,32 +206,40 @@ function switchForms() {
 		<div class="row">
 			<div class="col-8">
 				<label class="form-label">Server Address</label>
-				<b-input v-model="loginFormData.address" type="text" />
+				<b-input class="textInput" v-model="loginFormData.address" type="text" />
 			</div>
 
 			<div class="col-4">
 				<label class="form-label">Port</label>
-				<b-input v-model="loginFormData.port" type="number" />
+				<b-input class="textInput" v-model="loginFormData.port" type="number" />
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-12">
 				<label>Username</label>
-				<b-input v-model="loginFormData.username" type="text" />
+				<b-input class="textInput" v-model="loginFormData.username" type="text" />
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-12">
 				<label>Password</label>
-				<b-input v-model="loginFormData.password" type="password" />
+				<b-input
+					class="textInput"
+					v-model="loginFormData.password"
+					type="password"
+				/>
 			</div>
 		</div>
 		<div v-show="!loginForm" class="row">
 			<div class="col-12">
 				<label>Repeat Password</label>
-				<b-input v-model="loginFormData.repeatPassword" type="password" />
+				<b-input
+					class="textInput"
+					v-model="loginFormData.repeatPassword"
+					type="password"
+				/>
 			</div>
 		</div>
 
