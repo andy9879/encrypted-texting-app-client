@@ -5,4 +5,13 @@ body {
 }
 
 
+.textInput{
+	border-color: #3e3d3d !important;
+    background-color: #3e3d3d !important;
+    color: white !important;
+}
 
+.form-control:focus {
+    border-color: #16131a !important; 
+    box-shadow: 0 0 0 0.2rem #16131a !important;
+}
