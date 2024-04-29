@@ -24,7 +24,11 @@ $navBarHeight : 40px;
 	background-color: #0c0c0c;
 }
 
-.advanceChat{
+.page{
 	height: calc(100vh - $navBarHeight);
+}
+
+.page > div {
+	height: 100%;
 }
 
