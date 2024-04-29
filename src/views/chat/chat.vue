@@ -17,8 +17,6 @@ const route = useRoute();
 
 let page = ref(route.params.page);
 
-let showAddFriend = ref(false);
-
 import { checkPreKeyBundles } from "@/scripts/manageKeys";
 //https://www.npmjs.com/package/vue-advanced-chat
 register();
@@ -146,64 +144,37 @@ const roomActions = ref([
 	{ name: "deleteRoom", title: "Delete Room" },
 ]);
 
-function toggleAddFriend() {
-	showAddFriend.value = !showAddFriend.value;
-}
-
 // $("#toast").toast();
 </script>
 
 <template>
-	<div class="" style="margin: 0; display: flex">
-		<div class="serverIconWrapper">
-			<div class="serverSettingIconWrapper">
-				<b-icon
-					v-show="page == 'servers'"
-					@click="page = 'friends'"
-					class="serverIcon"
-					icon="person-fill"
-				></b-icon>
-
-				<!-- TODO change this icon -->
-				<b-icon
-					v-show="page == 'friends'"
-					@click="page = 'servers'"
-					class="serverIcon"
-					icon="server"
-				></b-icon>
-			</div>
-
-			<div class="serverIconScroll" style="">
-				<div class="row serverIconRow">
-					<b-icon
-						v-show="page == 'friends'"
-						class="serverIcon"
-						icon="person-plus-fill"
-						@click="toggleAddFriend()"
-					></b-icon>
-				</div>
-
-				<div class="row serverIconRow" v-for="i in 100">
-					<img class="serverIcon" src="@/assets/testIcon.jpg" />
-				</div>
-			</div>
+	<div class="navBar">
+		<div class="navItem" :class="{ navItemSelected: page == 'servers' }">
+			Servers
 		</div>
-
-		<addFriend
-			style="width: 100%; height: 100vh"
-			v-show="showAddFriend"
-		></addFriend>
-
-		<div v-show="!showAddFriend" class="advancedChatWrapper" style="width: 100vw">
-			<vue-advanced-chat
-				theme="dark"
-				height="100vh"
-				:current-user-id="currentUserId"
-				:rooms="JSON.stringify(rooms)"
-				:messages="JSON.stringify(messages)"
-				:room-actions="JSON.stringify(roomActions)"
-			/>
+		<div class="navItem" :class="{ navItemSelected: page == 'friends' }">
+			Friends
 		</div>
+		<div class="navItem" :class="{ navItemSelected: page == 'addFriend' }">
+			Add Friend
+		</div>
+		<div
+			class="navItem navItemSettings"
+			:class="{ navItemSelected: page == 'settings' }"
+		>
+			<b-icon icon="gear-fill" height="20px" width="20px"></b-icon>
+		</div>
+	</div>
+	<div class="advanceChat">
+		<vue-advanced-chat
+			class="advanceChat"
+			theme="dark"
+			height="100%"
+			:current-user-id="currentUserId"
+			:rooms="JSON.stringify(rooms)"
+			:messages="JSON.stringify(messages)"
+			:room-actions="JSON.stringify(roomActions)"
+		/>
 	</div>
 </template>
 
