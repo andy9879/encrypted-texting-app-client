@@ -8,6 +8,8 @@ import { socket, socketInit } from "@/scripts/socket";
 import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
 
 import { user } from "@/scripts/manageFiles";
+import { UserData as globalUserData } from "@/scripts/userData";
+
 import router from "@/router";
 
 import addFriend from "@/components/addFriend/addFriend.vue";

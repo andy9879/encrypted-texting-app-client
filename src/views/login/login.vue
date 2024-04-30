@@ -9,6 +9,7 @@ import { createKeyPair } from "@/scripts/manageKeys";
 
 import router from "@/router";
 import sha256 from "js-sha256";
+import { UserData as globalUserData } from "@/scripts/userData";
 
 let defultData = {
 	servers: [
@@ -176,6 +177,7 @@ async function login() {
 	socket.on("sucsefullyLogedIn", async (userData) => {
 		user.passwdHash = sha256(loginFormData.value.password);
 		await user.loadData();
+		globalUserData.data = userData;
 		console.log("Logged In");
 
 		router.push("/chat/servers");
