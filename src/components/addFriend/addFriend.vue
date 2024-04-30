@@ -15,6 +15,7 @@ function searchForUser() {
 			showNoUserFound.value = false;
 			UserToAdd.value = res;
 		} else {
+			UserToAdd.value = {};
 			showNoUserFound.value = true;
 		}
 	});
@@ -40,7 +41,7 @@ function searchForUser() {
 				</div>
 				<div class="row">
 					<div class="col">
-						<div v-show="showNoUserFound">User not found</div>
+						<div class="UserNotFound" v-show="showNoUserFound">User not found</div>
 						<div v-if="UserToAdd?.found" class="row userToAdd">
 							<div col-4>
 								<img
