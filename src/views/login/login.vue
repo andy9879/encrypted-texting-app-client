@@ -101,6 +101,8 @@ const displayUserCreated = ref(false);
 const formError = ref("");
 const userCreatedMsg = ref(false);
 
+//TODO Check if server is online
+
 async function createAccount() {
 	if (loginFormData.value.username == "") {
 		formError.value = "Username can not be blank";
