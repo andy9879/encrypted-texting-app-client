@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Notification } = require("electron");
 const path = require("node:path");
 const { encode } = require("node:punycode");
 const fs = require("fs");
@@ -128,6 +128,14 @@ function signKey(event, pub, priv) {
 	return sig;
 }
 
+function createNotification(event, title, body) {
+	console.log("notification");
+	new Notification({
+		title: title,
+		body: body,
+	}).show();
+}
+
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -155,6 +163,7 @@ app.whenReady().then(() => {
 	ipcMain.handle("writeUserData", writeUserData);
 	ipcMain.handle("createKeyPair", createKeyPair);
 	ipcMain.handle("signKey", signKey);
+	ipcMain.handle("createNotification", createNotification);
 	createWindow();
 
 	app.on("activate", () => {

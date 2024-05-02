@@ -15,3 +15,8 @@ contextBridge.exposeInMainWorld("manageKeys", {
 	createKeyPair: () => ipcRenderer.invoke("createKeyPair"),
 	signKey: (pub, priv) => ipcRenderer.invoke("signKey", pub, priv),
 });
+
+contextBridge.exposeInMainWorld("notification", {
+	createNotification: (title, body) =>
+		ipcRenderer.invoke("createNotification", title, body),
+});
