@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { socket } from "@/scripts/socket";
+import { UserData as globalUserData } from "@/scripts/userData";
 
 const searchQurry = ref("");
 
@@ -8,9 +9,11 @@ const showNoUserFound = ref(false);
 const UserToAdd = ref({});
 
 //TODO Add min username size to search
+//TODO make no user found look better
 function searchForUser() {
 	socket.emit("findUser", searchQurry.value);
 	socket.on("UserFound", (res) => {
+		console.log(UserToAdd);
 		if (res.found) {
 			showNoUserFound.value = false;
 			UserToAdd.value = res;
@@ -19,6 +22,10 @@ function searchForUser() {
 			showNoUserFound.value = true;
 		}
 	});
+}
+
+function sendFriendRequest(username) {
+	socket.emit("FriendRequest", username);
 }
 </script>
 
@@ -53,7 +60,12 @@ function searchForUser() {
 							</div>
 							<div class="col-7">{{ UserToAdd.username }}</div>
 							<div class="col-1">
-								<b-icon class="userToAddAddIcon" icon="person-plus-fill"></b-icon>
+								<b-icon
+									@click="sendFriendRequest(UserToAdd.username)"
+									sendFriendRequest
+									class="userToAddAddIcon"
+									icon="person-plus-fill"
+								></b-icon>
 							</div>
 						</div>
 					</div>
