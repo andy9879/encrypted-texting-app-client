@@ -14,7 +14,7 @@ import { useServerDataStore } from "@/stores/serverData";
 
 let serverData = useServerDataStore();
 
-let defultData = {
+let defaultData = {
 	servers: [
 		{
 			channels: [
@@ -134,7 +134,7 @@ async function createAccount() {
 
 	let iK = await createKeyPair();
 
-	defultData.iK = iK;
+	defaultData.iK = iK;
 
 	socket.emit(
 		"newAccount",
@@ -158,7 +158,7 @@ async function createAccount() {
 
 		user.passwdHash = sha256(loginFormData.value.password);
 
-		user.data = defultData;
+		user.data = defaultData;
 
 		socket.disconnect();
 	});
