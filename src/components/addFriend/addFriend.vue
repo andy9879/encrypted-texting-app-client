@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { socket } from "@/scripts/socket";
-import { UserData as globalUserData } from "@/scripts/userData";
+
+import { useServerDataStore } from "@/stores/serverData";
+
+let serverData = useServerDataStore();
 
 const searchQurry = ref("");
 
