@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "cd vue-advanced-chat && vite build && cd ../ && vite build && electron .",
+		"start": "vite build && electron .",
 		"dev": "vite",
-		"build": "cd vue-advanced-chat && vite build && cd ../ && vite build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"make": "vite build && electron-forge make"
 	},

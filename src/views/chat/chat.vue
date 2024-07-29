@@ -5,8 +5,6 @@ import { ref } from "vue";
 
 import { socket, socketInit } from "@/scripts/socket";
 
-import { register } from "../../../vue-advanced-chat/dist/vue-advanced-chat.mjs";
-
 import { user } from "@/scripts/manageFiles";
 
 import router from "@/router";
@@ -19,8 +17,6 @@ const route = useRoute();
 let page = ref(route.params.page);
 
 import { checkPreKeyBundles } from "@/scripts/manageKeys";
-//https://www.npmjs.com/package/vue-advanced-chat
-register();
 
 // import io, { connect } from "socket.io-client";
 
