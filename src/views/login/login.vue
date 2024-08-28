@@ -2,7 +2,7 @@
 import { ref } from "vue";
 // const fs = window.electron.fs;
 
-import { socket, socketInit } from "@/scripts/socket";
+import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
 import { user } from "@/scripts/manageFiles";
 
 import { createKeyPair } from "@/scripts/manageKeys";
@@ -80,6 +80,8 @@ async function connectToServer(url, port) {
 			socketInit(url, port);
 
 			socket.on("connect", resolve);
+
+			socketGlobalListeners();
 		});
 	}
 

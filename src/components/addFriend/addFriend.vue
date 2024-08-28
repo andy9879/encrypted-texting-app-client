@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import { socket } from "@/scripts/socket";
+import { socket, socketGlobalListeners } from "@/scripts/socket";
+
+socketGlobalListeners();
 
 import { useServerDataStore } from "@/stores/serverData";
 
