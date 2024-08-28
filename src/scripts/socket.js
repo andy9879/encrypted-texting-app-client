@@ -12,12 +12,9 @@ export function socketGlobalListeners() {
 	let serverData = useServerDataStore();
 	let socket = socketInstance;
 
-	socket.on("friendRequest", (req) => {
-		console.log("Received Friend Request");
-		serverData.friendRequests["incoming"].push({
-			username: req.username,
-			profilePicture: req.profilePicture,
-		});
+	socket.on("friendRequestUpdate", (req) => {
+		console.log("Received Friend Request Update");
+		serverData.friendRequests = req;
 	});
 }
 
