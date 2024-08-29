@@ -13,6 +13,8 @@ const searchQurry = ref("");
 const showNoUserFound = ref(false);
 const UserToAdd = ref({});
 
+//TODO style overflow scroll bar for friend requests
+
 //TODO Add min username size to search
 //TODO make no user found look better
 function searchForUser() {
@@ -67,9 +69,9 @@ function sendFriendRequest(username) {
 							<div class="col-1">
 								<b-icon
 									@click="sendFriendRequest(UserToAdd.username)"
-									sendFriendRequest
-									class="userToAddAddIcon"
 									icon="person-plus-fill"
+									class="addControlIcon"
+									scale="2"
 								></b-icon>
 							</div>
 						</div>
@@ -84,9 +86,10 @@ function sendFriendRequest(username) {
 						<div class="row">
 							<div class="col-2"></div>
 							<div class="col-6">Username</div>
-							<div class="col-4">Status</div>
+							<div class="col-2">Status</div>
+							<div class="col-2"></div>
 						</div>
-						<div>
+						<div class="requestListWrapper">
 							<div
 								v-for="req in serverData.friendRequests.outgoing"
 								:key="req.username"
@@ -102,26 +105,40 @@ function sendFriendRequest(username) {
 										{{ req.username }}
 									</div>
 
-									<div class="col-4">Requested</div>
+									<div class="col-2">Requested</div>
+									<div class="col-2">
+										<b-icon
+											style="margin-right: 0.3cm"
+											class="addControlIcon"
+											scale="2"
+											icon="check"
+										></b-icon>
+										<b-icon scale="2" class="addControlIcon" icon="x"></b-icon>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div
-							v-for="req in serverData.friendRequests.incoming"
-							:key="req.username"
-						>
-							<div class="row userToAdd">
-								<div class="col-2">
-									<img
-										class="userToAddIcon"
-										:src="'data:image/png;base64,' + req.profilePicture"
-									/>
-								</div>
-								<div class="col-6">
-									{{ req.username }}
-								</div>
 
-								<div class="col-4">Pending</div>
+							<div
+								v-for="req in serverData.friendRequests.incoming"
+								:key="req.username"
+							>
+								<div class="row userToAdd">
+									<div class="col-2">
+										<img
+											class="userToAddIcon"
+											:src="'data:image/png;base64,' + req.profilePicture"
+										/>
+									</div>
+									<div class="col-6">
+										{{ req.username }}
+									</div>
+
+									<div class="col-2">Pending</div>
+
+									<div class="col-2">
+										<b-icon scale="2" class="addControlIcon" icon="x"></b-icon>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
