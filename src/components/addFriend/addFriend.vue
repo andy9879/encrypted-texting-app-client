@@ -17,11 +17,13 @@ const UserToAdd = ref({});
 //TODO make no user found look better
 function searchForUser() {
 	socket.emit("findUser", searchQurry.value);
-	socket.on("UserFound", (res) => {
-		console.log(UserToAdd);
+	socket.on("UserFound", async (res) => {
 		if (res.found) {
 			showNoUserFound.value = false;
 			UserToAdd.value = res;
+			UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
+				UserToAdd.value.username
+			);
 		} else {
 			UserToAdd.value = {};
 			showNoUserFound.value = true;

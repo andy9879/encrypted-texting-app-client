@@ -187,6 +187,13 @@ async function login() {
 		serverData.profilePicture = userData.profilePicture;
 		serverData.friendRequests.incoming = userData.friendRequests.incoming;
 		serverData.friendRequests.outgoing = userData.friendRequests.outgoing;
+		for (let type in serverData.friendRequests) {
+			for (let request of serverData.friendRequests[type]) {
+				request.profilePicture = await serverData.otherUserProfilePicture(
+					request.username
+				);
+			}
+		}
 		serverData.incomingMessages = userData.incomingMessages;
 
 		console.log("Logged In");
