@@ -28,6 +28,11 @@ export function socketGlobalListeners() {
 
 		serverData.friendRequests = req;
 	});
+
+	socket.on("updateFriends", async (friends) => {
+		serverData.friends = friends;
+		console.log("Updated Friends");
+	});
 }
 
 export { socketInstance as socket };

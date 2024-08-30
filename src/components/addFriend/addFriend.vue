@@ -17,6 +17,9 @@ const UserToAdd = ref({});
 
 //TODO Add min username size to search
 //TODO make no user found look better
+//TODO Add Scroll bar for multiple search results for users
+//TODO Add popups for sending, denying , and accepting friend requests
+
 function searchForUser() {
 	socket.emit("findUser", searchQurry.value);
 	socket.on("UserFound", async (res) => {
@@ -35,6 +38,10 @@ function searchForUser() {
 
 function sendFriendRequest(username) {
 	socket.emit("FriendRequest", username);
+}
+
+function acceptFriendRequest(username) {
+	socket.emit("acceptFriendRequest", username);
 }
 </script>
 
@@ -112,6 +119,7 @@ function sendFriendRequest(username) {
 											class="addControlIcon"
 											scale="2"
 											icon="check"
+											@click="acceptFriendRequest(req.username)"
 										></b-icon>
 										<b-icon scale="2" class="addControlIcon" icon="x"></b-icon>
 									</div>
