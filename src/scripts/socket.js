@@ -2,6 +2,8 @@ import { io } from "socket.io-client";
 
 import { useServerDataStore } from "@/stores/serverData";
 
+import { user } from "@/scripts/manageFiles";
+
 let socketInstance = null;
 
 let serverUrl = null;
@@ -29,8 +31,22 @@ export function socketGlobalListeners() {
 		serverData.friendRequests = req;
 	});
 
+	//TODO add some way to reset friend to allow a ik change with a warning or something
 	socket.on("updateFriends", async (friends) => {
 		serverData.friends = friends;
+
+		friends.forEach((friend) => {
+			if (
+				user.data.friends.findIndex(
+					(clientFriend) => clientFriend.username == friend.username
+				) < 0
+			) {
+				user.data.friends.push(friend);
+			}
+		});
+
+		user.writeData();
+
 		console.log("Updated Friends");
 	});
 }

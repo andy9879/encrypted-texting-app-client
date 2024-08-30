@@ -64,6 +64,7 @@ let defaultData = {
 			id: 0,
 		},
 	],
+	friends: [],
 	iK: {},
 	keyBundles: [],
 };
