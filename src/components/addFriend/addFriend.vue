@@ -43,6 +43,10 @@ function sendFriendRequest(username) {
 function acceptFriendRequest(username) {
 	socket.emit("acceptFriendRequest", username);
 }
+
+function cancelFriendRequest(username) {
+	socket.emit("cancelFriendRequest", username);
+}
 </script>
 
 <template>
@@ -121,7 +125,12 @@ function acceptFriendRequest(username) {
 											icon="check"
 											@click="acceptFriendRequest(req.username)"
 										></b-icon>
-										<b-icon scale="2" class="addControlIcon" icon="x"></b-icon>
+										<b-icon
+											@click="cancelFriendRequest(req.username)"
+											scale="2"
+											class="addControlIcon"
+											icon="x"
+										></b-icon>
 									</div>
 								</div>
 							</div>
@@ -144,7 +153,12 @@ function acceptFriendRequest(username) {
 									<div class="col-2">Pending</div>
 
 									<div class="col-2">
-										<b-icon scale="2" class="addControlIcon" icon="x"></b-icon>
+										<b-icon
+											@click="cancelFriendRequest(req.username)"
+											scale="2"
+											class="addControlIcon"
+											icon="x"
+										></b-icon>
 									</div>
 								</div>
 							</div>
