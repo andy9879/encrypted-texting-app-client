@@ -15,4 +15,7 @@ export let user = {
 	writeData: async function () {
 		window.manageFiles.writeUserData(this._data, this.passwdHash);
 	},
+	changeUsername: async function (username) {
+		await window.manageFiles.changeUsername(username);
+	},
 };

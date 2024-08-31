@@ -153,11 +153,13 @@ async function createAccount() {
 		socket.disconnect();
 	});
 
-	socket.on("userCreated", () => {
+	socket.on("userCreated", async () => {
 		loadingWheel.value = false;
 		loginForm.value = true;
 		formError.value = "";
 		userCreatedMsg.value = true;
+
+		await user.changeUsername(loginFormData.value.username);
 
 		user.passwdHash = sha256(loginFormData.value.password);
 
@@ -183,6 +185,8 @@ async function login() {
 	});
 
 	socket.on("sucsefullyLogedIn", async (userData) => {
+		//TODO make better hash
+		await user.changeUsername(loginFormData.value.username);
 		user.passwdHash = sha256(loginFormData.value.password);
 		await user.loadData();
 		serverData.profilePicture = userData.profilePicture;

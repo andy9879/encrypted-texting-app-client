@@ -25,7 +25,7 @@ if (process.env.ignoreCertificate) {
 let dataPath = null;
 
 if (process.env.localData) {
-	dataPath = __dirname;
+	dataPath = path.join(__dirname, "userData");
 } else {
 	dataPath = app.getPath("userData");
 }
@@ -107,6 +107,14 @@ function writeUserData(event, data, hash) {
 	);
 }
 
+function changeUsername(event, username) {
+	dataPath =
+		dataPath.replaceAll(/(-[^\/]*?)?\.json/gi, "") +
+		"-" +
+		username.replaceAll("/", "") +
+		".json";
+}
+
 function createKeyPair() {
 	let priv = secp256k1.utils.randomPrivateKey();
 	let pub = secp256k1.getPublicKey(priv);
@@ -162,6 +170,7 @@ app.whenReady().then(() => {
 	ipcMain.handle("getUserData", getUserData);
 	ipcMain.handle("writeUserData", writeUserData);
 	ipcMain.handle("createKeyPair", createKeyPair);
+	ipcMain.handle("changeUsername", changeUsername);
 	ipcMain.handle("signKey", signKey);
 	ipcMain.handle("createNotification", createNotification);
 	createWindow();
