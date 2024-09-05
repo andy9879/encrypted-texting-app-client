@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from "vue";
 // const fs = window.electron.fs;
+import { useClientDataStore } from "@/stores/clientData";
+
+let clientData = useClientDataStore();
 
 import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
-import { user } from "@/scripts/manageFiles";
 
 import { createKeyPair } from "@/scripts/manageKeys";
 
@@ -154,16 +156,18 @@ async function createAccount() {
 	});
 
 	socket.on("userCreated", async () => {
+		//TODO Make a loading wheel or something tell data is done writing
 		loadingWheel.value = false;
 		loginForm.value = true;
 		formError.value = "";
 		userCreatedMsg.value = true;
 
-		await user.changeUsername(loginFormData.value.username);
+		await clientData.data.changeUsername(loginFormData.value.username);
 
-		user.passwdHash = sha256(loginFormData.value.password);
+		clientData.data.passwdHash = sha256(loginFormData.value.password);
 
-		user.data = defaultData;
+		clientData.data = defaultData;
+		clientData.writeData();
 
 		socket.disconnect();
 	});
@@ -186,9 +190,9 @@ async function login() {
 
 	socket.on("sucsefullyLogedIn", async (userData) => {
 		//TODO make better hash
-		await user.changeUsername(loginFormData.value.username);
-		user.passwdHash = sha256(loginFormData.value.password);
-		await user.loadData();
+		await clientData.data.changeUsername(loginFormData.value.username);
+		clientData.data.passwdHash = sha256(loginFormData.value.password);
+		await clientData.data.loadData();
 		serverData.profilePicture = userData.profilePicture;
 		serverData.friendRequests.incoming = userData.friendRequests.incoming;
 		serverData.friendRequests.outgoing = userData.friendRequests.outgoing;

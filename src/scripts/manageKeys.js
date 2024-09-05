@@ -1,5 +1,6 @@
-import { user } from "./manageFiles";
 import { socket } from "./socket";
+import { useClientDataStore } from "@/stores/clientData";
+let clientData = useClientDataStore();
 
 export async function createKeyPair() {
 	return await window.manageKeys.createKeyPair();
@@ -7,9 +8,8 @@ export async function createKeyPair() {
 
 export async function checkPreKeyBundles() {
 	let ammountOfOneTimeKeys = 0;
-	debugger;
 
-	user.data.keyBundles.forEach((bundle) => {
+	clientData.data.keyBundles.forEach((bundle) => {
 		ammountOfOneTimeKeys += bundle.ok.length;
 	});
 
@@ -30,8 +30,8 @@ export async function checkPreKeyBundles() {
 		keyBundle.ok.push(key);
 	}
 
-	user.data.keyBundles.push(keyBundle);
-	user.writeData();
+	clientData.data.keyBundles.push(keyBundle);
+	clientData.writeData();
 
 	let pubKeyBundle = JSON.parse(JSON.stringify(keyBundle));
 

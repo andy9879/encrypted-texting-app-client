@@ -5,8 +5,6 @@ import { ref } from "vue";
 
 import { socket, socketInit } from "@/scripts/socket";
 
-import { user } from "@/scripts/manageFiles";
-
 import router from "@/router";
 
 import addFriend from "@/components/addFriend/addFriend.vue";

@@ -1,8 +1,10 @@
 import { io } from "socket.io-client";
 
 import { useServerDataStore } from "@/stores/serverData";
+let serverData = useServerDataStore();
 
-import { user } from "@/scripts/manageFiles";
+import { useClientDataStore } from "@/stores/clientData";
+let clientData = useClientDataStore();
 
 let socketInstance = null;
 
@@ -14,7 +16,6 @@ export function socketInit(url, port) {
 }
 
 export function socketGlobalListeners() {
-	let serverData = useServerDataStore();
 	let socket = socketInstance;
 
 	socket.on("friendRequestUpdate", async (req) => {
@@ -37,15 +38,15 @@ export function socketGlobalListeners() {
 
 		friends.forEach((friend) => {
 			if (
-				user.data.friends.findIndex(
+				clientData.data.friends.findIndex(
 					(clientFriend) => clientFriend.username == friend.username
 				) < 0
 			) {
-				user.data.friends.push(friend);
+				clientData.data.friends.push(friend);
 			}
 		});
 
-		user.writeData();
+		clientData.writeData();
 
 		console.log("Updated Friends");
 	});
