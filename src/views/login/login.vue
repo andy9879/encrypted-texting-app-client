@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from "vue";
 // const fs = window.electron.fs;
+
+import { useServerDataStore } from "@/stores/serverData";
+
+let serverData = useServerDataStore();
+
 import { useClientDataStore } from "@/stores/clientData";
 
 let clientData = useClientDataStore();
@@ -11,65 +16,6 @@ import { createKeyPair } from "@/scripts/manageKeys";
 
 import router from "@/router";
 import sha256 from "js-sha256";
-
-import { useServerDataStore } from "@/stores/serverData";
-
-let serverData = useServerDataStore();
-
-let defaultData = {
-	servers: [
-		{
-			channels: [
-				{
-					messages: [],
-					channels: "id",
-					safetyKeyPos: 0,
-					users: [
-						{
-							username: "",
-							publicKeyPos: 0,
-							secrets: {
-								receiving: "",
-								sending: "",
-							},
-							id: 0,
-						},
-					],
-					pendingAddingUsers: {},
-				},
-			],
-			users: [
-				{
-					username: "name",
-					usernameHash: "",
-				},
-			],
-		},
-	],
-	contacts: [
-		[
-			{
-				username: "",
-				secrets: {
-					receiving: "",
-					sending: "",
-				},
-				id: 0,
-				safetyKeyPos: 0,
-			},
-		],
-	],
-	pendingMessages: [
-		{
-			username: "",
-			destination: "",
-			id: 0,
-		},
-	],
-	friends: [],
-	iK: {},
-	keyBundles: [],
-};
 
 async function connectToServer(url, port) {
 	loadingWheel.value = true;
@@ -139,7 +85,7 @@ async function createAccount() {
 
 	let iK = await createKeyPair();
 
-	defaultData.iK = iK;
+	clientData.data.iK = iK;
 
 	socket.emit(
 		"newAccount",
@@ -162,11 +108,10 @@ async function createAccount() {
 		formError.value = "";
 		userCreatedMsg.value = true;
 
-		await clientData.data.changeUsername(loginFormData.value.username);
+		await clientData.changeUsername(loginFormData.value.username);
 
 		clientData.data.passwdHash = sha256(loginFormData.value.password);
 
-		clientData.data = defaultData;
 		clientData.writeData();
 
 		socket.disconnect();
