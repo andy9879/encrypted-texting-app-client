@@ -1,10 +1,6 @@
 import { io } from "socket.io-client";
 
-import { useServerDataStore } from "@/stores/serverData";
-let serverData = useServerDataStore();
-
 import { useClientDataStore } from "@/stores/clientData";
-let clientData = useClientDataStore();
 
 let socketInstance = null;
 
@@ -16,6 +12,7 @@ export function socketInit(url, port) {
 }
 
 export function socketGlobalListeners() {
+	let clientData = useClientDataStore();
 	let socket = socketInstance;
 
 	socket.on("friendRequestUpdate", async (req) => {

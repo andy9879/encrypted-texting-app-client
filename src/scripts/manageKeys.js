@@ -1,12 +1,13 @@
 import { socket } from "./socket";
 import { useClientDataStore } from "@/stores/clientData";
-let clientData = useClientDataStore();
 
 export async function createKeyPair() {
 	return await window.manageKeys.createKeyPair();
 }
 
 export async function checkPreKeyBundles() {
+	let clientData = useClientDataStore();
+
 	let ammountOfOneTimeKeys = 0;
 
 	clientData.data.keyBundles.forEach((bundle) => {
