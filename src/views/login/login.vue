@@ -136,7 +136,7 @@ async function login() {
 	socket.on("sucsefullyLogedIn", async (userData) => {
 		//TODO make better hash
 		await clientData.changeUsername(loginFormData.value.username);
-		clientData.data.passwdHash = sha256(loginFormData.value.password);
+		clientData.passwdHash = sha256(loginFormData.value.password);
 		await clientData.loadData();
 		serverData.profilePicture = userData.profilePicture;
 		serverData.friendRequests.incoming = userData.friendRequests.incoming;
