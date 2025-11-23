@@ -7,9 +7,9 @@ import { socket, socketInit } from "@/scripts/socket";
 
 import router from "@/router";
 
-import addFriend from "@/components/addFriend/addFriend.vue";
-import friends from "@/components/friends/friends.vue";
-import servers from "@/components/servers/servers.vue";
+import addFriend from "@/components/chat-pages/addFriend/addFriend.vue";
+import friends from "@/components/chat-pages/friends/friends.vue";
+import servers from "@/components/chat-pages/servers/servers.vue";
 
 import { useRoute } from "vue-router";
 const route = useRoute();
