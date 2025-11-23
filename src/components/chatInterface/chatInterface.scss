@@ -8,16 +8,19 @@
     border-color: black;
     border-style: solid;
     border-width: 0;
-    border-right-width: 2px;
+    border-right-width: 1px;
     display: inline;
     height: 100%;
     padding-top: 10px;
 }
 
 .room{
-    text-align: center;
-    background-color: $secondary;
+    margin-left: 12px;
     margin-bottom: 5px;
+}
+
+.room-selected{
+    text-decoration: underline;
 }
 
 .chat{
@@ -33,4 +36,17 @@
 .messages{
     width: 100%;
     
+}
+
+.text-input-wrapper{
+    display: inline-block;
+    width: calc(100% - 2.5cm );
+}
+
+.chat-input{
+    display: flex;
+    border-style: solid;
+    border-color: black;
+    border-width: 0;
+    border-top-width: 1px;
 }
