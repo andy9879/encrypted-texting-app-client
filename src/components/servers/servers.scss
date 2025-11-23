@@ -7,8 +7,18 @@ $resultIconSize: 50px;
 
 .server-col{
     background-color: $tertiary;
+    padding: 0;
+    padding-top: 15px;
+    width: 2cm;
 }
 
 .page-wrapper{
     height: 100%;
+    display: flex;
+    justify-items: left;
+}
+
+.server-icon-wrapper{
+    display: flex;
+    justify-content: center;
 }

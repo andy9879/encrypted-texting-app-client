@@ -11,11 +11,13 @@ let serverData = useServerDataStore();
 
 <template>
 	<div class="content">
-		<div class="row">
-			<div class="col-1 server-col">
-				<img width="48px" src="@/assets/testIcon.jpg" />
+		<div class="page-wrapper">
+			<div class="server-col">
+				<div class="server-icon-wrapper">
+					<img width="48px" src="@/assets/testIcon.jpg" />
+				</div>
 			</div>
-			<div class="col-11">server chats</div>
+			<div>server chats</div>
 		</div>
 	</div>
 </template>
