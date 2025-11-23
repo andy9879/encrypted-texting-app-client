@@ -9,6 +9,7 @@ import router from "@/router";
 
 import addFriend from "@/components/addFriend/addFriend.vue";
 import friends from "@/components/friends/friends.vue";
+import servers from "@/components/servers/servers.vue";
 
 import { useRoute } from "vue-router";
 const route = useRoute();
@@ -53,7 +54,11 @@ function changePage(newPage) {
 
 <template>
 	<div class="navBar">
-		<div class="navItem" :class="{ navItemSelected: page == 'servers' }">
+		<div
+			@click="changePage('servers')"
+			class="navItem"
+			:class="{ navItemSelected: page == 'servers' }"
+		>
 			Servers
 		</div>
 		<div
@@ -84,6 +89,9 @@ function changePage(newPage) {
 		</div>
 		<div v-show="page == 'friends'">
 			<friends></friends>
+		</div>
+		<div v-show="page == 'servers'">
+			<servers></servers>
 		</div>
 	</div>
 </template>

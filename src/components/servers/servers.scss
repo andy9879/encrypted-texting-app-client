@@ -1,0 +1,73 @@
+.content{
+    margin: 0;
+    padding-top: 10px;
+    padding-left: 20px;
+    background-color: #181a1b;
+    height: 100%;
+}
+
+$resultIconSize: 50px;
+
+.resultIcon {
+	border-radius: 100%;
+	width: $resultIconSize;
+	height: $resultIconSize;
+	padding: 0;
+}
+
+.result{
+    margin-top: 20px;
+}
+
+.resultText{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.buttonWrapper{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.button{
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+}
+
+.userToAdd{
+    margin-top: 15px;
+    margin-left: 0;
+    padding: 5px;
+}
+
+.userToAdd > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.userToAddIcon{
+    border-radius: 100%;
+    border: 4px sold black ;
+    width: 50px;
+    height: 50px;
+}
+
+.UserNotFound{
+    color:$error;
+    margin-top: 10px;
+}
+
+.addControlIcon{
+    cursor: pointer;
+}
+
+.requestListWrapper{
+    margin: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 80vh;
+    
+}
