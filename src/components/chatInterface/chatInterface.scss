@@ -1,0 +1,36 @@
+.chat-wrapper{
+    display: flex;
+    justify-content: left;
+}
+
+.rooms{
+    width:5cm;
+    border-color: black;
+    border-style: solid;
+    border-width: 0;
+    border-right-width: 2px;
+    display: inline;
+    height: 100%;
+    padding-top: 10px;
+}
+
+.room{
+    text-align: center;
+    background-color: $secondary;
+    margin-bottom: 5px;
+}
+
+.chat{
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.messages{
+    width: 100%;
+    
+}

@@ -19,9 +19,8 @@ socketGlobalListeners();
 					<img width="48px" src="@/assets/testIcon.jpg" />
 				</div>
 			</div>
-			<div>
-				<chat-interface></chat-interface>
-			</div>
+
+			<chat-interface style="width: 100%; height: 100%"></chat-interface>
 		</div>
 	</div>
 </template>
