@@ -16,6 +16,7 @@ const {
 let { secp256k1 } = require("@noble/curves/secp256k1");
 let { utf8ToBytes } = require("@noble/hashes/utils");
 
+//TODO make dotenv files only included in building
 require("dotenv").config();
 
 if (process.env.ignoreCertificate) {
@@ -43,7 +44,7 @@ function getUserData(event, hash) {
 		if (fs.existsSync(dataPath)) {
 			if (process.env.NoEncryptData) {
 				resolve(
-					JSON.parse(fs.readFileSync(dataPath, { flag: "r", encoding: "utf-8" }))
+					JSON.parse(fs.readFileSync(dataPath, { flag: "r", encoding: "utf-8" })),
 				);
 				return;
 			}
@@ -103,7 +104,7 @@ function writeUserData(event, data, hash) {
 		!process.env.NoEncryptData ? encrypted : JSON.stringify(data),
 		{
 			flag: "w",
-		}
+		},
 	);
 }
 
@@ -127,7 +128,7 @@ function createKeyPair() {
 function signKey(event, pub, priv) {
 	let sig = secp256k1.sign(
 		new Uint8Array(pub.split(",")),
-		new Uint8Array(priv.split(","))
+		new Uint8Array(priv.split(",")),
 	);
 
 	sig.r = sig.r.toString();
