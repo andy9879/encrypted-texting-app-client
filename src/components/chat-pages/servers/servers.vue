@@ -1,22 +1,14 @@
 <script setup>
 import { ref } from "vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
-import { register } from "vue-advanced-chat";
 import { useServerDataStore } from "@/stores/serverData";
-register();
+import { useClientDataStore } from "@/stores/clientData";
+
+import chatInterface from "@/components/chatInterface/chatInterface.vue";
+
+let clientData = useClientDataStore();
 
 socketGlobalListeners();
-
-let serverData = useServerDataStore();
-
-currentUserId: "1234";
-let rooms = ref([]);
-let messages = ref([]);
-let roomActions = ref([
-	{ name: "inviteUser", title: "Invite User" },
-	{ name: "removeUser", title: "Remove User" },
-	{ name: "deleteRoom", title: "Delete Room" },
-]);
 </script>
 
 <template>
@@ -27,14 +19,8 @@ let roomActions = ref([
 					<img width="48px" src="@/assets/testIcon.jpg" />
 				</div>
 			</div>
-			<div></div>
 			<div>
-				<vue-advanced-chat
-					:current-user-id="currentUserId"
-					:rooms="JSON.stringify(rooms)"
-					:messages="JSON.stringify(messages)"
-					:room-actions="JSON.stringify(roomActions)"
-				/>
+				<chat-interface></chat-interface>
 			</div>
 		</div>
 	</div>
