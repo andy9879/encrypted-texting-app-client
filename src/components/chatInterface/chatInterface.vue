@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import chatInterfaceInput from "../chatInterfaceInput/chatInterfaceInput.vue";
 </script>
 
 <template>
@@ -13,12 +14,7 @@ import { ref } from "vue";
 				<div class="message">hello world</div>
 			</div>
 			<div class="chat-input">
-				<span class="text-input-wrapper">
-					<b-input></b-input>
-				</span>
-				<span style="margin-left: 5px">
-					<b-button>Send</b-button>
-				</span>
+				<chatInterfaceInput />
 			</div>
 		</div>
 	</div>
