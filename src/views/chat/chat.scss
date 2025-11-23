@@ -2,6 +2,7 @@ $navBarHeight : 40px;
 
 .navBar{
 	height:$navBarHeight;
+	background-color: $secondary;
 	
 }
 
@@ -21,11 +22,12 @@ $navBarHeight : 40px;
 }
 
 .navItemSelected{
-	background-color: #0c0c0c;
+	background-color: $primary;
 }
 
 .page{
 	height: calc(100vh - $navBarHeight);
+	background-color: $background;
 }
 
 .page > div {

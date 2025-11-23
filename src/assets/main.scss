@@ -8,7 +8,7 @@ body {
 .textInput{
 	border-color: #3e3d3d !important;
     background-color: #3e3d3d !important;
-    color: white !important;
+    color: $text-color !important;
 }
 
 .form-control:focus {

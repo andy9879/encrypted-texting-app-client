@@ -1,13 +1,14 @@
 .content{
     margin: 0;
-    padding-top: 10px;
-    padding-left: 20px;
-    background-color: $background;
     height: 100%;
 }
 
 $resultIconSize: 50px;
 
 .server-col{
-    background-color: #343535;
+    background-color: $tertiary;
+}
+
+.page-wrapper{
+    height: 100%;
 }
