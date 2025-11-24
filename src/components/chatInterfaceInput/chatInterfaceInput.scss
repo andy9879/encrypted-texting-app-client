@@ -1,5 +1,37 @@
-input[type="text"], textarea {
+.editorWrapper {
+  border: 1px solid $secondary;
+  border-radius: 8px;
+  background-color: $tertiary;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  padding: 2px 0 2px 0;
+  justify-content: space-between;
+}
 
-  background-color : transparent; 
+#editor {
+  max-height: 2.25cm;
+  overflow-y: auto;
+  margin-right: 15px;
+  width: calc(100% - 2.5cm);
+  border: none;
+}
 
+#editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+#editor::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#editor::-webkit-scrollbar-thumb {
+  background-color: $primary;
+  border-radius: 10px;
+  // border: 3px solid #ffffff;
+}
+
+.editorIcon {
+  margin-right: 10px;
+  cursor: pointer;
 }

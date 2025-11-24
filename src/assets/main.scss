@@ -1,17 +1,19 @@
+@import 'primeicons/primeicons.css';
+
 body {
-	background-color: $background;
-	color: $text-color;
-	overflow: hidden;
+    background-color: $background;
+    color: $text-color;
+    overflow: hidden;
 }
 
 
-.textInput{
-	border-color: #3e3d3d !important;
+.textInput {
+    border-color: #3e3d3d !important;
     background-color: #3e3d3d !important;
     color: $text-color !important;
 }
 
 .form-control:focus {
-    border-color: #16131a !important; 
+    border-color: #16131a !important;
     box-shadow: 0 0 0 0.2rem #16131a !important;
 }
