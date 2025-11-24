@@ -6,7 +6,8 @@ onMounted(() => {
 	const quill = new Quill("#editor", {
 		theme: "snow",
 		modules: {
-			toolbar: toolbar.value, // important
+			// Equivalent to { toolbar: { container: '#toolbar' }}
+			toolbar: "#toolbar",
 		},
 	});
 });
