@@ -131,10 +131,10 @@ function signKey(event, pub, priv) {
 		new Uint8Array(priv.split(",")),
 	);
 
-	sig.r = sig.r.toString();
-	sig.s = sig.s.toString();
-
-	return sig;
+	return {
+		r: sig.r.toString(),
+		s: sig.s.toString(),
+	};
 }
 
 function createNotification(event, title, body) {
