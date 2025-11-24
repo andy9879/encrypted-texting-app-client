@@ -109,9 +109,10 @@ function writeUserData(event, data, hash) {
 }
 
 function changeUsername(event, username) {
+	//TODO make sure special chars are not allowed in user names
 	dataPath =
-		dataPath.replaceAll(/(-[^\/]*?)?\.json/gi, "") +
-		"-" +
+		dataPath.replaceAll(/[^\\\/]*?\.json/gi, "") +
+		"userData-" +
 		username.replaceAll("/", "") +
 		".json";
 }
