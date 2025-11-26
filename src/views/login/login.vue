@@ -11,6 +11,7 @@ import { useClientDataStore } from "@/stores/clientData";
 let clientData = useClientDataStore();
 
 import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
+import * as serverApi from "@/scripts/serverApi";
 
 import { createKeyPair } from "@/scripts/manageKeys";
 
@@ -78,9 +79,11 @@ async function createAccount() {
 
 	//TODO put socket in store
 
+	serverApi.url = loginFormData.value.address;
+
 	let socket = await connectToServer(
 		"https://" + loginFormData.value.address,
-		loginFormData.value.port
+		loginFormData.value.port,
 	);
 
 	let iK = await createKeyPair();
@@ -92,7 +95,7 @@ async function createAccount() {
 		JSON.stringify({
 			...loginFormData.value,
 			iK: iK.pub,
-		})
+		}),
 	);
 
 	socket.on("usernameExists", () => {
@@ -122,7 +125,7 @@ async function login() {
 	loadingWheel.value = true;
 	let socket = await connectToServer(
 		"https://" + loginFormData.value.address,
-		loginFormData.value.port
+		loginFormData.value.port,
 	);
 
 	socket.emit("login", loginFormData.value);
@@ -144,7 +147,7 @@ async function login() {
 		for (let type in serverData.friendRequests) {
 			for (let request of serverData.friendRequests[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username
+					request.username,
 				);
 			}
 		}
@@ -160,6 +163,12 @@ function switchForms() {
 	loginForm.value = !loginForm.value;
 }
 
+async function test() {
+	serverApi.url = loginFormData.value.address;
+	serverApi.port = loginFormData.value.port;
+	serverApi.createAccount();
+}
+
 // $("#toast").toast();
 </script>
 
@@ -171,6 +180,8 @@ function switchForms() {
 			</div>
 		</div>
 	</header>
+
+	<button @click="test()">test</button>
 
 	<div class="loginForm">
 		<div v-show="userCreatedMsg" class="row">

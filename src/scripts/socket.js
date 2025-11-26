@@ -6,8 +6,6 @@ import { useServerDataStore } from "@/stores/serverData";
 
 let socketInstance = null;
 
-let serverUrl = null;
-
 export function socketInit(url, port) {
 	socketInstance = io(url + ":" + port);
 	serverUrl = url + ":" + port;
@@ -24,7 +22,7 @@ export function socketGlobalListeners() {
 		for (let type in req) {
 			for (let request of req[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username
+					request.username,
 				);
 			}
 		}
@@ -39,7 +37,7 @@ export function socketGlobalListeners() {
 		friends.forEach((friend) => {
 			if (
 				clientData.data.friends.findIndex(
-					(clientFriend) => clientFriend.username == friend.username
+					(clientFriend) => clientFriend.username == friend.username,
 				) < 0
 			) {
 				clientData.data.friends.push(friend);
@@ -53,5 +51,3 @@ export function socketGlobalListeners() {
 }
 
 export { socketInstance as socket };
-
-export { serverUrl as url };

@@ -1,6 +1,6 @@
 // stores/counter.js
 import { defineStore } from "pinia";
-import { url } from "@/scripts/socket";
+import { getUserProfilePic } from "@/scripts/serverApi";
 
 export const useServerDataStore = defineStore("ServerDataStore", {
 	state: () => ({
@@ -15,8 +15,7 @@ export const useServerDataStore = defineStore("ServerDataStore", {
 	actions: {
 		async otherUserProfilePicture(username) {
 			if (this.otherUsersProfilePictures[username] == undefined) {
-				let res = await fetch(`${url}/profilePicture/${username}/`);
-				let picture = res.text();
+				let picture = await getUserProfilePic(username);
 				this.otherUsersProfilePictures[username] = picture;
 				return picture;
 			} else {
