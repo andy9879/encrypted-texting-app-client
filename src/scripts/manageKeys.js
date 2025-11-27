@@ -1,4 +1,4 @@
-import { socket } from "./socket";
+import { addKeyBundle } from "./serverApi";
 import { useClientDataStore } from "@/stores/clientData";
 
 export async function createKeyPair() {
@@ -8,13 +8,13 @@ export async function createKeyPair() {
 export async function checkPreKeyBundles() {
 	let clientData = useClientDataStore();
 
-	let ammountOfOneTimeKeys = 0;
+	let amountOfOneTimeKeys = 0;
 
 	clientData.data.keyBundles.forEach((bundle) => {
-		ammountOfOneTimeKeys += bundle.ok.length;
+		amountOfOneTimeKeys += bundle.ok.length;
 	});
 
-	if (ammountOfOneTimeKeys > 10000) return;
+	if (amountOfOneTimeKeys > 10000) return;
 
 	let keyBundle = {
 		sk: await window.manageKeys.createKeyPair(),
@@ -23,10 +23,10 @@ export async function checkPreKeyBundles() {
 
 	keyBundle.sig = await window.manageKeys.signKey(
 		keyBundle.sk.pub,
-		keyBundle.sk.priv
+		keyBundle.sk.priv,
 	);
 
-	for (let i = 0; i < 1000; i++) {
+	for (let i = 0; i < 200; i++) {
 		let key = await window.manageKeys.createKeyPair();
 		keyBundle.ok.push(key);
 	}
@@ -43,5 +43,5 @@ export async function checkPreKeyBundles() {
 		return key;
 	});
 
-	socket.emit("addKeyBundle", pubKeyBundle);
+	addKeyBundle(pubKeyBundle);
 }

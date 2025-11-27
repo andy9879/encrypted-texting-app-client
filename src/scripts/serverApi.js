@@ -52,3 +52,15 @@ export async function login(data) {
 		method: "POST",
 	});
 }
+
+export async function addKeyBundle(bundle) {
+	let serverData = useServerDataStore();
+	return await fetch(`https://${serverUrl}:${serverPort}/account/addKeyBundle`, {
+		headers: {
+			"Content-Type": "application/json",
+			authorization: `Bearer ${serverData.jwt}`,
+		},
+		body: JSON.stringify({ bundle }),
+		method: "POST",
+	});
+}
