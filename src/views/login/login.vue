@@ -33,7 +33,7 @@ async function connectToServer() {
 
 			socket.on("connect", resolve);
 
-			socketGlobalListeners();
+			//socketGlobalListeners();
 		});
 	}
 

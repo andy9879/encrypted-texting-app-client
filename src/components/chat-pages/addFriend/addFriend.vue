@@ -2,8 +2,6 @@
 import { ref } from "vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
 
-socketGlobalListeners();
-
 import { useServerDataStore } from "@/stores/serverData";
 
 let serverData = useServerDataStore();
@@ -27,7 +25,7 @@ function searchForUser() {
 			showNoUserFound.value = false;
 			UserToAdd.value = res;
 			UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
-				UserToAdd.value.username
+				UserToAdd.value.username,
 			);
 		} else {
 			UserToAdd.value = {};
