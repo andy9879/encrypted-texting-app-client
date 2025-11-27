@@ -1,6 +1,7 @@
 // stores/counter.js
 import { defineStore } from "pinia";
 import { getUserProfilePic } from "@/scripts/serverApi";
+import getStream from "get-stream";
 
 export const useServerDataStore = defineStore("ServerDataStore", {
 	state: () => ({
@@ -17,7 +18,8 @@ export const useServerDataStore = defineStore("ServerDataStore", {
 	actions: {
 		async otherUserProfilePicture(username) {
 			if (this.otherUsersProfilePictures[username] == undefined) {
-				let picture = await getUserProfilePic(username);
+				let stream = await getUserProfilePic(username);
+				let picture = await getStream(stream);
 				this.otherUsersProfilePictures[username] = picture;
 				return picture;
 			} else {

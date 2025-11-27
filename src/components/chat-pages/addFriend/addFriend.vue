@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
 
 import { useServerDataStore } from "@/stores/serverData";
+import { findUser } from "@/scripts/serverApi";
 
 let serverData = useServerDataStore();
 
@@ -18,20 +19,19 @@ const UserToAdd = ref({});
 //TODO Add Scroll bar for multiple search results for users
 //TODO Add popups for sending, denying , and accepting friend requests
 
-function searchForUser() {
-	socket.emit("findUser", searchQurry.value);
-	socket.on("UserFound", async (res) => {
-		if (res.found) {
-			showNoUserFound.value = false;
-			UserToAdd.value = res;
-			UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
-				UserToAdd.value.username,
-			);
-		} else {
-			UserToAdd.value = {};
-			showNoUserFound.value = true;
-		}
-	});
+async function searchForUser() {
+	let res = await findUser(searchQurry.value);
+
+	if (res.found) {
+		showNoUserFound.value = false;
+		UserToAdd.value = res;
+		UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
+			res.username,
+		);
+	} else {
+		UserToAdd.value = {};
+		showNoUserFound.value = true;
+	}
 }
 
 function sendFriendRequest(username) {

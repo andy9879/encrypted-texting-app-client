@@ -6,14 +6,23 @@ export { serverPort as port };
 
 import { useServerDataStore } from "@/stores/serverData";
 
+function createUrl() {
+	return `https://${serverUrl}:${serverPort}`;
+}
+
+function authHeader() {
+	let serverData = useServerDataStore();
+	return { authorization: `Bearer ${serverData.jwt}` };
+}
+
 export async function refreshToken() {
 	let serverData = useServerDataStore();
 
 	return await (
-		await fetch(`https://${serverUrl}:${serverPort}/account/refreshJwt`, {
+		await fetch(`${createUrl()}/account/refreshJwt`, {
 			headers: {
 				"Content-Type": "application/json",
-				authorization: `Bearer ${serverData.jwt}`,
+				...authHeader(),
 			},
 			body: JSON.stringify({
 				refreshToken: serverData.refreshToken,
@@ -24,27 +33,22 @@ export async function refreshToken() {
 }
 
 export async function getUserProfilePic(username) {
-	return await fetch(
-		`https://${serverUrl}:${port}/profilePicture/${username}/`,
-	).text();
+	let res = await fetch(`${createUrl()}/users/profilePicture/${username}/`);
+	return res.body;
 }
 
 export async function createAccount(data) {
-	console.log(`https://${serverUrl}:${serverPort}/account/createAccount`);
-	return await fetch(
-		`https://${serverUrl}:${serverPort}/account/createAccount`,
-		{
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-			method: "POST",
+	return await fetch(`${createUrl()}/account/createAccount`, {
+		headers: {
+			"Content-Type": "application/json",
 		},
-	);
+		body: JSON.stringify(data),
+		method: "POST",
+	});
 }
 
 export async function login(data) {
-	return await fetch(`https://${serverUrl}:${serverPort}/account/login`, {
+	return await fetch(`${createUrl()}/account/login`, {
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -54,13 +58,23 @@ export async function login(data) {
 }
 
 export async function addKeyBundle(bundle) {
-	let serverData = useServerDataStore();
-	return await fetch(`https://${serverUrl}:${serverPort}/account/addKeyBundle`, {
+	return await fetch(`${createUrl()}/account/addKeyBundle`, {
 		headers: {
 			"Content-Type": "application/json",
-			authorization: `Bearer ${serverData.jwt}`,
+			...authHeader(),
 		},
 		body: JSON.stringify({ bundle }),
 		method: "POST",
 	});
+}
+
+export async function findUser(username) {
+	return await (
+		await fetch(`${createUrl()}/users/findUser/${username}`, {
+			headers: {
+				...authHeader(),
+			},
+			method: "GET",
+		})
+	).json();
 }
