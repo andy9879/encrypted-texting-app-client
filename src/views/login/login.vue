@@ -18,7 +18,7 @@ import { createKeyPair } from "@/scripts/manageKeys";
 import router from "@/router";
 import sha256 from "js-sha256";
 
-async function connectToServer(url, port) {
+async function connectToServer() {
 	loadingWheel.value = true;
 	console.log(url);
 	console.log(port);
@@ -27,7 +27,7 @@ async function connectToServer(url, port) {
 
 	function connected() {
 		return new Promise((resolve) => {
-			socketInit(url, port);
+			socketInit();
 
 			socket.on("connect", resolve);
 
@@ -77,34 +77,25 @@ async function createAccount() {
 		return;
 	}
 
+	loadingWheel.value = true;
+
 	//TODO put socket in store
 
 	serverApi.url = loginFormData.value.address;
-
-	let socket = await connectToServer(
-		"https://" + loginFormData.value.address,
-		loginFormData.value.port,
-	);
+	serverApi.port = loginFormData.value.port;
 
 	let iK = await createKeyPair();
 
 	clientData.data.iK = iK;
 
-	socket.emit(
-		"newAccount",
-		JSON.stringify({
+	let res = await (
+		await serverApi.createAccount({
 			...loginFormData.value,
 			iK: iK.pub,
-		}),
-	);
+		})
+	).json();
 
-	socket.on("usernameExists", () => {
-		loadingWheel.value = false;
-		formError.value = "Username already exists";
-		socket.disconnect();
-	});
-
-	socket.on("userCreated", async () => {
+	if (res.status === "userCreated") {
 		//TODO Make a loading wheel or something tell data is done writing
 		loadingWheel.value = false;
 		loginForm.value = true;
@@ -116,17 +107,18 @@ async function createAccount() {
 		clientData.passwdHash = sha256(loginFormData.value.password);
 
 		clientData.writeData();
-
-		socket.disconnect();
-	});
+	} else if (res.status === "usernameExists") {
+		loadingWheel.value = false;
+		formError.value = "Username already exists";
+	} else {
+		loadingWheel.value = false;
+		formError.value = "Account creation failed";
+	}
 }
 
 async function login() {
 	loadingWheel.value = true;
-	let socket = await connectToServer(
-		"https://" + loginFormData.value.address,
-		loginFormData.value.port,
-	);
+	let socket = await connectToServer();
 
 	socket.emit("login", loginFormData.value);
 
@@ -161,12 +153,6 @@ async function login() {
 
 function switchForms() {
 	loginForm.value = !loginForm.value;
-}
-
-async function test() {
-	serverApi.url = loginFormData.value.address;
-	serverApi.port = loginFormData.value.port;
-	serverApi.createAccount();
 }
 
 // $("#toast").toast();

@@ -10,8 +10,12 @@ export async function getUserProfilePic(username) {
 	).text();
 }
 
-export async function createAccount() {
+export async function createAccount(data) {
 	return await fetch(`https://${serverUrl}:${serverPort}/createAccount`, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
 		method: "POST",
 	});
 }

@@ -4,11 +4,12 @@ import { useClientDataStore } from "@/stores/clientData";
 
 import { useServerDataStore } from "@/stores/serverData";
 
+import { url, port } from "@/scripts/serverApi";
+
 let socketInstance = null;
 
-export function socketInit(url, port) {
+export function socketInit() {
 	socketInstance = io(url + ":" + port);
-	serverUrl = url + ":" + port;
 }
 
 export function socketGlobalListeners() {
