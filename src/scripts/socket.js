@@ -9,7 +9,13 @@ import { url, port } from "@/scripts/serverApi";
 let socketInstance = null;
 
 export function socketInit() {
-	socketInstance = io(url + ":" + port);
+	let serverData = useServerDataStore();
+
+	socketInstance = io("https://" + url + ":" + port, {
+		extraHeaders: {
+			authorization: `bearer ${serverData.jwt}`,
+		},
+	});
 }
 
 export function socketGlobalListeners() {

@@ -141,7 +141,6 @@ async function login() {
 		return;
 	} else if (res.status === "sucsefullyLogedIn") {
 		let userData = res;
-		//TODO make better hash
 		await clientData.changeUsername(loginFormData.value.username);
 		clientData.passwdHash = sha256(loginFormData.value.password);
 		await clientData.loadData();
@@ -158,6 +157,7 @@ async function login() {
 			}
 		}
 		serverData.incomingMessages = userData.incomingMessages;
+		socketInit();
 
 		console.log("Logged In");
 
