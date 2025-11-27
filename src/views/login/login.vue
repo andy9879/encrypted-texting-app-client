@@ -18,6 +18,8 @@ import { createKeyPair } from "@/scripts/manageKeys";
 import router from "@/router";
 import sha256 from "js-sha256";
 
+import * as refreshToken from "@/scripts/refreshToken";
+
 async function connectToServer() {
 	loadingWheel.value = true;
 	console.log(url);
@@ -158,6 +160,7 @@ async function login() {
 		}
 		serverData.incomingMessages = userData.incomingMessages;
 		socketInit();
+		refreshToken.enableRefresh = true;
 
 		console.log("Logged In");
 

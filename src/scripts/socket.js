@@ -18,6 +18,13 @@ export function socketInit() {
 	});
 }
 
+export function refreshTokenHeader(newToken) {
+	console.log(socketInstance);
+	socketInstance.io.opts.extraHeaders.authorization = `bearer ${newToken}`;
+	socketInstance.disconnect();
+	socketInstance.connect();
+}
+
 export function socketGlobalListeners() {
 	let clientData = useClientDataStore();
 	let serverData = useServerDataStore();

@@ -4,6 +4,25 @@ let serverPort = null;
 export { serverUrl as url };
 export { serverPort as port };
 
+import { useServerDataStore } from "@/stores/serverData";
+
+export async function refreshToken() {
+	let serverData = useServerDataStore();
+
+	return await (
+		await fetch(`https://${serverUrl}:${serverPort}/account/refreshJwt`, {
+			headers: {
+				"Content-Type": "application/json",
+				authorization: `Bearer ${serverData.jwt}`,
+			},
+			body: JSON.stringify({
+				refreshToken: serverData.refreshToken,
+			}),
+			method: "POST",
+		})
+	).json();
+}
+
 export async function getUserProfilePic(username) {
 	return await fetch(
 		`https://${serverUrl}:${port}/profilePicture/${username}/`,
