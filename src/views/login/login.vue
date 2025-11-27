@@ -98,6 +98,7 @@ async function createAccount() {
 	} catch {
 		loadingWheel.value = false;
 		formError.value = "Account creation failed";
+		return;
 	}
 
 	if (res.status === "userCreated") {
@@ -131,9 +132,8 @@ async function login() {
 	} catch {
 		formError.value = "login failed";
 		loadingWheel.value = false;
+		return;
 	}
-
-	console.log(res);
 
 	if (res.status === "WrongUsernameOrPassword") {
 		formError.value = "Wrong username or password";
@@ -148,6 +148,8 @@ async function login() {
 		serverData.profilePicture = userData.profilePicture;
 		serverData.friendRequests.incoming = userData.friendRequests.incoming;
 		serverData.friendRequests.outgoing = userData.friendRequests.outgoing;
+		serverData.refreshToken = userData.refreshToken;
+		serverData.jwt = userData.jwt;
 		for (let type in serverData.friendRequests) {
 			for (let request of serverData.friendRequests[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(

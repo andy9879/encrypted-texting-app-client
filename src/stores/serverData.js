@@ -11,6 +11,8 @@ export const useServerDataStore = defineStore("ServerDataStore", {
 		},
 		incomingMessages: [],
 		otherUsersProfilePictures: {},
+		refreshToken: null,
+		jwt: null,
 	}),
 	actions: {
 		async otherUserProfilePicture(username) {
