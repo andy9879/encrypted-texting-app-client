@@ -88,12 +88,17 @@ async function createAccount() {
 
 	clientData.data.iK = iK;
 
-	let res = await (
-		await serverApi.createAccount({
-			...loginFormData.value,
-			iK: iK.pub,
-		})
-	).json();
+	try {
+		var res = await (
+			await serverApi.createAccount({
+				...loginFormData.value,
+				iK: iK.pub,
+			})
+		).json();
+	} catch {
+		loadingWheel.value = false;
+		formError.value = "Account creation failed";
+	}
 
 	if (res.status === "userCreated") {
 		//TODO Make a loading wheel or something tell data is done writing
@@ -118,17 +123,24 @@ async function createAccount() {
 
 async function login() {
 	loadingWheel.value = true;
-	let socket = await connectToServer();
 
-	socket.emit("login", loginFormData.value);
+	serverApi.url = loginFormData.value.address;
+	serverApi.port = loginFormData.value.port;
+	try {
+		var res = await (await serverApi.login(loginFormData.value)).json();
+	} catch {
+		formError.value = "login failed";
+		loadingWheel.value = false;
+	}
 
-	socket.on("WrongUsernameOrPassword", () => {
-		socket.disconnect();
+	console.log(res);
+
+	if (res.status === "WrongUsernameOrPassword") {
 		formError.value = "Wrong username or password";
 		loadingWheel.value = false;
-	});
-
-	socket.on("sucsefullyLogedIn", async (userData) => {
+		return;
+	} else if (res.status === "sucsefullyLogedIn") {
+		let userData = res;
 		//TODO make better hash
 		await clientData.changeUsername(loginFormData.value.username);
 		clientData.passwdHash = sha256(loginFormData.value.password);
@@ -148,7 +160,10 @@ async function login() {
 		console.log("Logged In");
 
 		router.push("/chat/servers");
-	});
+	} else {
+		formError.value = "login failed";
+		loadingWheel.value = false;
+	}
 }
 
 function switchForms() {
@@ -166,8 +181,6 @@ function switchForms() {
 			</div>
 		</div>
 	</header>
-
-	<button @click="test()">test</button>
 
 	<div class="loginForm">
 		<div v-show="userCreatedMsg" class="row">

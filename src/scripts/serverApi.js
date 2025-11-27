@@ -11,7 +11,21 @@ export async function getUserProfilePic(username) {
 }
 
 export async function createAccount(data) {
-	return await fetch(`https://${serverUrl}:${serverPort}/createAccount`, {
+	console.log(`https://${serverUrl}:${serverPort}/account/createAccount`);
+	return await fetch(
+		`https://${serverUrl}:${serverPort}/account/createAccount`,
+		{
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+			method: "POST",
+		},
+	);
+}
+
+export async function login(data) {
+	return await fetch(`https://${serverUrl}:${serverPort}/account/login`, {
 		headers: {
 			"Content-Type": "application/json",
 		},
