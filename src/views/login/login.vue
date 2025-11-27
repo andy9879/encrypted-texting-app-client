@@ -21,11 +21,11 @@ import sha256 from "js-sha256";
 import * as refreshToken from "@/scripts/refreshToken";
 
 async function connectToServer() {
-	loadingWheel.value = true;
 	console.log(url);
 	console.log(port);
 
 	//TODO Add error handling
+	refreshToken.enableRefresh = true;
 
 	function connected() {
 		return new Promise((resolve) => {
@@ -159,8 +159,7 @@ async function login() {
 			}
 		}
 		serverData.incomingMessages = userData.incomingMessages;
-		socketInit();
-		refreshToken.enableRefresh = true;
+		connectToServer();
 
 		console.log("Logged In");
 
