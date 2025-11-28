@@ -34,12 +34,12 @@ async function searchForUser() {
 	}
 }
 
-function sendFriendRequest(username) {
-	socket.emit("FriendRequest", username);
+function sendFriendRequest(userId) {
+	socket.emit("FriendRequest", userId);
 }
 
-function acceptFriendRequest(username) {
-	socket.emit("acceptFriendRequest", username);
+function acceptFriendRequest(userId) {
+	socket.emit("acceptFriendRequest", userId);
 }
 
 function cancelFriendRequest(userId) {
@@ -77,7 +77,7 @@ function cancelFriendRequest(userId) {
 							<div class="col-7">{{ UserToAdd.username }}</div>
 							<div class="col-1">
 								<b-icon
-									@click="sendFriendRequest(UserToAdd.username)"
+									@click="sendFriendRequest(UserToAdd.id)"
 									icon="person-plus-fill"
 									class="addControlIcon"
 									scale="2"
@@ -121,7 +121,7 @@ function cancelFriendRequest(userId) {
 											class="addControlIcon"
 											scale="2"
 											icon="check"
-											@click="acceptFriendRequest(req.username)"
+											@click="acceptFriendRequest(req.id)"
 										></b-icon>
 										<b-icon
 											@click="cancelFriendRequest(req.id)"
