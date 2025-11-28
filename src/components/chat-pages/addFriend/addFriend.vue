@@ -42,8 +42,8 @@ function acceptFriendRequest(username) {
 	socket.emit("acceptFriendRequest", username);
 }
 
-function cancelFriendRequest(username) {
-	socket.emit("cancelFriendRequest", username);
+function cancelFriendRequest(userId) {
+	socket.emit("cancelFriendRequest", userId);
 }
 </script>
 
@@ -124,7 +124,7 @@ function cancelFriendRequest(username) {
 											@click="acceptFriendRequest(req.username)"
 										></b-icon>
 										<b-icon
-											@click="cancelFriendRequest(req.username)"
+											@click="cancelFriendRequest(req.id)"
 											scale="2"
 											class="addControlIcon"
 											icon="x"
@@ -152,7 +152,7 @@ function cancelFriendRequest(username) {
 
 									<div class="col-2">
 										<b-icon
-											@click="cancelFriendRequest(req.username)"
+											@click="cancelFriendRequest(req.id)"
 											scale="2"
 											class="addControlIcon"
 											icon="x"
