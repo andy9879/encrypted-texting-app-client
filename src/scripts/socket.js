@@ -8,30 +8,15 @@ import { url, port } from "@/scripts/serverApi";
 
 let socketInstance = null;
 
-export function socketInit() {
-	let serverData = useServerDataStore();
-
-	socketInstance = io("https://" + url + ":" + port, {
-		extraHeaders: {
-			authorization: `bearer ${serverData.jwt}`,
-		},
-	});
-}
-
-export function refreshTokenHeader(newToken) {
-	console.log(socketInstance);
-	socketInstance.io.opts.extraHeaders.authorization = `bearer ${newToken}`;
-	socketInstance.disconnect();
-	socketInstance.connect();
-}
-
-export function socketGlobalListeners() {
+function socketGlobalListeners() {
 	let clientData = useClientDataStore();
 	let serverData = useServerDataStore();
 	let socket = socketInstance;
 
 	socket.on("friendRequestUpdate", async (req) => {
 		console.log("Received Friend Request Update");
+
+		let res = JSON.parse(JSON.stringify(req));
 
 		for (let type in req) {
 			for (let request of req[type]) {
@@ -42,6 +27,8 @@ export function socketGlobalListeners() {
 		}
 
 		serverData.friendRequests = req;
+
+		socket.emit("friendRequestUpdateRes", res);
 	});
 
 	//TODO add some way to reset friend to allow a ik change with a warning or something
@@ -62,6 +49,25 @@ export function socketGlobalListeners() {
 
 		console.log("Updated Friends");
 	});
+}
+
+export function socketInit() {
+	let serverData = useServerDataStore();
+
+	socketInstance = io("https://" + url + ":" + port, {
+		extraHeaders: {
+			authorization: `bearer ${serverData.jwt}`,
+		},
+	});
+
+	socketGlobalListeners();
+}
+
+export function refreshTokenHeader(newToken) {
+	console.log(socketInstance);
+	socketInstance.io.opts.extraHeaders.authorization = `bearer ${newToken}`;
+	socketInstance.disconnect();
+	socketInstance.connect();
 }
 
 export { socketInstance as socket };

@@ -100,7 +100,7 @@ function cancelFriendRequest(username) {
 						</div>
 						<div class="requestListWrapper">
 							<div
-								v-for="req in serverData.friendRequests.outgoing"
+								v-for="req in serverData.friendRequests.incoming"
 								:key="req.username"
 							>
 								<div class="row userToAdd">
@@ -114,7 +114,7 @@ function cancelFriendRequest(username) {
 										{{ req.username }}
 									</div>
 
-									<div class="col-2">Requested</div>
+									<div class="col-2">Pending</div>
 									<div class="col-2">
 										<b-icon
 											style="margin-right: 0.3cm"
@@ -134,7 +134,7 @@ function cancelFriendRequest(username) {
 							</div>
 
 							<div
-								v-for="req in serverData.friendRequests.incoming"
+								v-for="req in serverData.friendRequests.outgoing"
 								:key="req.username"
 							>
 								<div class="row userToAdd">
@@ -148,7 +148,7 @@ function cancelFriendRequest(username) {
 										{{ req.username }}
 									</div>
 
-									<div class="col-2">Pending</div>
+									<div class="col-2">Requested</div>
 
 									<div class="col-2">
 										<b-icon
