@@ -69,6 +69,7 @@ function cancelFriendRequest(userId) {
 						<div class="UserNotFound" v-show="showNoUserFound">User not found</div>
 						<div v-if="UserToAdd?.found" class="row userToAdd">
 							<div col-4>
+								<!-- TODO switch profile pics to async component with suspense -->
 								<img
 									class="userToAddIcon"
 									:src="'data:image/png;base64,' + UserToAdd.profilePicture"
