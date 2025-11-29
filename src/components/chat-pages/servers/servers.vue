@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
-import { socket, socketGlobalListeners } from "@/scripts/socket";
 import { useServerDataStore } from "@/stores/serverData";
 import { useClientDataStore } from "@/stores/clientData";
 
@@ -34,6 +33,7 @@ let selectedFriendId = ref(null);
 						<div v-show="showServer">test</div>
 						<div v-show="!showServer">
 							<div class="friends">
+								<div v-if="clientData.data.friends.length === 0">No Friends ):</div>
 								<div
 									v-for="friend in clientData.data.friends"
 									:key="friend.username"
