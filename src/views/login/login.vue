@@ -138,7 +138,7 @@ async function login() {
 		formError.value = "Wrong username or password";
 		loadingWheel.value = false;
 		return;
-	} else if (res.status === "sucsefullyLogedIn") {
+	} else if (res.status === "successfullyLoggedIn") {
 		let userData = res;
 		await clientData.changeUsername(loginFormData.value.username);
 		clientData.passwdHash = sha256(loginFormData.value.password);
