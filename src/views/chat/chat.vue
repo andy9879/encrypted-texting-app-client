@@ -75,11 +75,14 @@ function changePage(newPage) {
 		>
 			Add Friend
 		</div>
+
 		<div
 			class="navItem navItemSettings"
 			:class="{ navItemSelected: page == 'settings' }"
 		>
-			<b-icon icon="gear-fill" height="20px" width="20px"></b-icon>
+			<RouterLink to="/settings/">
+				<b-icon icon="gear-fill" height="20px" width="20px"></b-icon>
+			</RouterLink>
 		</div>
 	</div>
 

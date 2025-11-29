@@ -17,14 +17,6 @@ export const useServerDataStore = defineStore("ServerDataStore", {
 	}),
 	actions: {
 		async otherUserProfilePicture(username) {
-			let time = new Promise((resolve) => {
-				setTimeout(() => {
-					resolve();
-				}, 5000);
-			});
-
-			await time;
-
 			if (this.otherUsersProfilePictures[username] == undefined) {
 				let stream = await getUserProfilePic(username);
 				let picture = await getStream(stream);
