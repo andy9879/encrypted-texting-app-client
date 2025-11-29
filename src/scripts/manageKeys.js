@@ -1,47 +1,54 @@
 import { addKeyBundle } from "./serverApi";
 import { useClientDataStore } from "@/stores/clientData";
+import { v4 as uuid } from "uuid";
+import { requestPreKeyBundle as requestPreKeyBundleReq } from "@/scripts/serverApi.js";
 
 export async function createKeyPair() {
 	return await window.manageKeys.createKeyPair();
 }
 
+export async function signKey(pub, priv) {
+	return await window.manageKeys.signKey(pub, priv);
+}
+
 export async function checkPreKeyBundles() {
 	let clientData = useClientDataStore();
 
-	let amountOfOneTimeKeys = 0;
+	let amountOfOneTimeKeys = Object.keys(clientData.data.keyBundles);
 
-	clientData.data.keyBundles.forEach((bundle) => {
-		amountOfOneTimeKeys += bundle.ok.length;
-	});
+	if (amountOfOneTimeKeys > 1000) return;
 
-	if (amountOfOneTimeKeys > 10000) return;
+	let keyBundle = [];
 
-	let keyBundle = {
-		sk: await window.manageKeys.createKeyPair(),
-		ok: [],
-	};
-
-	keyBundle.sig = await window.manageKeys.signKey(
-		keyBundle.sk.pub,
-		keyBundle.sk.priv,
-	);
-
-	for (let i = 0; i < 200; i++) {
+	for (let i = 0; i < 100; i++) {
 		let key = await window.manageKeys.createKeyPair();
-		keyBundle.ok.push(key);
+		keyBundle.push({
+			...key,
+			id: uuid(),
+			iss: Date.now(),
+		});
 	}
 
-	clientData.data.keyBundles.push(keyBundle);
+	keyBundle.forEach((key) => {
+		clientData.data.keyBundles[key.id] = key;
+	});
+
 	clientData.writeData();
 
 	let pubKeyBundle = JSON.parse(JSON.stringify(keyBundle));
 
-	pubKeyBundle.sk.priv = undefined;
-
-	pubKeyBundle.ok = pubKeyBundle.ok.map((key) => {
-		key.priv = undefined;
+	pubKeyBundle = pubKeyBundle.map((key) => {
+		delete key.priv;
+		delete key.iss;
 		return key;
 	});
 
 	addKeyBundle(pubKeyBundle);
+}
+
+export async function requestPreKeyBundle(userId) {
+	let req = await requestPreKeyBundleReq(userId);
+	if (req.status !== "successful") return null;
+
+	let bundle = req.bundle;
 }

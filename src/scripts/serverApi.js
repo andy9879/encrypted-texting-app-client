@@ -68,6 +68,17 @@ export async function addKeyBundle(bundle) {
 	});
 }
 
+export async function requestPreKeyBundle(userId) {
+	return await (
+		await fetch(`${createUrl()}/users/requestPreKeyBundle/${userId}`, {
+			headers: {
+				...authHeader(),
+			},
+			method: "GET",
+		})
+	).json();
+}
+
 export async function findUser(username) {
 	return await (
 		await fetch(`${createUrl()}/users/findUser/${username}`, {

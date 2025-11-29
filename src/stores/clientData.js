@@ -56,7 +56,8 @@ export const useClientDataStore = defineStore("ClientDataStore", {
 			],
 			friends: [],
 			iK: {},
-			keyBundles: [],
+			sK: {},
+			keyBundles: {},
 		},
 	}),
 	actions: {
@@ -64,7 +65,10 @@ export const useClientDataStore = defineStore("ClientDataStore", {
 			this.data = await window.manageFiles.getUserData(this.passwdHash);
 		},
 		async writeData() {
-			window.manageFiles.writeUserData(JSON.parse(JSON.stringify(this.data)), this.passwdHash);
+			window.manageFiles.writeUserData(
+				JSON.parse(JSON.stringify(this.data)),
+				this.passwdHash,
+			);
 		},
 		async changeUsername(username) {
 			await window.manageFiles.changeUsername(username);
