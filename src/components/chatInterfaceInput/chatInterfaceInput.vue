@@ -1,7 +1,22 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef, defineProps } from "vue";
 import Quill from "/node_modules/quill/dist/quill.js";
 import Container from "quill/blots/container";
+import { parse } from "node-html-parser";
+
+const editor = useTemplateRef("editor");
+
+const props = defineProps({
+	send: Function,
+});
+
+function OnSend() {
+	let html = editor.value?.innerHTML;
+	const root = parse(html);
+	let input = root.querySelector(".ql-editor")?.innerHTML;
+
+	props.send(input);
+}
 
 onMounted(() => {
 	const quill = new Quill("#editor", {
@@ -36,13 +51,13 @@ onMounted(() => {
 	<div class="editorWrapper">
 		<!--TODO make sure to densentize text data on the server side -->
 		<!-- TODO fix chat input one word wrapping -->
-		<div id="editor">
+		<div id="editor" ref="editor">
 			<p>Hello World!</p>
 		</div>
 		<div>
 			<div class="editorIcon pi pi-paperclip"></div>
 			<div class="editorIcon pi pi-image"></div>
-			<div class="editorIcon pi pi-send"></div>
+			<div @click="OnSend()" class="editorIcon pi pi-send"></div>
 		</div>
 	</div>
 </template>

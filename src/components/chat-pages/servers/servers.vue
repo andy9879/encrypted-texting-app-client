@@ -11,6 +11,10 @@ let clientData = useClientDataStore();
 
 let showServer = ref(true);
 let selectedFriendId = ref(null);
+
+function send(text) {
+	console.log(text);
+}
 </script>
 
 <template>
@@ -67,7 +71,11 @@ let selectedFriendId = ref(null);
 				No Friend selected
 			</div>
 
-			<chat-interface v-else style="width: 100%; height: 100%"></chat-interface>
+			<chat-interface
+				:send="send"
+				v-else
+				style="width: 100%; height: 100%"
+			></chat-interface>
 		</div>
 	</div>
 </template>

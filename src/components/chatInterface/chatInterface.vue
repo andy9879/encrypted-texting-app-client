@@ -1,6 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import chatInterfaceInput from "../chatInterfaceInput/chatInterfaceInput.vue";
+
+const props = defineProps({
+	send: Function,
+});
 </script>
 
 <template>
@@ -10,7 +14,7 @@ import chatInterfaceInput from "../chatInterfaceInput/chatInterfaceInput.vue";
 				<div class="message">hello world</div>
 			</div>
 			<div class="chat-input">
-				<chatInterfaceInput />
+				<chatInterfaceInput :send="send" />
 			</div>
 		</div>
 	</div>
