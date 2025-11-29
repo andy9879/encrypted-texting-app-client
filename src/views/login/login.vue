@@ -148,13 +148,6 @@ async function login() {
 		serverData.friendRequests.outgoing = userData.friendRequests.outgoing;
 		serverData.refreshToken = userData.refreshToken;
 		serverData.jwt = userData.jwt;
-		for (let type in serverData.friendRequests) {
-			for (let request of serverData.friendRequests[type]) {
-				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username,
-				);
-			}
-		}
 		serverData.incomingMessages = userData.incomingMessages;
 		connectToServer();
 
