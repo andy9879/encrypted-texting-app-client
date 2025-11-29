@@ -5,10 +5,6 @@ import chatInterfaceInput from "../chatInterfaceInput/chatInterfaceInput.vue";
 
 <template>
 	<div class="chat-wrapper">
-		<div class="rooms">
-			<div class="room room-selected">room 1</div>
-			<div class="room">room 2</div>
-		</div>
 		<div class="chat">
 			<div class="messages">
 				<div class="message">hello world</div>

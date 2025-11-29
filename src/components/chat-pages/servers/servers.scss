@@ -1,25 +1,39 @@
-.content{
+.content {
     margin: 0;
     height: 100%;
 }
 
 $resultIconSize: 50px;
 
-.server-col{
+.server-col {
     background-color: $tertiary;
     padding: 0;
     padding-top: 15px;
-    width: 2cm;
+    padding-left: 10px;
+    width: 6cm;
     box-shadow: 2px 7px 5px 2px #000000;
 }
 
-.page-wrapper{
+.page-wrapper {
     height: 100%;
     display: flex;
     justify-items: left;
 }
 
-.server-icon-wrapper{
+.server-icon-col-wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.direct-message-wrapper {
+    padding-bottom: 10px;
+    border-bottom: 2px solid $text-color;
+    margin-bottom: 10px;
+}
+
+.direct-message {
+    font-size: 1cm;
+    cursor: pointer;
 }
