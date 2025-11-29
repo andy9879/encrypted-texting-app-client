@@ -60,8 +60,14 @@ let selectedFriendId = ref(null);
 					</div>
 				</div>
 			</div>
+			<div
+				v-if="!showServer && selectedFriendId === null"
+				class="no-friend-selected"
+			>
+				No Friend selected
+			</div>
 
-			<chat-interface style="width: 100%; height: 100%"></chat-interface>
+			<chat-interface v-else style="width: 100%; height: 100%"></chat-interface>
 		</div>
 	</div>
 </template>
