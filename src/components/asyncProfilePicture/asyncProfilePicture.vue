@@ -9,7 +9,16 @@ let imageSrc = await serverData.otherUserProfilePicture(props.username);
 </script>
 
 <template>
-	<img width="64px" height="64px" :src="'data:image/png;base64,' + imageSrc" />
+	<img
+		class="profileIcon"
+		width="48px"
+		height="48px"
+		:src="'data:image/png;base64,' + imageSrc"
+	/>
 </template>
 
-<style scoped></style>
+<style scoped>
+.profileIcon {
+	border-radius: 10px;
+}
+</style>

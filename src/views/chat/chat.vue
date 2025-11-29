@@ -8,7 +8,6 @@ import { socket, socketInit } from "@/scripts/socket";
 import router from "@/router";
 
 import addFriend from "@/components/chat-pages/addFriend/addFriend.vue";
-import friends from "@/components/chat-pages/friends/friends.vue";
 import servers from "@/components/chat-pages/servers/servers.vue";
 
 import { useRoute } from "vue-router";
@@ -21,29 +20,6 @@ import { checkPreKeyBundles } from "@/scripts/manageKeys";
 // import io, { connect } from "socket.io-client";
 
 checkPreKeyBundles();
-
-async function connectToServer(url, port) {
-	loadingWheel.value = true;
-	console.log(url);
-	console.log(port);
-
-	//TODO Add error handling
-
-	let socket = null;
-
-	function connected() {
-		return new Promise((resolve) => {
-			socket = io(url + ":" + port);
-			socket.on("connect", resolve);
-		});
-	}
-
-	await connected();
-
-	console.log("Connected to Server");
-
-	return socket;
-}
 
 function changePage(newPage) {
 	page.value = newPage;
@@ -60,13 +36,6 @@ function changePage(newPage) {
 			:class="{ navItemSelected: page == 'servers' }"
 		>
 			Servers
-		</div>
-		<div
-			@click="changePage('friends')"
-			class="navItem"
-			:class="{ navItemSelected: page == 'friends' }"
-		>
-			Friends
 		</div>
 		<div
 			@click="changePage('addFriend')"
@@ -89,9 +58,6 @@ function changePage(newPage) {
 	<div class="page">
 		<div v-show="page == 'addFriend'">
 			<addFriend></addFriend>
-		</div>
-		<div v-show="page == 'friends'">
-			<friends></friends>
 		</div>
 		<div v-show="page == 'servers'">
 			<servers></servers>
