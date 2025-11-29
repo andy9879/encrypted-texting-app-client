@@ -4,16 +4,11 @@ import { useClientDataStore } from "@/stores/clientData";
 
 import { useServerDataStore } from "@/stores/serverData";
 
+import { url, port } from "@/scripts/serverApi";
+
 let socketInstance = null;
 
-let serverUrl = null;
-
-export function socketInit(url, port) {
-	socketInstance = io(url + ":" + port);
-	serverUrl = url + ":" + port;
-}
-
-export function socketGlobalListeners() {
+function socketGlobalListeners() {
 	let clientData = useClientDataStore();
 	let serverData = useServerDataStore();
 	let socket = socketInstance;
@@ -21,15 +16,19 @@ export function socketGlobalListeners() {
 	socket.on("friendRequestUpdate", async (req) => {
 		console.log("Received Friend Request Update");
 
+		let res = JSON.parse(JSON.stringify(req));
+
 		for (let type in req) {
 			for (let request of req[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username
+					request.username,
 				);
 			}
 		}
 
 		serverData.friendRequests = req;
+
+		socket.emit("friendRequestUpdateRes", res);
 	});
 
 	//TODO add some way to reset friend to allow a ik change with a warning or something
@@ -39,7 +38,7 @@ export function socketGlobalListeners() {
 		friends.forEach((friend) => {
 			if (
 				clientData.data.friends.findIndex(
-					(clientFriend) => clientFriend.username == friend.username
+					(clientFriend) => clientFriend.username == friend.username,
 				) < 0
 			) {
 				clientData.data.friends.push(friend);
@@ -52,6 +51,22 @@ export function socketGlobalListeners() {
 	});
 }
 
-export { socketInstance as socket };
+export function socketInit() {
+	let serverData = useServerDataStore();
 
-export { serverUrl as url };
+	socketInstance = io("https://" + url + ":" + port, {
+		extraHeaders: {
+			authorization: `bearer ${serverData.jwt}`,
+		},
+	});
+
+	socketGlobalListeners();
+}
+
+export function refreshTokenHeader(newToken) {
+	socketInstance.io.opts.extraHeaders.authorization = `bearer ${newToken}`;
+	socketInstance.disconnect();
+	socketInstance.connect();
+}
+
+export { socketInstance as socket };

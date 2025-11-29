@@ -1,11 +1,14 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
+import { refreshTokenTimer } from "@/scripts/refreshToken";
+
+refreshTokenTimer();
 </script>
 
 <template>
-  <RouterView />
+	<RouterView />
 </template>
 
-<style >
+<style>
 @import "@/assets/main.scss";
 </style>

@@ -11,26 +11,26 @@ import { useClientDataStore } from "@/stores/clientData";
 let clientData = useClientDataStore();
 
 import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
+import * as serverApi from "@/scripts/serverApi";
 
 import { createKeyPair } from "@/scripts/manageKeys";
 
 import router from "@/router";
 import sha256 from "js-sha256";
 
-async function connectToServer(url, port) {
-	loadingWheel.value = true;
-	console.log(url);
-	console.log(port);
+import * as refreshToken from "@/scripts/refreshToken";
 
+async function connectToServer() {
 	//TODO Add error handling
+	refreshToken.enableRefresh = true;
 
 	function connected() {
 		return new Promise((resolve) => {
-			socketInit(url, port);
+			socketInit();
 
 			socket.on("connect", resolve);
 
-			socketGlobalListeners();
+			//socketGlobalListeners();
 		});
 	}
 
@@ -76,32 +76,31 @@ async function createAccount() {
 		return;
 	}
 
+	loadingWheel.value = true;
+
 	//TODO put socket in store
 
-	let socket = await connectToServer(
-		"https://" + loginFormData.value.address,
-		loginFormData.value.port
-	);
+	serverApi.url = loginFormData.value.address;
+	serverApi.port = loginFormData.value.port;
 
 	let iK = await createKeyPair();
 
 	clientData.data.iK = iK;
 
-	socket.emit(
-		"newAccount",
-		JSON.stringify({
-			...loginFormData.value,
-			iK: iK.pub,
-		})
-	);
-
-	socket.on("usernameExists", () => {
+	try {
+		var res = await (
+			await serverApi.createAccount({
+				...loginFormData.value,
+				iK: iK.pub,
+			})
+		).json();
+	} catch {
 		loadingWheel.value = false;
-		formError.value = "Username already exists";
-		socket.disconnect();
-	});
+		formError.value = "Account creation failed";
+		return;
+	}
 
-	socket.on("userCreated", async () => {
+	if (res.status === "userCreated") {
 		//TODO Make a loading wheel or something tell data is done writing
 		loadingWheel.value = false;
 		loginForm.value = true;
@@ -113,47 +112,59 @@ async function createAccount() {
 		clientData.passwdHash = sha256(loginFormData.value.password);
 
 		clientData.writeData();
-
-		socket.disconnect();
-	});
+	} else if (res.status === "usernameExists") {
+		loadingWheel.value = false;
+		formError.value = "Username already exists";
+	} else {
+		loadingWheel.value = false;
+		formError.value = "Account creation failed";
+	}
 }
 
 async function login() {
 	loadingWheel.value = true;
-	let socket = await connectToServer(
-		"https://" + loginFormData.value.address,
-		loginFormData.value.port
-	);
 
-	socket.emit("login", loginFormData.value);
+	serverApi.url = loginFormData.value.address;
+	serverApi.port = loginFormData.value.port;
+	try {
+		var res = await (await serverApi.login(loginFormData.value)).json();
+	} catch {
+		formError.value = "login failed";
+		loadingWheel.value = false;
+		return;
+	}
 
-	socket.on("WrongUsernameOrPassword", () => {
-		socket.disconnect();
+	if (res.status === "WrongUsernameOrPassword") {
 		formError.value = "Wrong username or password";
 		loadingWheel.value = false;
-	});
-
-	socket.on("sucsefullyLogedIn", async (userData) => {
-		//TODO make better hash
+		return;
+	} else if (res.status === "sucsefullyLogedIn") {
+		let userData = res;
 		await clientData.changeUsername(loginFormData.value.username);
 		clientData.passwdHash = sha256(loginFormData.value.password);
 		await clientData.loadData();
 		serverData.profilePicture = userData.profilePicture;
 		serverData.friendRequests.incoming = userData.friendRequests.incoming;
 		serverData.friendRequests.outgoing = userData.friendRequests.outgoing;
+		serverData.refreshToken = userData.refreshToken;
+		serverData.jwt = userData.jwt;
 		for (let type in serverData.friendRequests) {
 			for (let request of serverData.friendRequests[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username
+					request.username,
 				);
 			}
 		}
 		serverData.incomingMessages = userData.incomingMessages;
+		connectToServer();
 
 		console.log("Logged In");
 
 		router.push("/chat/servers");
-	});
+	} else {
+		formError.value = "login failed";
+		loadingWheel.value = false;
+	}
 }
 
 function switchForms() {

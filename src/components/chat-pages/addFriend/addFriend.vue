@@ -2,9 +2,8 @@
 import { ref } from "vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
 
-socketGlobalListeners();
-
 import { useServerDataStore } from "@/stores/serverData";
+import { findUser } from "@/scripts/serverApi";
 
 let serverData = useServerDataStore();
 
@@ -20,32 +19,31 @@ const UserToAdd = ref({});
 //TODO Add Scroll bar for multiple search results for users
 //TODO Add popups for sending, denying , and accepting friend requests
 
-function searchForUser() {
-	socket.emit("findUser", searchQurry.value);
-	socket.on("UserFound", async (res) => {
-		if (res.found) {
-			showNoUserFound.value = false;
-			UserToAdd.value = res;
-			UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
-				UserToAdd.value.username
-			);
-		} else {
-			UserToAdd.value = {};
-			showNoUserFound.value = true;
-		}
-	});
+async function searchForUser() {
+	let res = await findUser(searchQurry.value);
+
+	if (res.found) {
+		showNoUserFound.value = false;
+		UserToAdd.value = res;
+		UserToAdd.value.profilePicture = await serverData.otherUserProfilePicture(
+			res.username,
+		);
+	} else {
+		UserToAdd.value = {};
+		showNoUserFound.value = true;
+	}
 }
 
-function sendFriendRequest(username) {
-	socket.emit("FriendRequest", username);
+function sendFriendRequest(userId) {
+	socket.emit("FriendRequest", userId);
 }
 
-function acceptFriendRequest(username) {
-	socket.emit("acceptFriendRequest", username);
+function acceptFriendRequest(userId) {
+	socket.emit("acceptFriendRequest", userId);
 }
 
-function cancelFriendRequest(username) {
-	socket.emit("cancelFriendRequest", username);
+function cancelFriendRequest(userId) {
+	socket.emit("cancelFriendRequest", userId);
 }
 </script>
 
@@ -71,6 +69,7 @@ function cancelFriendRequest(username) {
 						<div class="UserNotFound" v-show="showNoUserFound">User not found</div>
 						<div v-if="UserToAdd?.found" class="row userToAdd">
 							<div col-4>
+								<!-- TODO switch profile pics to async component with suspense -->
 								<img
 									class="userToAddIcon"
 									:src="'data:image/png;base64,' + UserToAdd.profilePicture"
@@ -79,7 +78,7 @@ function cancelFriendRequest(username) {
 							<div class="col-7">{{ UserToAdd.username }}</div>
 							<div class="col-1">
 								<b-icon
-									@click="sendFriendRequest(UserToAdd.username)"
+									@click="sendFriendRequest(UserToAdd.id)"
 									icon="person-plus-fill"
 									class="addControlIcon"
 									scale="2"
@@ -102,40 +101,6 @@ function cancelFriendRequest(username) {
 						</div>
 						<div class="requestListWrapper">
 							<div
-								v-for="req in serverData.friendRequests.outgoing"
-								:key="req.username"
-							>
-								<div class="row userToAdd">
-									<div class="col-2">
-										<img
-											class="userToAddIcon"
-											:src="'data:image/png;base64,' + req.profilePicture"
-										/>
-									</div>
-									<div class="col-6">
-										{{ req.username }}
-									</div>
-
-									<div class="col-2">Requested</div>
-									<div class="col-2">
-										<b-icon
-											style="margin-right: 0.3cm"
-											class="addControlIcon"
-											scale="2"
-											icon="check"
-											@click="acceptFriendRequest(req.username)"
-										></b-icon>
-										<b-icon
-											@click="cancelFriendRequest(req.username)"
-											scale="2"
-											class="addControlIcon"
-											icon="x"
-										></b-icon>
-									</div>
-								</div>
-							</div>
-
-							<div
 								v-for="req in serverData.friendRequests.incoming"
 								:key="req.username"
 							>
@@ -151,10 +116,44 @@ function cancelFriendRequest(username) {
 									</div>
 
 									<div class="col-2">Pending</div>
+									<div class="col-2">
+										<b-icon
+											style="margin-right: 0.3cm"
+											class="addControlIcon"
+											scale="2"
+											icon="check"
+											@click="acceptFriendRequest(req.id)"
+										></b-icon>
+										<b-icon
+											@click="cancelFriendRequest(req.id)"
+											scale="2"
+											class="addControlIcon"
+											icon="x"
+										></b-icon>
+									</div>
+								</div>
+							</div>
+
+							<div
+								v-for="req in serverData.friendRequests.outgoing"
+								:key="req.username"
+							>
+								<div class="row userToAdd">
+									<div class="col-2">
+										<img
+											class="userToAddIcon"
+											:src="'data:image/png;base64,' + req.profilePicture"
+										/>
+									</div>
+									<div class="col-6">
+										{{ req.username }}
+									</div>
+
+									<div class="col-2">Requested</div>
 
 									<div class="col-2">
 										<b-icon
-											@click="cancelFriendRequest(req.username)"
+											@click="cancelFriendRequest(req.id)"
 											scale="2"
 											class="addControlIcon"
 											icon="x"

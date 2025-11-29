@@ -7,8 +7,6 @@ import { useClientDataStore } from "@/stores/clientData";
 import chatInterface from "@/components/chatInterface/chatInterface.vue";
 
 let clientData = useClientDataStore();
-
-socketGlobalListeners();
 </script>
 
 <template>
