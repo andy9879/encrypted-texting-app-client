@@ -78,8 +78,6 @@ async function createAccount() {
 
 	loadingWheel.value = true;
 
-	//TODO put socket in store
-
 	serverApi.url = loginFormData.value.address;
 	serverApi.port = loginFormData.value.port;
 
