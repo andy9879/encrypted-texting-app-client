@@ -13,7 +13,7 @@ export async function refreshTokenTimer() {
 	setInterval(
 		async () => {
 			if (!EnableRefresh) return;
-
+			//TODO add retry refresh token
 			let { jwt, refreshToken } = await refreshTokenReq();
 
 			serverData.jwt = jwt;
