@@ -41,7 +41,16 @@ function socketGlobalListeners() {
 					(clientFriend) => clientFriend.username == friend.username,
 				) < 0
 			) {
-				clientData.data.friends.push(friend);
+				clientData.data.friends.push({
+					...friend,
+					privetMessage: {
+						currentIncomingKey: "",
+						currentOutgoingKey: "",
+						incomingMessages: [],
+						outgoingMessages: [],
+						decryptedIncomingMessages: [],
+					},
+				});
 			}
 		});
 
