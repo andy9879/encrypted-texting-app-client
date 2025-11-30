@@ -119,6 +119,7 @@ function changeUsername(event, username) {
 }
 
 function createKeyPair() {
+	//TODO Check on deprecated function
 	let priv = secp256k1.utils.randomPrivateKey();
 	let pub = secp256k1.getPublicKey(priv);
 	return {
