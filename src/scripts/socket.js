@@ -47,6 +47,11 @@ function socketGlobalListeners() {
 
 		clientData.writeData();
 
+		socket.emit(
+			"receivedFriendUpdate",
+			friends.map((friend) => friend.id),
+		);
+
 		console.log("Updated Friends");
 	});
 }
