@@ -13,6 +13,8 @@ let showServer = ref(true);
 let selectedFriendId = ref(null);
 
 function send(text) {
+	//TODO better error handling when friendId is null
+	if (showServer || selectedFriendId === null) return;
 	console.log(text);
 }
 </script>
