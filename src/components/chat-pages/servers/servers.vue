@@ -6,16 +6,53 @@ import { useServerDataStore } from "@/stores/serverData";
 import { useClientDataStore } from "@/stores/clientData";
 
 import chatInterface from "@/components/chatInterface/chatInterface.vue";
+import { requestPreKeyBundle } from "@/scripts/serverApi.js";
+import {
+	getSharedSecret,
+	verifySig,
+	createKeyPair,
+	hkdf,
+} from "@/scripts/manageKeys.js";
 
 let clientData = useClientDataStore();
 
 let showServer = ref(true);
 let selectedFriendId = ref(null);
 
-function send(text) {
+async function send(text) {
 	//TODO better error handling when friendId is null
-	if (showServer || selectedFriendId === null) return;
+	if (!showServer || selectedFriendId === null) return;
+
+	let friend = clientData.data.friends.find(
+		(friend) => friend.id === selectedFriendId.value,
+	);
+
 	console.log(text);
+
+	let outgoing = friend.privetMessage.outgoing;
+
+	if (outgoing.secret === null) {
+		//TODO add error handling when request preKey Bundle fails
+		let keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
+
+		let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK);
+
+		//TODO Better error handling when verify fails
+		if (!verify) return;
+
+		let eK = await createKeyPair();
+
+		let sharedSecretArr = await Promise.all([
+			getSharedSecret(eK.priv, friend.iK),
+			getSharedSecret(clientData.data.iK.priv, keyBundle.sK.pub),
+			getSharedSecret(eK.priv, keyBundle.sK.pub),
+			getSharedSecret(eK.priv, keyBundle.oK.pub),
+		]);
+
+		let secret = await hkdf(sharedSecretArr, keyBundle.oK.id);
+
+		console.log(secret);
+	}
 }
 </script>
 

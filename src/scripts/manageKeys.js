@@ -8,7 +8,20 @@ export async function createKeyPair() {
 }
 
 export async function signKey(pub, priv) {
+	//TODO Hash pub key before siging
 	return await window.manageKeys.signKey(pub, priv);
+}
+
+export async function getSharedSecret(pub, priv) {
+	return await window.manageKeys.getSharedSecret(pub, priv);
+}
+
+export async function verifySig(sig, signedContent, pub) {
+	return await window.manageKeys.verifySig(sig, signedContent, pub);
+}
+
+export async function hkdf(input, info) {
+	return await window.manageKeys.hkdf(input, info);
 }
 
 export async function checkPreKeyBundles() {

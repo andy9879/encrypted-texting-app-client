@@ -44,10 +44,13 @@ function socketGlobalListeners() {
 				clientData.data.friends.push({
 					...friend,
 					privetMessage: {
-						currentIncomingKey: "",
-						currentOutgoingKey: "",
-						incomingMessages: [],
-						outgoingMessages: [],
+						incoming: {
+							secret: null,
+						},
+						outgoing: {
+							lastRotate: 0,
+							secret: null,
+						},
 						decryptedIncomingMessages: [],
 					},
 				});

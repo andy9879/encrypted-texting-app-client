@@ -15,6 +15,11 @@ contextBridge.exposeInMainWorld("manageFiles", {
 contextBridge.exposeInMainWorld("manageKeys", {
 	createKeyPair: () => ipcRenderer.invoke("createKeyPair"),
 	signKey: (pub, priv) => ipcRenderer.invoke("signKey", pub, priv),
+	getSharedSecret: (pub, priv) =>
+		ipcRenderer.invoke("getSharedSecret", pub, priv),
+	verifySig: (sig, signedContent, pub) =>
+		ipcRenderer.invoke("verifySig", sig, signedContent, pub),
+	hkdf: (input, info) => ipcRenderer.invoke("hkdf", input, info),
 });
 
 contextBridge.exposeInMainWorld("notification", {

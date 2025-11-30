@@ -11,6 +11,7 @@ const {
 	createDecipheriv,
 	randomFillSync,
 	constants,
+	hkdfSync,
 } = require("crypto");
 
 let { secp256k1 } = require("@noble/curves/secp256k1");
@@ -138,6 +139,40 @@ function signKey(event, pub, priv) {
 	};
 }
 
+function getSharedSecret(event, priv, pub) {
+	let intPriv = new Uint8Array(priv.split(","));
+	let intPub = new Uint8Array(pub.split(","));
+
+	return secp256k1
+		.getSharedSecret(new Uint8Array(intPriv), new Uint8Array(intPub))
+		.toString();
+}
+
+function verifySig(event, sig, signedContent, pub) {
+	return secp256k1.verify(
+		{
+			r: BigInt(sig.r),
+			s: BigInt(sig.s),
+		},
+		new Uint8Array(signedContent.split(",")),
+		new Uint8Array(pub.split(",")),
+	);
+}
+
+function hkdf(event, input, info) {
+	let secret = new Uint8Array(
+		input
+			.reduce((newSecret, secret) => {
+				return newSecret + secret;
+			})
+			.split(",")
+			.map((i) => parseInt(i)),
+	);
+	return Buffer.from(hkdfSync("sha512", secret, "", info, 64)).toString(
+		"base64",
+	);
+}
+
 function createNotification(event, title, body) {
 	console.log("notification");
 	new Notification({
@@ -174,7 +209,10 @@ app.whenReady().then(() => {
 	ipcMain.handle("createKeyPair", createKeyPair);
 	ipcMain.handle("changeUsername", changeUsername);
 	ipcMain.handle("signKey", signKey);
+	ipcMain.handle("getSharedSecret", getSharedSecret);
+	ipcMain.handle("verifySig", verifySig);
 	ipcMain.handle("createNotification", createNotification);
+	ipcMain.handle("hkdf", hkdf);
 	createWindow();
 
 	app.on("activate", () => {
