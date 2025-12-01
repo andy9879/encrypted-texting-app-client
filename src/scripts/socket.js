@@ -53,7 +53,6 @@ function socketGlobalListeners() {
 							messages: [],
 							iv: "",
 						},
-						decryptedIncomingMessages: [],
 					},
 				});
 			}
@@ -70,6 +69,10 @@ function socketGlobalListeners() {
 	});
 }
 
+function updateAll() {
+	socketInstance.emit("updateAllRequest");
+}
+
 export function socketInit() {
 	let serverData = useServerDataStore();
 
@@ -80,12 +83,14 @@ export function socketInit() {
 	});
 
 	socketGlobalListeners();
+	updateAll();
 }
 
 export function refreshTokenHeader(newToken) {
 	socketInstance.io.opts.extraHeaders.authorization = `bearer ${newToken}`;
 	socketInstance.disconnect();
 	socketInstance.connect();
+	updateAll();
 }
 
 export { socketInstance as socket };
