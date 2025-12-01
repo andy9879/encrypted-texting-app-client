@@ -120,6 +120,8 @@ async function createAccount() {
 
 		await clientData.changeUsername(loginFormData.value.username);
 
+		clientData.data.id = res.id;
+
 		clientData.passwdHash = sha256(loginFormData.value.password);
 
 		clientData.writeData();
