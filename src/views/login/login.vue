@@ -135,6 +135,7 @@ async function createAccount() {
 }
 
 async function login() {
+	//TODO error handling for not being able to find userData file
 	loadingWheel.value = true;
 
 	serverApi.url = loginFormData.value.address;
