@@ -26,6 +26,7 @@ async function connectToServer() {
 
 	function connected() {
 		return new Promise((resolve) => {
+			//TODO setup listener before connection
 			socketInit();
 
 			socket.on("connect", resolve);
