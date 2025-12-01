@@ -12,7 +12,9 @@ import {
 	verifySig,
 	createKeyPair,
 	hkdf,
+	encrypt,
 } from "@/scripts/manageKeys.js";
+import { socket } from "@/scripts/socket";
 
 let clientData = useClientDataStore();
 
@@ -31,16 +33,24 @@ async function send(text) {
 
 	let outgoing = friend.privetMessage.outgoing;
 
+	let secret = null;
+
+	let rotate = false;
+
+	let eK = null;
+
+	let keyBundle = null;
+
 	if (outgoing.secret === null) {
 		//TODO add error handling when request preKey Bundle fails
-		let keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
+		keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
 
 		let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK);
 
 		//TODO Better error handling when verify fails
 		if (!verify) return;
 
-		let eK = await createKeyPair();
+		eK = await createKeyPair();
 
 		let sharedSecretArr = await Promise.all([
 			getSharedSecret(eK.priv, friend.iK),
@@ -49,10 +59,45 @@ async function send(text) {
 			getSharedSecret(eK.priv, keyBundle.oK.pub),
 		]);
 
-		let secret = await hkdf(sharedSecretArr, keyBundle.oK.id);
+		secret = await hkdf(
+			sharedSecretArr.reduce((newSecret, secret) => {
+				return newSecret + secret;
+			}),
+			keyBundle.oK.id,
+		);
 
-		console.log(secret);
+		rotate = true;
+	} else {
+		secret = await hkdf(outgoing.secret);
 	}
+
+	let encryptedText = await encrypt(secret, text);
+
+	let time = Date.now();
+
+	let message = {
+		encryptedText,
+		eK: eK?.pub ?? null,
+		oKId: keyBundle?.oK?.id ?? null,
+		to: friend.id,
+		rotate,
+		time,
+	};
+
+	outgoing.lastRotate += 1;
+	outgoing.secret = secret;
+	outgoing.iv = keyBundle.oK.id;
+	outgoing.messages.push({
+		text,
+		time,
+	});
+
+	clientData.writeData();
+
+	socket.emit("sendPrivateMessage", message);
+
+	console.log(secret);
+	console.log(message);
 }
 </script>
 

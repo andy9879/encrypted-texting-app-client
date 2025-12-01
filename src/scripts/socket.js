@@ -50,6 +50,8 @@ function socketGlobalListeners() {
 						outgoing: {
 							lastRotate: 0,
 							secret: null,
+							messages: [],
+							iv: "",
 						},
 						decryptedIncomingMessages: [],
 					},

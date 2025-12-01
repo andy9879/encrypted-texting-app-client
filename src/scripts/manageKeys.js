@@ -24,6 +24,14 @@ export async function hkdf(input, info) {
 	return await window.manageKeys.hkdf(input, info);
 }
 
+export async function encrypt(hash, text) {
+	return await window.manageKeys.encrypt(hash, text);
+}
+
+export async function decrypt(hash, text) {
+	return await window.manageKeys.decrypt(hash, text);
+}
+
 export async function checkPreKeyBundles() {
 	let clientData = useClientDataStore();
 

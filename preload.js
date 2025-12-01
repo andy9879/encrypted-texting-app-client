@@ -20,6 +20,8 @@ contextBridge.exposeInMainWorld("manageKeys", {
 	verifySig: (sig, signedContent, pub) =>
 		ipcRenderer.invoke("verifySig", sig, signedContent, pub),
 	hkdf: (input, info) => ipcRenderer.invoke("hkdf", input, info),
+	encrypt: (hash, text) => ipcRenderer.invoke("encrypt", hash, text),
+	decrypt: (hash, text) => ipcRenderer.invoke("decrypt", hash, text),
 });
 
 contextBridge.exposeInMainWorld("notification", {

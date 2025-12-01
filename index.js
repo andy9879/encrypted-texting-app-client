@@ -161,17 +161,50 @@ function verifySig(event, sig, signedContent, pub) {
 }
 
 function hkdf(event, input, info) {
-	let secret = new Uint8Array(
-		input
-			.reduce((newSecret, secret) => {
-				return newSecret + secret;
-			})
-			.split(",")
-			.map((i) => parseInt(i)),
-	);
-	return Buffer.from(hkdfSync("sha512", secret, "", info, 64)).toString(
+	let secret = new Uint8Array(input.split(",").map((i) => parseInt(i)));
+	return Buffer.from(hkdfSync("sha256", secret, "", info, 32)).toString(
 		"base64",
 	);
+}
+
+function encrypt(event, hash, text) {
+	let key = Buffer.from(hash, "base64");
+
+	let iv = Buffer.alloc(16);
+	iv = randomFillSync(iv);
+
+	const cipher = createCipheriv("aes-256-cbc", key, iv);
+
+	let encrypted = cipher.update(text, "utf8", "base64");
+
+	encrypted += cipher.final("base64");
+
+	return (encrypted = iv.toString("base64") + ":" + encrypted);
+}
+
+function decrypt(event, hash, text) {
+	let key = Buffer.from(hash, "base64");
+
+	let encriptedDataArr = text.split(":");
+
+	let iv = Buffer.from(encriptedDataArr[0], "base64");
+	let encrypted = encriptedDataArr[1];
+
+	const decipher = createDecipheriv("aes-256-cbc", key, iv);
+
+	let decrypted = "";
+
+	decipher.on("readable", () => {
+		let chunk;
+		while (null !== (chunk = decipher.read())) {
+			decrypted += chunk.toString("utf8");
+		}
+	});
+
+	decipher.write(encrypted, "base64");
+	decipher.end();
+
+	return decrypted;
 }
 
 function createNotification(event, title, body) {
@@ -214,6 +247,8 @@ app.whenReady().then(() => {
 	ipcMain.handle("verifySig", verifySig);
 	ipcMain.handle("createNotification", createNotification);
 	ipcMain.handle("hkdf", hkdf);
+	ipcMain.handle("encrypt", encrypt);
+	ipcMain.handle("decrypt", decrypt);
 	createWindow();
 
 	app.on("activate", () => {
