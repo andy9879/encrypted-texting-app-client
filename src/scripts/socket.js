@@ -6,7 +6,12 @@ import { useServerDataStore } from "@/stores/serverData";
 
 import { url, port } from "@/scripts/serverApi";
 
-import { getSharedSecret, hkdf, decrypt } from "@/scripts/manageKeys";
+import {
+	getSharedSecret,
+	hkdf,
+	decrypt,
+	checkPreKeyBundles,
+} from "@/scripts/manageKeys";
 
 import sanitizeHtml from "sanitize-html";
 
@@ -73,6 +78,7 @@ function socketGlobalListeners() {
 	socket.on("PrivateMessagesUpdate", async (messages) => {
 		let user = clientData.data;
 		let friends = user.friends;
+		checkPreKeyBundles();
 
 		messages.forEach(async (message) => {
 			let friend = friends.find((friend) => friend.id === message.from);
@@ -90,6 +96,8 @@ function socketGlobalListeners() {
 			}
 
 			let oK = user.keyBundles[message.oKId];
+
+			delete user.keyBundles[message.oKId];
 
 			let secret = null;
 
