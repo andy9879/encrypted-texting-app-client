@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { v4 as uuid } from "uuid";
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
 import { useServerDataStore } from "@/stores/serverData";
@@ -29,67 +30,52 @@ async function send(text) {
 		(friend) => friend.id === selectedFriendId.value,
 	);
 
-	console.log(text);
-
 	let outgoing = friend.privetMessage.outgoing;
 
 	let secret = null;
 
-	let rotate = false;
+	//TODO add error handling when request preKey Bundle fails
+	let keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
 
-	let eK = null;
+	let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK);
 
-	let keyBundle = null;
+	//TODO Better error handling when verify fails
+	if (!verify) return;
 
-	if (outgoing.secret === null) {
-		//TODO add error handling when request preKey Bundle fails
-		keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
+	let eK = await createKeyPair();
 
-		let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK);
+	let sharedSecretArr = await Promise.all([
+		getSharedSecret(eK.priv, friend.iK),
+		getSharedSecret(clientData.data.iK.priv, keyBundle.sK.pub),
+		getSharedSecret(eK.priv, keyBundle.sK.pub),
+		getSharedSecret(eK.priv, keyBundle.oK.pub),
+	]);
 
-		//TODO Better error handling when verify fails
-		if (!verify) return;
-
-		eK = await createKeyPair();
-
-		let sharedSecretArr = await Promise.all([
-			getSharedSecret(eK.priv, friend.iK),
-			getSharedSecret(clientData.data.iK.priv, keyBundle.sK.pub),
-			getSharedSecret(eK.priv, keyBundle.sK.pub),
-			getSharedSecret(eK.priv, keyBundle.oK.pub),
-		]);
-
-		secret = await hkdf(
-			sharedSecretArr.reduce((newSecret, secret) => {
-				return newSecret + secret;
-			}),
-			keyBundle.oK.id,
-		);
-
-		rotate = true;
-	} else {
-		secret = await hkdf(outgoing.secret);
-	}
+	secret = await hkdf(
+		sharedSecretArr.reduce((newSecret, secret) => {
+			return newSecret + secret;
+		}),
+		keyBundle.oK.id,
+	);
 
 	let encryptedText = await encrypt(secret, text);
 
 	let time = Date.now();
+	let messageId = uuid();
 
 	let message = {
+		id: messageId,
 		encryptedText,
 		eK: eK?.pub ?? null,
 		oKId: keyBundle?.oK?.id ?? null,
 		to: friend.id,
-		rotate,
 		time,
 	};
 
-	outgoing.lastRotate += 1;
-	outgoing.secret = secret;
-	outgoing.iv = keyBundle.oK.id;
 	outgoing.messages.push({
 		text,
 		time,
+		id: messageId,
 	});
 
 	clientData.writeData();

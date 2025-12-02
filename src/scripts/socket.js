@@ -6,6 +6,8 @@ import { useServerDataStore } from "@/stores/serverData";
 
 import { url, port } from "@/scripts/serverApi";
 
+import { getSharedSecret, hkdf, decrypt } from "@/scripts/manageKeys";
+
 let socketInstance = null;
 
 function socketGlobalListeners() {
@@ -45,13 +47,11 @@ function socketGlobalListeners() {
 					...friend,
 					privetMessage: {
 						incoming: {
-							secret: null,
+							messages: [],
+							decryptedMessageIds: [],
 						},
 						outgoing: {
-							lastRotate: 0,
-							secret: null,
 							messages: [],
-							iv: "",
 						},
 					},
 				});
@@ -66,6 +66,48 @@ function socketGlobalListeners() {
 		);
 
 		console.log("Updated Friends");
+	});
+
+	socket.on("PrivateMessagesUpdate", async (messages) => {
+		let user = clientData.data;
+		let friends = user.friends;
+
+		messages.forEach(async (message) => {
+			let friend = friends.find((friend) => friend.id === message.from);
+
+			if (friend === undefined) return;
+
+			let incoming = friend.privetMessage.incoming;
+
+			if (incoming.decryptedMessageIds.includes(message.id)) return;
+
+			let oK = user.keyBundles[message.oKId];
+
+			let secret = null;
+
+			let sharedSecretArr = await Promise.all([
+				getSharedSecret(user.iK.priv, message.eK),
+				getSharedSecret(user.sK.priv, friend.iK),
+				getSharedSecret(user.sK.priv, message.eK),
+				getSharedSecret(oK.priv, message.eK),
+			]);
+
+			secret = await hkdf(
+				sharedSecretArr.reduce((newSecret, secret) => {
+					return newSecret + secret;
+				}),
+				oK.id,
+			);
+
+			incoming.decryptedMessageIds.push(message.id);
+
+			let text = await decrypt(secret, message.encryptedText);
+
+			console.log(secret);
+			console.log(text);
+
+			clientData.writeData();
+		});
 	});
 }
 

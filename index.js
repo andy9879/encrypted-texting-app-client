@@ -183,28 +183,32 @@ function encrypt(event, hash, text) {
 }
 
 function decrypt(event, hash, text) {
-	let key = Buffer.from(hash, "base64");
+	return new Promise((resolve) => {
+		let key = Buffer.from(hash, "base64");
 
-	let encriptedDataArr = text.split(":");
+		let encriptedDataArr = text.split(":");
 
-	let iv = Buffer.from(encriptedDataArr[0], "base64");
-	let encrypted = encriptedDataArr[1];
+		let iv = Buffer.from(encriptedDataArr[0], "base64");
+		let encrypted = encriptedDataArr[1];
 
-	const decipher = createDecipheriv("aes-256-cbc", key, iv);
+		const decipher = createDecipheriv("aes-256-cbc", key, iv);
 
-	let decrypted = "";
+		let decrypted = "";
 
-	decipher.on("readable", () => {
-		let chunk;
-		while (null !== (chunk = decipher.read())) {
-			decrypted += chunk.toString("utf8");
-		}
+		decipher.on("readable", () => {
+			let chunk;
+			while (null !== (chunk = decipher.read())) {
+				decrypted += chunk.toString("utf8");
+			}
+		});
+
+		decipher.write(encrypted, "base64");
+		decipher.end();
+
+		decipher.on("end", () => {
+			resolve(decrypted);
+		});
 	});
-
-	decipher.write(encrypted, "base64");
-	decipher.end();
-
-	return decrypted;
 }
 
 function createNotification(event, title, body) {
