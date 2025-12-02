@@ -53,8 +53,8 @@
 
 .jump {
     display: block;
-    position: relative;
-    bottom: 10px;
+    position: absolute;
+    bottom: 1.75cm;
     width: fit-content;
     padding: 1px 30px 1px 30px;
     background-color: $tertiary;

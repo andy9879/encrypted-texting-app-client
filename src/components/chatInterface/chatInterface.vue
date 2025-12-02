@@ -54,10 +54,8 @@ watch(messages, () => {
 	}
 });
 
-//TODO make jump to present less buggy
 function jumpToPresent() {
 	y.value = messagesElement.value.scrollHeight;
-	disableAutoScroll.value = false;
 }
 
 watch(y, () => {
@@ -68,6 +66,13 @@ watch(y, () => {
 		500
 	) {
 		disableAutoScroll.value = true;
+	}
+});
+
+watch(arrivedState, () => {
+	console.log(arrivedState);
+	if (arrivedState.bottom) {
+		disableAutoScroll.value = false;
 	}
 });
 
