@@ -122,6 +122,8 @@ async function createAccount() {
 
 		clientData.data.id = res.id;
 
+		clientData.data.username = loginFormData.value.username;
+
 		clientData.passwdHash = sha256(loginFormData.value.password);
 
 		clientData.writeData();

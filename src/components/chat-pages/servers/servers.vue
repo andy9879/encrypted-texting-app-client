@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { v4 as uuid } from "uuid";
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
@@ -21,6 +21,16 @@ let clientData = useClientDataStore();
 
 let showServer = ref(true);
 let selectedFriendId = ref(null);
+
+const selectedFriend = computed(() => {
+	if (selectedFriendId.value === null) return null;
+
+	let friend = clientData.data.friends.find(
+		(friend) => friend.id === selectedFriendId.value,
+	);
+
+	return friend ?? null;
+});
 
 async function send(text) {
 	//TODO better error handling when friendId is null
@@ -81,9 +91,6 @@ async function send(text) {
 	clientData.writeData();
 
 	socket.emit("sendPrivateMessage", message);
-
-	console.log(secret);
-	console.log(message);
 }
 </script>
 
@@ -143,6 +150,28 @@ async function send(text) {
 
 			<chat-interface
 				:send="send"
+				:incoming="
+					selectedFriend !== null
+						? selectedFriend.privetMessage.incoming.messages.map((message) => {
+								return {
+									...message,
+									userId: selectedFriend.id,
+									username: selectedFriend.username,
+								};
+							})
+						: null
+				"
+				:outgoing="
+					selectedFriend !== null
+						? selectedFriend.privetMessage.outgoing.messages.map((message) => {
+								return {
+									...message,
+									userId: clientData.data.id,
+									username: clientData.data.username,
+								};
+							})
+						: null
+				"
 				v-else
 				style="width: 100%; height: 100%"
 			></chat-interface>

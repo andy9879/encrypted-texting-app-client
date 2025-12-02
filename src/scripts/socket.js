@@ -8,6 +8,8 @@ import { url, port } from "@/scripts/serverApi";
 
 import { getSharedSecret, hkdf, decrypt } from "@/scripts/manageKeys";
 
+import sanitizeHtml from "sanitize-html";
+
 let socketInstance = null;
 
 function socketGlobalListeners() {
@@ -111,8 +113,19 @@ function socketGlobalListeners() {
 
 			socket.emit("receivedPrivateMessage", message.id);
 
-			console.log(secret);
-			console.log(text);
+			let sanitizeText = sanitizeHtml(text, {
+				allowedTags: ["b", "i", "em", "u", "strong", "a", "img", "p"],
+				allowedAttributes: {
+					a: ["href"],
+					img: ["src"],
+				},
+			});
+
+			incoming.messages.push({
+				text: sanitizeText,
+				time: message.time,
+				id: message.id,
+			});
 
 			clientData.writeData();
 		});

@@ -59,6 +59,7 @@ export const useClientDataStore = defineStore("ClientDataStore", {
 			sK: {},
 			keyBundles: {},
 			id: null,
+			username: null,
 		},
 	}),
 	actions: {
