@@ -1,7 +1,7 @@
 <script setup>
 import { useServerDataStore } from "@/stores/serverData";
 
-const props = defineProps(["username"]);
+const props = defineProps(["username", "width", "height"]);
 
 let serverData = useServerDataStore();
 
@@ -11,8 +11,8 @@ let imageSrc = await serverData.otherUserProfilePicture(props.username);
 <template>
 	<img
 		class="profileIcon"
-		width="48px"
-		height="48px"
+		:width="props.width ?? '48px'"
+		:height="props.height ?? '48px'"
 		:src="'data:image/png;base64,' + imageSrc"
 	/>
 </template>

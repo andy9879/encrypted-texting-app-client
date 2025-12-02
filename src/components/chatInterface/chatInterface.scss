@@ -18,11 +18,15 @@
     width: 100%;
     height: 100%;
     overflow-y: scroll;
+}
 
+.messages::-webkit-scrollbar {
+    display: none;
 }
 
 .message {
     margin-bottom: 10px;
+    display: flex;
 
 
 }
@@ -35,4 +39,26 @@
 .text-input-wrapper {
     display: inline-block;
     width: calc(100% - 2.5cm);
+}
+
+.message-wrapper {
+    display: inline-block;
+}
+
+.profile-picture {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 0.2rem;
+}
+
+.jump {
+    display: block;
+    position: relative;
+    bottom: 10px;
+    width: fit-content;
+    padding: 1px 30px 1px 30px;
+    background-color: $tertiary;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px black;
+    cursor: pointer;
 }
