@@ -75,11 +75,17 @@ function socketGlobalListeners() {
 		messages.forEach(async (message) => {
 			let friend = friends.find((friend) => friend.id === message.from);
 
-			if (friend === undefined) return;
+			if (friend === undefined) {
+				socket.emit("receivedPrivateMessage", message.id);
+				return;
+			}
 
 			let incoming = friend.privetMessage.incoming;
 
-			if (incoming.decryptedMessageIds.includes(message.id)) return;
+			if (incoming.decryptedMessageIds.includes(message.id)) {
+				socket.emit("receivedPrivateMessage", message.id);
+				return;
+			}
 
 			let oK = user.keyBundles[message.oKId];
 
@@ -102,6 +108,8 @@ function socketGlobalListeners() {
 			incoming.decryptedMessageIds.push(message.id);
 
 			let text = await decrypt(secret, message.encryptedText);
+
+			socket.emit("receivedPrivateMessage", message.id);
 
 			console.log(secret);
 			console.log(text);
