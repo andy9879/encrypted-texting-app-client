@@ -1,12 +1,12 @@
-$background:#131415;
-$primary:#0c0c0c;
-$secondary:#383838;
-$tertiary:#1a1a1a;
+$background: #131415;
+$primary: #0c0c0c;
+$secondary: #383838;
+$tertiary: #1a1a1a;
 
-$text-color:#cccbcb;
-$error:#d71d1d;
-$sucsses:#2bbe06;
+$text-color: #cccbcb;
+$text-color-faded: #686868;
+$error: #d71d1d;
+$sucsses: #2bbe06;
 
 @import 'bootstrap/scss/bootstrap.scss';
 @import 'bootstrap-vue/src/index.scss';
-
