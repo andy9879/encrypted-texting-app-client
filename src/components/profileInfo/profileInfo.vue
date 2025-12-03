@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import addFriend from "../chat-pages/addFriend/addFriend.vue";
+import addFriend from "@/components/addFriend/addFriend.vue";
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
 import { useServerDataStore } from "@/stores/serverData";

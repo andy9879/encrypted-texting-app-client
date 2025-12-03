@@ -169,7 +169,7 @@ async function login() {
 
 		console.log("Logged In");
 
-		router.push("/chat/servers");
+		router.push("/chat/");
 	} else {
 		formError.value = "login failed";
 		loadingWheel.value = false;
