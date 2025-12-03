@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { v4 as uuid } from "uuid";
+
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
 import { useServerDataStore } from "@/stores/serverData";
@@ -16,6 +17,7 @@ import {
 	encrypt,
 } from "@/scripts/manageKeys.js";
 import { socket } from "@/scripts/socket";
+import profileInfo from "@/components/profileInfo/profileInfo.vue";
 
 let clientData = useClientDataStore();
 
@@ -98,7 +100,7 @@ async function send(text) {
 	<div class="content">
 		<div class="page-wrapper">
 			<div class="server-col">
-				<div class="row">
+				<div class="row" style="margin-left: 10px">
 					<div class="col-3">
 						<div class="server-icon-col-wrapper">
 							<div class="direct-message-wrapper">
@@ -140,6 +142,7 @@ async function send(text) {
 						</div>
 					</div>
 				</div>
+				<profile-info />
 			</div>
 			<div
 				v-if="!showServer && selectedFriendId === null"

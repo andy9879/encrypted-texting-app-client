@@ -1,0 +1,37 @@
+.wrapper {
+    width: calc(100% - 10px);
+    margin: 0 5px 0 5px;
+    padding: 10px;
+    background-color: $primary;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.profilePicture {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.ProfileInfoAndControls {
+    display: inline-block;
+}
+
+.controls {
+    span {
+        margin-right: 10px;
+        cursor: pointer;
+        color: $text-color;
+
+        :hover {
+            color: $text-color
+        }
+    }
+}
+
+.addFriend {
+    position: absolute;
+    bottom: 4cm;
+    left: 15px;
+}

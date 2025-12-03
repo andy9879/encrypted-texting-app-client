@@ -1,0 +1,14 @@
+input {
+    background: transparent;
+    color: $text-color;
+    border: none;
+    border-bottom: solid;
+    border-color: $text-color;
+
+
+
+}
+
+input:focus {
+    outline: none;
+}
