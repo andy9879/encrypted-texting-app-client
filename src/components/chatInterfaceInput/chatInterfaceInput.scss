@@ -17,6 +17,10 @@
   border: none;
 }
 
+#editor:deep(.ql-editor.ql-blank::before) {
+  color: $text-color;
+}
+
 #editor::-webkit-scrollbar {
   width: 8px;
 }

@@ -101,7 +101,7 @@ async function send(text) {
 		<div class="content">
 			<div class="page-wrapper">
 				<div class="server-col">
-					<div class="row" style="margin-left: 10px">
+					<div class="row">
 						<div class="col-3">
 							<div class="server-icon-col-wrapper">
 								<div class="direct-message-wrapper">

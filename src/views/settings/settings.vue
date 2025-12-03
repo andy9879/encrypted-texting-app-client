@@ -19,7 +19,7 @@ function logout() {
 
 <template>
 	<button @click="logout()">Logout</button>
-	<RouterLink to="/chat/servers">
+	<RouterLink to="/chat/">
 		<button>Back</button>
 	</RouterLink>
 </template>

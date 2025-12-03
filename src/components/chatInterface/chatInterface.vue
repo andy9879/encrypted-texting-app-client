@@ -33,7 +33,7 @@ const messages = computed(() => {
 					...message,
 					type: "outgoing",
 				};
-			})
+			}),
 		);
 
 	return messagesArr.sort((a, b) => a.time - b.time);
@@ -42,42 +42,41 @@ const messages = computed(() => {
 const messagesElement = useTemplateRef("messages");
 const { x, y, isScrolling, arrivedState, directions, measure } = useScroll(
 	messagesElement,
-	{ behavior: "smooth" }
+	{ behavior: "smooth" },
 );
 
 let disableAutoScroll = ref(false);
-
-watch(messages, () => {
-	if (!disableAutoScroll.value) {
-		y.value = messagesElement.value.scrollHeight;
-		measure();
-	}
-});
 
 function jumpToPresent() {
 	y.value = messagesElement.value.scrollHeight;
 }
 
-watch(y, () => {
-	if (
-		messagesElement.value.scrollHeight -
-			messagesElement.value.clientHeight -
-			y.value >
-		500
-	) {
-		disableAutoScroll.value = true;
-	}
-});
-
-watch(arrivedState, () => {
-	console.log(arrivedState);
-	if (arrivedState.bottom) {
-		disableAutoScroll.value = false;
-	}
-});
-
 onMounted(() => {
 	y.value = messagesElement.value.scrollHeight;
+	watch(y, () => {
+		if (
+			messagesElement.value.scrollHeight -
+				messagesElement.value.clientHeight -
+				y.value >
+			500
+		) {
+			disableAutoScroll.value = true;
+		}
+	});
+
+	watch(arrivedState, () => {
+		console.log(arrivedState);
+		if (arrivedState.bottom) {
+			disableAutoScroll.value = false;
+		}
+	});
+
+	watch(messages, () => {
+		if (!disableAutoScroll.value) {
+			y.value = messagesElement.value.scrollHeight;
+			measure();
+		}
+	});
 });
 </script>
 
