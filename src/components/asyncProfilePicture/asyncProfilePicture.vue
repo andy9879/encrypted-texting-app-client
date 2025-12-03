@@ -13,7 +13,7 @@ let imageSrc = await serverData.otherUserProfilePicture(props.username);
 		class="profileIcon"
 		:width="props.width ?? '48px'"
 		:height="props.height ?? '48px'"
-		:src="'data:image/png;base64,' + imageSrc"
+		:src="imageSrc"
 	/>
 </template>
 

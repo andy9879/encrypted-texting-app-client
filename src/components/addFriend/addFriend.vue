@@ -79,10 +79,7 @@ const friendRequests = computed(() => {
 					<div v-if="UserToAdd?.found" class="row userToAdd">
 						<div col-4>
 							<!-- TODO switch profile pics to async component with suspense -->
-							<img
-								class="userToAddIcon"
-								:src="'data:image/png;base64,' + UserToAdd.profilePicture"
-							/>
+							<img class="userToAddIcon" :src="UserToAdd.profilePicture" />
 						</div>
 						<div class="col-7">{{ UserToAdd.username }}</div>
 						<div class="col-1">
@@ -102,10 +99,7 @@ const friendRequests = computed(() => {
 			<div v-for="req in friendRequests" :key="req.username">
 				<div class="userToAdd">
 					<div>
-						<img
-							class="userToAddIcon"
-							:src="'data:image/png;base64,' + req.profilePicture"
-						/>
+						<img class="userToAddIcon" :src="req.profilePicture" />
 					</div>
 					<div class="userToAddUsername">
 						{{ req.username }}
