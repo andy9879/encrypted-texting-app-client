@@ -1,10 +1,13 @@
 .content {
     margin: 0;
     padding-top: 10px;
-    padding-left: 20px;
+    padding-left: 10px;
     height: 100%;
     background-color: $primary;
     width: 8cm;
+    height: 8cm;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px 2px #000000;
 }
 
 $resultIconSize: 50px;
@@ -36,19 +39,19 @@ $resultIconSize: 50px;
     margin-top: 15px;
     margin-left: 0;
     padding: 5px;
+    display: flex;
+    align-items: center;
 }
 
-.userToAdd>div {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-}
+
 
 .userToAddIcon {
-    border-radius: 100%;
+    border-radius: 10px;
     border: 4px sold black;
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
 }
 
 .UserNotFound {
@@ -62,8 +65,16 @@ $resultIconSize: 50px;
 
 .requestListWrapper {
     margin: 0;
-    overflow-y: scroll;
     overflow-x: hidden;
-    max-height: 80vh;
+    height: calc(100% - 1rem - 15px);
 
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+}
+
+.userToAddUsername {
+    width: 5.5cm;
+    margin-left: 15px;
 }

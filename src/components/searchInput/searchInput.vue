@@ -14,7 +14,7 @@ function search() {
 <template>
 	<span @click="search()" class="pi pi-search"></span>
 	<span>
-		<input v-model="model" />
+		<input v-model="model" placeholder="Search Users" />
 	</span>
 </template>
 

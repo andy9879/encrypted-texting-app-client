@@ -4,9 +4,8 @@ input {
     border: none;
     border-bottom: solid;
     border-color: $text-color;
-
-
-
+    width: calc(100% - 42px);
+    margin-left: 10px;
 }
 
 input:focus {

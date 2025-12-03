@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, defineProps, watch } from "vue";
 import searchInput from "@/components/searchInput/searchInput.vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
 
@@ -19,7 +19,6 @@ const showFriendRequests = ref(true);
 //TODO make no user found look better
 //TODO Add Scroll bar for multiple search results for users
 //TODO Add popups for sending, denying , and accepting friend requests
-
 async function searchForUser(searchQuery) {
 	let res = await findUser(searchQuery);
 	showFriendRequests.value = false;
@@ -48,11 +47,29 @@ function acceptFriendRequest(userId) {
 function cancelFriendRequest(userId) {
 	socket.emit("cancelFriendRequest", userId);
 }
+
+const friendRequests = computed(() => {
+	return serverData.friendRequests.incoming
+		.map((friendRequest) => {
+			return {
+				...friendRequest,
+				type: "incoming",
+			};
+		})
+		.concat(
+			serverData.friendRequests.outgoing.map((friendRequest) => {
+				return {
+					...friendRequest,
+					type: "outgoing",
+				};
+			}),
+		);
+});
 </script>
 
 <template>
 	<div class="content">
-		<div class="row">
+		<div>
 			<searchInput :search="searchForUser" />
 		</div>
 		<div v-show="!showFriendRequests">
@@ -80,80 +97,38 @@ function cancelFriendRequest(userId) {
 				</div>
 			</div>
 		</div>
-		<div v-show="showFriendRequests">
-			<div class="row">
-				<div class="col">
-					<div class="row">
-						<div class="col-2"></div>
-						<div class="col-6">Username</div>
-						<div class="col-2">Status</div>
-						<div class="col-2"></div>
+
+		<div class="requestListWrapper" v-show="showFriendRequests">
+			<div v-for="req in friendRequests" :key="req.username">
+				<div class="userToAdd">
+					<div>
+						<img
+							class="userToAddIcon"
+							:src="'data:image/png;base64,' + req.profilePicture"
+						/>
 					</div>
-					<div class="requestListWrapper">
-						<div
-							v-for="req in serverData.friendRequests.incoming"
-							:key="req.username"
-						>
-							<div class="row userToAdd">
-								<div class="col-2">
-									<img
-										class="userToAddIcon"
-										:src="'data:image/png;base64,' + req.profilePicture"
-									/>
-								</div>
-								<div class="col-6">
-									{{ req.username }}
-								</div>
-
-								<div class="col-2">Pending</div>
-								<div class="col-2">
-									<b-icon
-										style="margin-right: 0.3cm"
-										class="addControlIcon"
-										scale="2"
-										icon="check"
-										@click="acceptFriendRequest(req.id)"
-									></b-icon>
-									<b-icon
-										@click="cancelFriendRequest(req.id)"
-										scale="2"
-										class="addControlIcon"
-										icon="x"
-									></b-icon>
-								</div>
-							</div>
-						</div>
-
-						<div
-							v-for="req in serverData.friendRequests.outgoing"
-							:key="req.username"
-						>
-							<div class="row userToAdd">
-								<div class="col-2">
-									<img
-										class="userToAddIcon"
-										:src="'data:image/png;base64,' + req.profilePicture"
-									/>
-								</div>
-								<div class="col-6">
-									{{ req.username }}
-								</div>
-
-								<div class="col-2">Requested</div>
-
-								<div class="col-2">
-									<b-icon
-										@click="cancelFriendRequest(req.id)"
-										scale="2"
-										class="addControlIcon"
-										icon="x"
-									></b-icon>
-								</div>
-							</div>
-						</div>
+					<div class="userToAddUsername">
+						{{ req.username }}
 					</div>
+
+					<b-icon
+						v-if="req.type === 'incoming'"
+						style="margin-right: 0.3cm"
+						class="addControlIcon"
+						scale="2"
+						icon="check"
+						@click="acceptFriendRequest(req.id)"
+					></b-icon>
+
+					<b-icon
+						@click="cancelFriendRequest(req.id)"
+						scale="2"
+						class="addControlIcon"
+						icon="x"
+					></b-icon>
 				</div>
 			</div>
+			<div v-if="friendRequests.length === 0">No Friend Requests ):</div>
 		</div>
 	</div>
 </template>
