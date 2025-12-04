@@ -6,6 +6,8 @@ import { parse } from "node-html-parser";
 
 const editor = useTemplateRef("editor");
 
+let quill = null;
+
 const props = defineProps({
 	send: Function,
 });
@@ -14,12 +16,13 @@ function OnSend() {
 	let html = editor.value?.innerHTML;
 	const root = parse(html);
 	let input = root.querySelector(".ql-editor")?.innerHTML;
+	quill.deleteText(0, quill.getLength());
 
 	props.send(input);
 }
 
 onMounted(() => {
-	const quill = new Quill("#editor", {
+	quill = new Quill("#editor", {
 		theme: "snow",
 		placeholder: "Enter Message",
 		modules: {
