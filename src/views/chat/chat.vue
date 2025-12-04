@@ -96,6 +96,7 @@ async function send(text) {
 }
 
 function deleteChat() {
+	//TODO possibly deleted the recorded of decrypted ids to
 	let friend = clientData.data.friends.find(
 		(friend) => friend.id === selectedFriendId.value,
 	);
