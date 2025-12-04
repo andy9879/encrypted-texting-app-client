@@ -108,6 +108,34 @@ function deleteChat() {
 
 	clientData.writeData();
 }
+
+const incomingMessages = computed(() => {
+	if (selectedFriend.value === null) {
+		return null;
+	}
+
+	return selectedFriend.value.privetMessage.incoming.messages.map((message) => {
+		return {
+			...message,
+			userId: selectedFriend.value.id,
+			username: selectedFriend.value.username,
+		};
+	});
+});
+
+const outgoingMessages = computed(() => {
+	if (selectedFriend.value === null) {
+		return null;
+	}
+
+	return selectedFriend.value.privetMessage.outgoing.messages.map((message) => {
+		return {
+			...message,
+			userId: clientData.data.id,
+			username: clientData.data.username,
+		};
+	});
+});
 </script>
 
 <template>
@@ -169,28 +197,8 @@ function deleteChat() {
 				<chat-interface
 					:send="send"
 					:deleteChat="deleteChat"
-					:incoming="
-						selectedFriend !== null
-							? selectedFriend.privetMessage.incoming.messages.map((message) => {
-									return {
-										...message,
-										userId: selectedFriend.id,
-										username: selectedFriend.username,
-									};
-								})
-							: null
-					"
-					:outgoing="
-						selectedFriend !== null
-							? selectedFriend.privetMessage.outgoing.messages.map((message) => {
-									return {
-										...message,
-										userId: clientData.data.id,
-										username: clientData.data.username,
-									};
-								})
-							: null
-					"
+					:incoming="incomingMessages"
+					:outgoing="outgoingMessages"
 					v-else
 					style="width: 100%; height: 100%"
 				></chat-interface>
