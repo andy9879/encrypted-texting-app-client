@@ -13,7 +13,7 @@ import {
 	checkPreKeyBundles,
 } from "@/scripts/manageKeys";
 
-import sanitizeHtml from "sanitize-html";
+import { sanitize } from "./sanitize";
 
 let socketInstance = null;
 
@@ -121,13 +121,7 @@ function socketGlobalListeners() {
 
 			socket.emit("receivedPrivateMessage", message.id);
 
-			let sanitizeText = sanitizeHtml(text, {
-				allowedTags: ["b", "i", "em", "u", "strong", "a", "img", "p"],
-				allowedAttributes: {
-					a: ["href"],
-					img: ["src"],
-				},
-			});
+			let sanitizeText = sanitize(text);
 
 			incoming.messages.push({
 				text: sanitizeText,

@@ -18,6 +18,7 @@ import {
 } from "@/scripts/manageKeys.js";
 import { socket } from "@/scripts/socket";
 import profileInfo from "@/components/profileInfo/profileInfo.vue";
+import { sanitize } from "@/scripts/sanitize";
 
 let clientData = useClientDataStore();
 
@@ -85,7 +86,7 @@ async function send(text) {
 	};
 
 	outgoing.messages.push({
-		text,
+		text: sanitize(text),
 		time,
 		id: messageId,
 	});
