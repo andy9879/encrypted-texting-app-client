@@ -10,11 +10,13 @@ import {
 import { useScroll } from "@vueuse/core";
 import chatInterfaceInput from "../chatInterfaceInput/chatInterfaceInput.vue";
 import { useServerDataStore } from "@/stores/serverData";
+import nuke from "../icons/nuke.vue";
 
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
 const props = defineProps({
 	send: Function,
+	deleteChat: Function,
 	incoming: Array,
 	outgoing: Array,
 });
@@ -82,6 +84,24 @@ onMounted(() => {
 
 <template>
 	<div class="chat-wrapper">
+		<div>
+			<nuke v-b-modal.modal-1 class="deleteIcon" width="24px" height="24px"></nuke>
+
+			<b-modal
+				@ok="props.deleteChat"
+				id="modal-1"
+				size="lg"
+				title="Delete Chat"
+				class="deleteChatModal"
+			>
+				<p>Are you sure you want to delete the entire chat?</p>
+				<p>This will not delete the chat for the other user</p>
+				<template #modal-footer="{ ok, cancel }">
+					<b-button @click="cancel()" style="margin-right: 10px">Cancel</b-button>
+					<b-button variant="danger" @click="ok()"> Delete Chat </b-button>
+				</template>
+			</b-modal>
+		</div>
 		<div class="chat">
 			<div class="messages" ref="messages">
 				<div class="message" v-for="message in messages" :key="message.id">

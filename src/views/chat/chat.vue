@@ -94,6 +94,19 @@ async function send(text) {
 
 	socket.emit("sendPrivateMessage", message);
 }
+
+function deleteChat() {
+	let friend = clientData.data.friends.find(
+		(friend) => friend.id === selectedFriendId.value,
+	);
+
+	if (friend === undefined) return;
+
+	friend.privetMessage.incoming.messages = [];
+	friend.privetMessage.outgoing.messages = [];
+
+	clientData.writeData();
+}
 </script>
 
 <template>
@@ -154,6 +167,7 @@ async function send(text) {
 
 				<chat-interface
 					:send="send"
+					:deleteChat="deleteChat"
 					:incoming="
 						selectedFriend !== null
 							? selectedFriend.privetMessage.incoming.messages.map((message) => {

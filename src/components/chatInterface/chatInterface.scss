@@ -62,3 +62,18 @@
     box-shadow: 2px 2px 4px black;
     cursor: pointer;
 }
+
+.deleteIcon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+}
+
+.deleteIcon:focus {
+    outline: none;
+}
+
+.deleteChatModal {
+    background-color: red;
+}
