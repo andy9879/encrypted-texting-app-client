@@ -57,7 +57,12 @@ async function upload() {
 	/>
 	<button @click="upload()">Upload</button>
 	<br />
-	<img class="userToAddIcon" :src="profilePictureExample" />
+	<img
+		width="100px"
+		height="100px"
+		class="userToAddIcon"
+		:src="profilePictureExample"
+	/>
 </template>
 
 <style scoped>
