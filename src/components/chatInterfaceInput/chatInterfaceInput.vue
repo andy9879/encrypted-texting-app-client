@@ -41,19 +41,14 @@ onMounted(() => {
 <template>
 	<!-- TODO Fix toolBar -->
 	<div v-show="showToolBar" id="toolbar">
-		<!-- Add font size dropdown -->
-		<select class="ql-size">
-			<option value="small"></option>
-			<!-- Note a missing, thus falsy value, is used to reset to default -->
-			<option selected></option>
-			<option value="large"></option>
-			<option value="huge"></option>
-		</select>
-		<!-- Add a bold button -->
+		<button class="ql-italic"></button>
+
+		<button class="ql-underline"></button>
 		<button class="ql-bold"></button>
-		<!-- Add subscript and superscript buttons -->
+
 		<button class="ql-script" value="sub"></button>
 		<button class="ql-script" value="super"></button>
+		<button class="ql-code-block"></button>
 	</div>
 	<div class="editorWrapper">
 		<!-- TODO fix chat input one word wrapping -->
