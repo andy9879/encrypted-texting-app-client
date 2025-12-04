@@ -10,15 +10,26 @@ let serverData = useServerDataStore();
 let clientData = useClientDataStore();
 
 let showAddFriend = ref(false);
+let showAddFriendFirstLoad = ref(true);
 
 function toggle() {
 	showAddFriend.value = !showAddFriend.value;
+	showAddFriendFirstLoad.value = false;
 }
 </script>
 
 <template>
 	<div ref="profileInfo" class="wrapper">
-		<div v-show="showAddFriend" class="addFriend">
+		<div
+			v-show="!showAddFriendFirstLoad"
+			:class="{
+				addFriend: true,
+				animate__animated: true,
+				animate__backOutDown: !showAddFriend && !showAddFriendFirstLoad,
+				animate__backInUp: showAddFriend,
+				animate__faster: true,
+			}"
+		>
 			<add-friend />
 		</div>
 		<div class="profilePicture">
