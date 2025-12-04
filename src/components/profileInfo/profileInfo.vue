@@ -22,13 +22,13 @@ function toggle() {
 	<div ref="profileInfo" class="wrapper">
 		<div
 			v-show="!showAddFriendFirstLoad"
-			:class="{
-				addFriend: true,
-				animate__animated: true,
-				animate__backOutDown: !showAddFriend && !showAddFriendFirstLoad,
-				animate__backInUp: showAddFriend,
-				animate__faster: true,
-			}"
+			:class="[
+				'addFriend',
+				'animate__animated',
+				'animate__faster',
+				{ ['animate__backOutDown']: !showAddFriend && !showAddFriendFirstLoad },
+				{ ['animate__backInUp']: showAddFriend },
+			]"
 		>
 			<add-friend />
 		</div>
