@@ -77,7 +77,9 @@ onMounted(() => {
 
 	watch(messages, () => {
 		if (!disableAutoScroll.value) {
-			messagesElementScroll.y.value = messagesElement.value.scrollHeight;
+			setTimeout(() => {
+				messagesElementScroll.y.value = messagesElement.value.scrollHeight;
+			}, 200);
 		}
 		messagesElementScroll.measure();
 	});
