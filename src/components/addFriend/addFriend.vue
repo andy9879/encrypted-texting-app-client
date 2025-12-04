@@ -13,6 +13,8 @@ const UserToAdd = ref({});
 
 const showFriendRequests = ref(true);
 
+const showCancelSearch = ref(false);
+
 //TODO style overflow scroll bar for friend requests
 
 //TODO Add min username size to search
@@ -22,6 +24,7 @@ const showFriendRequests = ref(true);
 async function searchForUser(searchQuery) {
 	let res = await findUser(searchQuery);
 	showFriendRequests.value = false;
+	showCancelSearch.value = true;
 
 	if (res.found) {
 		showNoUserFound.value = false;
@@ -35,9 +38,16 @@ async function searchForUser(searchQuery) {
 	}
 }
 
+async function cancelSearch() {
+	showNoUserFound.value = false;
+	showFriendRequests.value = true;
+	showCancelSearch.value = false;
+}
+
 function sendFriendRequest(userId) {
 	socket.emit("FriendRequest", userId);
 	showFriendRequests.value = true;
+	showCancelSearch.value = false;
 }
 
 function acceptFriendRequest(userId) {
@@ -70,7 +80,11 @@ const friendRequests = computed(() => {
 <template>
 	<div class="content">
 		<div>
-			<searchInput :search="searchForUser" />
+			<searchInput
+				:show-cancel="showCancelSearch"
+				:cancel="cancelSearch"
+				:search="searchForUser"
+			/>
 		</div>
 		<div v-show="!showFriendRequests">
 			<div class="row">

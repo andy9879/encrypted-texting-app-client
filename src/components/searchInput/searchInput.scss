@@ -11,3 +11,16 @@ input {
 input:focus {
     outline: none;
 }
+
+.search-controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.control {
+    cursor: pointer;
+}
