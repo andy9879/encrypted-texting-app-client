@@ -13,7 +13,7 @@
   max-height: 5cm;
   overflow-y: auto;
   margin-right: 15px;
-  width: calc(100% - 2.5cm);
+  width: calc(100% - 3cm);
   border: none;
 }
 
@@ -38,4 +38,45 @@
 .editorIcon {
   margin-right: 10px;
   cursor: pointer;
+}
+
+.editorControls {
+  display: flex;
+  align-items: center;
+}
+
+#toolbar {
+  border: none;
+  background-color: $primary;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+#toolbar:deep(.ql-snow .ql-picker) {
+  color: $text-color
+}
+
+#toolbar:deep(.ql-active .ql-stroke) {
+  stroke: $text-color-faded !important;
+}
+
+#toolbar:deep(.ql-stroke) {
+  stroke: $text-color !important;
+}
+
+#toolbar:deep([type="button"]:hover .ql-stroke) {
+  stroke: $text-color-faded !important;
+}
+
+
+#toolbar:deep(.ql-fill) {
+  fill: $text-color !important;
+}
+
+#toolbar:deep(.ql-active .ql-fill) {
+  fill: $text-color-faded !important;
+}
+
+#toolbar:deep([type="button"]:hover .ql-fill) {
+  fill: $text-color-faded !important;
 }

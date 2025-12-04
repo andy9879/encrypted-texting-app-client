@@ -3,6 +3,7 @@ import { onMounted, ref, useTemplateRef, defineProps } from "vue";
 import Quill from "/node_modules/quill/dist/quill.js";
 import Container from "quill/blots/container";
 import { parse } from "node-html-parser";
+import textIcon from "../icons/textIcon.vue";
 
 const editor = useTemplateRef("editor");
 
@@ -11,6 +12,8 @@ let quill = null;
 const props = defineProps({
 	send: Function,
 });
+
+const showToolBar = ref(false);
 
 function OnSend() {
 	let html = editor.value?.innerHTML;
@@ -37,7 +40,7 @@ onMounted(() => {
 
 <template>
 	<!-- TODO Fix toolBar -->
-	<div id="toolbar" style="display: none">
+	<div v-show="showToolBar" id="toolbar">
 		<!-- Add font size dropdown -->
 		<select class="ql-size">
 			<option value="small"></option>
@@ -55,7 +58,10 @@ onMounted(() => {
 	<div class="editorWrapper">
 		<!-- TODO fix chat input one word wrapping -->
 		<div id="editor" ref="editor"></div>
-		<div>
+		<div class="editorControls">
+			<div @click="showToolBar = !showToolBar" class="editorIcon">
+				<textIcon width="20px" height="32px"></textIcon>
+			</div>
 			<div class="editorIcon pi pi-paperclip"></div>
 			<div class="editorIcon pi pi-image"></div>
 			<div @click="OnSend()" class="editorIcon pi pi-send"></div>
