@@ -20,6 +20,11 @@ const props = defineProps({
 	incoming: Array,
 	outgoing: Array,
 });
+const messagesElement = useTemplateRef("messages");
+
+const messagesElementScroll = useScroll(messagesElement, {
+	behavior: "smooth",
+});
 
 const messages = computed(() => {
 	let messagesArr = props.incoming
@@ -41,43 +46,40 @@ const messages = computed(() => {
 	return messagesArr.sort((a, b) => a.time - b.time);
 });
 
-const messagesElement = useTemplateRef("messages");
-const { x, y, isScrolling, arrivedState, directions, measure } = useScroll(
-	messagesElement,
-	{ behavior: "smooth" },
-);
+function jumpToPresent() {
+	messagesElementScroll.y.value = messagesElement.value.scrollHeight;
+}
 
 let disableAutoScroll = ref(false);
 
-function jumpToPresent() {
-	y.value = messagesElement.value.scrollHeight;
-}
-
 onMounted(() => {
-	y.value = messagesElement.value.scrollHeight;
-	watch(y, () => {
+	jumpToPresent();
+	setTimeout(() => {
+		jumpToPresent();
+	}, 100);
+
+	watch(messagesElementScroll.y, () => {
 		if (
 			messagesElement.value.scrollHeight -
 				messagesElement.value.clientHeight -
-				y.value >
-			500
+				messagesElementScroll.y.value >
+			200
 		) {
 			disableAutoScroll.value = true;
 		}
 	});
 
-	watch(arrivedState, () => {
-		console.log(arrivedState);
-		if (arrivedState.bottom) {
+	watch(messagesElementScroll.arrivedState, () => {
+		if (messagesElementScroll.arrivedState.bottom) {
 			disableAutoScroll.value = false;
 		}
 	});
 
 	watch(messages, () => {
 		if (!disableAutoScroll.value) {
-			y.value = messagesElement.value.scrollHeight;
-			measure();
+			messagesElementScroll.y.value = messagesElement.value.scrollHeight;
 		}
+		messagesElementScroll.measure();
 	});
 });
 </script>
