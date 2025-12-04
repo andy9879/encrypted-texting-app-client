@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import addFriend from "@/components/addFriend/addFriend.vue";
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
 
@@ -11,16 +11,31 @@ let clientData = useClientDataStore();
 
 let showAddFriend = ref(false);
 let showAddFriendFirstLoad = ref(true);
+let enableClickOutsideToCloseAddFriend = ref(false);
 
-function toggle() {
+function toggleAddFriend() {
 	showAddFriend.value = !showAddFriend.value;
 	showAddFriendFirstLoad.value = false;
 }
+
+function closeAddFriend() {
+	if (enableClickOutsideToCloseAddFriend.value && showAddFriend.value) {
+		showAddFriend.value = false;
+	}
+}
+
+watch(showAddFriend, () => {
+	setTimeout(() => {
+		enableClickOutsideToCloseAddFriend.value =
+			!enableClickOutsideToCloseAddFriend.value;
+	}, 200);
+});
 </script>
 
 <template>
 	<div ref="profileInfo" class="wrapper">
 		<div
+			v-click-outside-element="closeAddFriend"
 			v-show="!showAddFriendFirstLoad"
 			:class="[
 				'addFriend',
@@ -47,7 +62,7 @@ function toggle() {
 				{{ clientData.data.username }}
 			</div>
 			<div class="controls">
-				<span @click="toggle()" class="pi pi-user-plus"></span>
+				<span @click="toggleAddFriend()" class="pi pi-user-plus"></span>
 				<RouterLink to="/settings/">
 					<span class="pi pi-cog"></span>
 				</RouterLink>
