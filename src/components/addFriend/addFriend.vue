@@ -90,13 +90,13 @@ const friendRequests = computed(() => {
 			<div class="row">
 				<div class="col">
 					<div class="UserNotFound" v-show="showNoUserFound">User not found</div>
-					<div v-if="UserToAdd?.found" class="row userToAdd">
-						<div col-4>
+					<div v-if="UserToAdd?.found" class="userToAdd">
+						<div>
 							<!-- TODO switch profile pics to async component with suspense -->
 							<img class="userToAddIcon" :src="UserToAdd.profilePicture" />
 						</div>
-						<div class="col-7">{{ UserToAdd.username }}</div>
-						<div class="col-1">
+						<div class="userToAddUsername">{{ UserToAdd.username }}</div>
+						<div>
 							<b-icon
 								@click="sendFriendRequest(UserToAdd.id)"
 								icon="person-plus-fill"
