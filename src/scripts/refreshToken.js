@@ -1,6 +1,7 @@
 import { useServerDataStore } from "@/stores/serverData";
 import { refreshToken as refreshTokenReq } from "@/scripts/serverApi";
 import { refreshTokenHeader } from "@/scripts/socket";
+import { checkPreKeyBundles } from "@/scripts/manageKeys";
 
 const tokenRefreshMin = 4;
 
@@ -19,6 +20,7 @@ export async function refreshTokenTimer() {
 			serverData.jwt = jwt;
 			serverData.refreshToken = refreshToken;
 			refreshTokenHeader(jwt);
+			checkPreKeyBundles();
 		},
 		tokenRefreshMin * 60 * 1000,
 	);

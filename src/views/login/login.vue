@@ -13,7 +13,11 @@ let clientData = useClientDataStore();
 import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
 import * as serverApi from "@/scripts/serverApi";
 
-import { createKeyPair, signKey } from "@/scripts/manageKeys";
+import {
+	createKeyPair,
+	signKey,
+	checkPreKeyBundles,
+} from "@/scripts/manageKeys";
 
 import router from "@/router";
 import sha256 from "js-sha256";
@@ -168,6 +172,7 @@ async function login() {
 		connectToServer();
 
 		console.log("Logged In");
+		checkPreKeyBundles();
 
 		router.push("/chat/");
 	} else {
