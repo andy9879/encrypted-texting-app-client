@@ -27,6 +27,7 @@ function socketGlobalListeners() {
 
 		let res = JSON.parse(JSON.stringify(req));
 
+		//TODO Remove this statement and all references to it
 		for (let type in req) {
 			for (let request of req[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
