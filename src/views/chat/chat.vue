@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { v4 as uuid } from "uuid";
 
 import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
@@ -33,6 +33,18 @@ const selectedFriend = computed(() => {
 	);
 
 	return friend ?? null;
+});
+
+watch(selectedFriendId, () => {
+	let friend = clientData.data.friends.find(
+		(friend) => friend.id === selectedFriendId.value,
+	);
+
+	if (friend === undefined) return;
+
+	friend.privetMessage.incoming.unread = 0;
+
+	clientData.writeData();
 });
 
 async function send(text) {
@@ -112,7 +124,7 @@ function deleteChat() {
 
 const incomingMessages = computed(() => {
 	if (selectedFriend.value === null) {
-		return null;
+		return [];
 	}
 
 	return selectedFriend.value.privetMessage.incoming.messages.map((message) => {
@@ -126,7 +138,7 @@ const incomingMessages = computed(() => {
 
 const outgoingMessages = computed(() => {
 	if (selectedFriend.value === null) {
-		return null;
+		return [];
 	}
 
 	return selectedFriend.value.privetMessage.outgoing.messages.map((message) => {
@@ -164,11 +176,11 @@ const outgoingMessages = computed(() => {
 									<div
 										v-for="friend in clientData.data.friends"
 										:key="friend.username"
-										:class="{
-											row: true,
-											friend: true,
-											friendSelected: friend.id === selectedFriendId,
-										}"
+										:class="[
+											['row'],
+											['friend'],
+											{ friendSelected: friend.id === selectedFriendId },
+										]"
 										@click="selectedFriendId = friend.id"
 									>
 										<div class="col-4">
@@ -180,7 +192,12 @@ const outgoingMessages = computed(() => {
 												<template #fallback> Loading... </template>
 											</Suspense>
 										</div>
-										<div class="col-8 friend-username">{{ friend.username }}</div>
+										<div class="col-6 friend-username">{{ friend.username }}</div>
+										<div class="col-2 unreadCount">
+											<div v-show="friend.privetMessage.incoming.unread > 0">
+												{{ friend.privetMessage.incoming.unread }}
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

@@ -59,6 +59,7 @@ function socketGlobalListeners() {
 						incoming: {
 							messages: [],
 							decryptedMessageIds: [],
+							unread: 0,
 						},
 						outgoing: {
 							messages: [],
@@ -131,6 +132,8 @@ function socketGlobalListeners() {
 				time: message.time,
 				id: message.id,
 			});
+
+			incoming.unread += 1;
 
 			clientData.writeData();
 		});
