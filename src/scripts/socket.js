@@ -43,6 +43,7 @@ function socketGlobalListeners() {
 
 	//TODO add some way to reset friend to allow a ik change with a warning or something
 	//TODO Theres probably a race condition between adding a new friend and receiving private messages if the friend request was accept while the other user is offline
+	//TODO Turn friends into a hash map
 	socket.on("updateFriends", async (friends) => {
 		serverData.friends = friends;
 
