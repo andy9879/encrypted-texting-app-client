@@ -15,7 +15,7 @@ const {
 } = require("crypto");
 
 let { secp256k1 } = require("@noble/curves/secp256k1");
-let { utf8ToBytes } = require("@noble/hashes/utils");
+const { Base64 } = require("js-base64");
 
 //TODO make dotenv files only included in building
 require("dotenv").config();
@@ -123,16 +123,13 @@ function createKeyPair() {
 	let priv = secp256k1.utils.randomPrivateKey();
 	let pub = secp256k1.getPublicKey(priv);
 	return {
-		priv: priv.join(),
-		pub: pub.join(),
+		priv: Base64.fromUint8Array(priv),
+		pub: Base64.fromUint8Array(pub),
 	};
 }
 
 function signKey(event, pub, priv) {
-	let sig = secp256k1.sign(
-		new Uint8Array(pub.split(",")),
-		new Uint8Array(priv.split(",")),
-	);
+	let sig = secp256k1.sign(Base64.toUint8Array(pub), Base64.toUint8Array(priv));
 
 	return {
 		r: sig.r.toString(),
@@ -141,12 +138,10 @@ function signKey(event, pub, priv) {
 }
 
 function getSharedSecret(event, priv, pub) {
-	let intPriv = new Uint8Array(priv.split(","));
-	let intPub = new Uint8Array(pub.split(","));
+	let intPriv = Base64.toUint8Array(priv);
+	let intPub = Base64.toUint8Array(pub);
 
-	return secp256k1
-		.getSharedSecret(new Uint8Array(intPriv), new Uint8Array(intPub))
-		.toString();
+	return Base64.fromUint8Array(secp256k1.getSharedSecret(intPriv, intPub));
 }
 
 function verifySig(event, sig, signedContent, pub) {
@@ -155,23 +150,23 @@ function verifySig(event, sig, signedContent, pub) {
 			r: BigInt(sig.r),
 			s: BigInt(sig.s),
 		},
-		new Uint8Array(signedContent.split(",")),
-		new Uint8Array(pub.split(",")),
+		Base64.toUint8Array(signedContent),
+		Base64.toUint8Array(pub),
 	);
 }
 
 function hkdf(event, input, info) {
-	let secret = new Uint8Array(input.split(",").map((i) => parseInt(i)));
-	return Buffer.from(hkdfSync("sha256", secret, "", info, 32)).toString(
-		"base64",
+	let secret = Base64.toUint8Array(input);
+	return Base64.fromUint8Array(
+		new Uint8Array(hkdfSync("sha256", secret, "", info, 32)),
 	);
 }
 
 function encrypt(event, hash, text) {
-	let key = Buffer.from(hash, "base64");
+	let key = Base64.toUint8Array(hash);
 
 	let iv = Buffer.alloc(16);
-	iv = randomFillSync(iv);
+	iv = new Uint8Array(randomFillSync(iv));
 
 	const cipher = createCipheriv("aes-256-cbc", key, iv);
 
@@ -179,16 +174,16 @@ function encrypt(event, hash, text) {
 
 	encrypted += cipher.final("base64");
 
-	return (encrypted = iv.toString("base64") + ":" + encrypted);
+	return (encrypted = Base64.fromUint8Array(iv) + ":" + encrypted);
 }
 
 function decrypt(event, hash, text) {
 	return new Promise((resolve) => {
-		let key = Buffer.from(hash, "base64");
+		let key = Base64.toUint8Array(hash);
 
 		let encriptedDataArr = text.split(":");
 
-		let iv = Buffer.from(encriptedDataArr[0], "base64");
+		let iv = Base64.toUint8Array(encriptedDataArr[0]);
 		let encrypted = encriptedDataArr[1];
 
 		const decipher = createDecipheriv("aes-256-cbc", key, iv);
