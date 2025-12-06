@@ -17,6 +17,7 @@ import { socket } from "@/scripts/socket";
 import profileInfo from "@/components/profileInfo/profileInfo.vue";
 import chatFriendsList from "@/components/chatFriendsList/chatFriendsList.vue";
 import { sanitize } from "@/scripts/sanitize";
+import chatChannelList from "@/components/chatChannelList/chatChannelList.vue";
 
 let clientData = useClientDataStore();
 
@@ -154,7 +155,7 @@ const outgoingMessages = computed(() => {
 		<div class="content">
 			<div class="page-wrapper">
 				<div class="server-col">
-					<div class="row">
+					<div class="row" style="width: 100%">
 						<div class="col-3">
 							<div class="server-icon-col-wrapper">
 								<div class="direct-message-wrapper">
@@ -163,11 +164,27 @@ const outgoingMessages = computed(() => {
 										class="pi pi-users direct-message"
 									></span>
 								</div>
-								<img width="48px" src="@/assets/testIcon.jpg" />
+								<div class="serverIcon">
+									<img class="" width="48px" src="@/assets/testIcon.jpg" />
+								</div>
+								<div class="serverIcon">
+									<img class="" width="48px" src="@/assets/testIcon2.jpg" />
+								</div>
+								<div class="serverIcon">
+									<img class="" width="48px" src="@/assets/testIcon3.png" />
+								</div>
+								<div class="serverIcon">
+									<img class="" width="48px" src="@/assets/testIcon4.jpg" />
+								</div>
+								<div class="serverIcon">
+									<img class="" width="48px" src="@/assets/testIcon5.png" />
+								</div>
 							</div>
 						</div>
 						<div class="col-9" style="padding: 0">
-							<div v-show="showServer">test</div>
+							<div v-show="showServer">
+								<chatChannelList />
+							</div>
 							<div v-show="!showServer">
 								<chatFriendsList v-model:selectedFriendId="selectedFriendId" />
 							</div>

@@ -51,3 +51,15 @@ $resultIconSize: 50px;
     height: 100%;
     padding: 10px;
 }
+
+.serverIcon {
+    img {
+        border-radius: 10px;
+        width: 48px;
+        height: 48px;
+        cursor: pointer;
+    }
+
+    margin-bottom: 15px;
+
+}
