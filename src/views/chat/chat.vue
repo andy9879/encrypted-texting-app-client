@@ -2,9 +2,6 @@
 import { ref, computed, watch } from "vue";
 import { v4 as uuid } from "uuid";
 
-import asyncProfilePicture from "@/components/asyncProfilePicture/asyncProfilePicture.vue";
-
-import { useServerDataStore } from "@/stores/serverData";
 import { useClientDataStore } from "@/stores/clientData";
 
 import chatInterface from "@/components/chatInterface/chatInterface.vue";
@@ -18,6 +15,7 @@ import {
 } from "@/scripts/manageKeys.js";
 import { socket } from "@/scripts/socket";
 import profileInfo from "@/components/profileInfo/profileInfo.vue";
+import chatFriendsList from "@/components/chatFriendsList/chatFriendsList.vue";
 import { sanitize } from "@/scripts/sanitize";
 
 let clientData = useClientDataStore();
@@ -171,35 +169,7 @@ const outgoingMessages = computed(() => {
 						<div class="col-9" style="padding: 0">
 							<div v-show="showServer">test</div>
 							<div v-show="!showServer">
-								<div class="friends">
-									<div v-if="clientData.data.friends.length === 0">No Friends ):</div>
-									<div
-										v-for="friend in clientData.data.friends"
-										:key="friend.username"
-										:class="[
-											['row'],
-											['friend'],
-											{ friendSelected: friend.id === selectedFriendId },
-										]"
-										@click="selectedFriendId = friend.id"
-									>
-										<div class="col-4">
-											<Suspense>
-												<asyncProfilePicture
-													:username="friend.username"
-												></asyncProfilePicture>
-												<!-- TODO Add betting loading screen -->
-												<template #fallback> Loading... </template>
-											</Suspense>
-										</div>
-										<div class="col-6 friend-username">{{ friend.username }}</div>
-										<div class="col-2 unreadCount">
-											<div v-show="friend.privetMessage.incoming.unread > 0">
-												{{ friend.privetMessage.incoming.unread }}
-											</div>
-										</div>
-									</div>
-								</div>
+								<chatFriendsList v-model:selectedFriendId="selectedFriendId" />
 							</div>
 						</div>
 					</div>
