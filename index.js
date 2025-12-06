@@ -132,8 +132,8 @@ function signKey(event, pub, priv) {
 	let sig = secp256k1.sign(Base64.toUint8Array(pub), Base64.toUint8Array(priv));
 
 	return {
-		r: sig.r.toString(),
-		s: sig.s.toString(),
+		r: "0x" + sig.r.toString(16),
+		s: "0x" + sig.s.toString(16),
 	};
 }
 
