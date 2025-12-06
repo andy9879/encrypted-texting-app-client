@@ -156,8 +156,8 @@ const outgoingMessages = computed(() => {
 			<div class="page-wrapper">
 				<div class="server-col">
 					<div class="row" style="width: 100%">
-						<div class="col-3">
-							<div class="server-icon-col-wrapper">
+						<div class="col-3 server-icon-col-wrapper">
+							<div class="server-icon-col">
 								<div class="direct-message-wrapper">
 									<span
 										@click="showServer = !showServer"
