@@ -118,13 +118,6 @@ function changeUsername(event, username) {
 		".json";
 }
 
-function hkdf(event, input, info) {
-	let secret = Base64.toUint8Array(input);
-	return Base64.fromUint8Array(
-		new Uint8Array(hkdfSync("sha256", secret, "", info, 32)),
-	);
-}
-
 function encrypt(event, hash, text) {
 	let key = Base64.toUint8Array(hash);
 
@@ -204,7 +197,6 @@ app.whenReady().then(() => {
 	ipcMain.handle("writeUserData", writeUserData);
 	ipcMain.handle("changeUsername", changeUsername);
 	ipcMain.handle("createNotification", createNotification);
-	ipcMain.handle("hkdf", hkdf);
 	ipcMain.handle("encrypt", encrypt);
 	ipcMain.handle("decrypt", decrypt);
 	createWindow();

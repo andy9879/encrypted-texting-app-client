@@ -1,5 +1,6 @@
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { Base64 } from "js-base64";
+import scrypt from "scrypt-js";
 import { addKeyBundle } from "./serverApi";
 import { useClientDataStore } from "@/stores/clientData";
 import { v4 as uuid } from "uuid";
@@ -44,7 +45,16 @@ export async function verifySig(sig, signedContent, pub) {
 }
 
 export async function hkdf(input, info) {
-	return await window.manageKeys.hkdf(input, info);
+	let uintHash = await scrypt.scrypt(
+		Base64.toUint8Array(input),
+		Base64.toUint8Array(info),
+		128,
+		8,
+		4,
+		32,
+	);
+
+	return Base64.fromUint8Array(uintHash);
 }
 
 export async function encrypt(hash, text) {
