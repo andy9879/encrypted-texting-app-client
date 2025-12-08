@@ -13,12 +13,6 @@ contextBridge.exposeInMainWorld("manageFiles", {
 	// we can also expose variables, not just functions
 });
 contextBridge.exposeInMainWorld("manageKeys", {
-	createKeyPair: () => ipcRenderer.invoke("createKeyPair"),
-	signKey: (pub, priv) => ipcRenderer.invoke("signKey", pub, priv),
-	getSharedSecret: (pub, priv) =>
-		ipcRenderer.invoke("getSharedSecret", pub, priv),
-	verifySig: (sig, signedContent, pub) =>
-		ipcRenderer.invoke("verifySig", sig, signedContent, pub),
 	hkdf: (input, info) => ipcRenderer.invoke("hkdf", input, info),
 	encrypt: (hash, text) => ipcRenderer.invoke("encrypt", hash, text),
 	decrypt: (hash, text) => ipcRenderer.invoke("decrypt", hash, text),

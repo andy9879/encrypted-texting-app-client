@@ -118,43 +118,6 @@ function changeUsername(event, username) {
 		".json";
 }
 
-function createKeyPair() {
-	//TODO Check on deprecated function
-	let priv = secp256k1.utils.randomPrivateKey();
-	let pub = secp256k1.getPublicKey(priv);
-	return {
-		priv: Base64.fromUint8Array(priv),
-		pub: Base64.fromUint8Array(pub),
-	};
-}
-
-function signKey(event, pub, priv) {
-	let sig = secp256k1.sign(Base64.toUint8Array(pub), Base64.toUint8Array(priv));
-
-	return {
-		r: "0x" + sig.r.toString(16),
-		s: "0x" + sig.s.toString(16),
-	};
-}
-
-function getSharedSecret(event, priv, pub) {
-	let intPriv = Base64.toUint8Array(priv);
-	let intPub = Base64.toUint8Array(pub);
-
-	return Base64.fromUint8Array(secp256k1.getSharedSecret(intPriv, intPub));
-}
-
-function verifySig(event, sig, signedContent, pub) {
-	return secp256k1.verify(
-		{
-			r: BigInt(sig.r),
-			s: BigInt(sig.s),
-		},
-		Base64.toUint8Array(signedContent),
-		Base64.toUint8Array(pub),
-	);
-}
-
 function hkdf(event, input, info) {
 	let secret = Base64.toUint8Array(input);
 	return Base64.fromUint8Array(
@@ -239,11 +202,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
 	ipcMain.handle("getUserData", getUserData);
 	ipcMain.handle("writeUserData", writeUserData);
-	ipcMain.handle("createKeyPair", createKeyPair);
 	ipcMain.handle("changeUsername", changeUsername);
-	ipcMain.handle("signKey", signKey);
-	ipcMain.handle("getSharedSecret", getSharedSecret);
-	ipcMain.handle("verifySig", verifySig);
 	ipcMain.handle("createNotification", createNotification);
 	ipcMain.handle("hkdf", hkdf);
 	ipcMain.handle("encrypt", encrypt);

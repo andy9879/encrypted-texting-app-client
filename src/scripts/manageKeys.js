@@ -1,23 +1,46 @@
+import { secp256k1 } from "@noble/curves/secp256k1";
+import { Base64 } from "js-base64";
 import { addKeyBundle } from "./serverApi";
 import { useClientDataStore } from "@/stores/clientData";
 import { v4 as uuid } from "uuid";
 import { requestPreKeyBundle as requestPreKeyBundleReq } from "@/scripts/serverApi.js";
 
 export async function createKeyPair() {
-	return await window.manageKeys.createKeyPair();
+	//TODO Check on deprecated function
+	let priv = secp256k1.utils.randomPrivateKey();
+	let pub = secp256k1.getPublicKey(priv);
+	return {
+		priv: Base64.fromUint8Array(priv),
+		pub: Base64.fromUint8Array(pub),
+	};
 }
 
 export async function signKey(pub, priv) {
 	//TODO Hash pub key before siging
-	return await window.manageKeys.signKey(pub, priv);
+	let sig = secp256k1.sign(Base64.toUint8Array(pub), Base64.toUint8Array(priv));
+
+	return {
+		r: "0x" + sig.r.toString(16),
+		s: "0x" + sig.s.toString(16),
+	};
 }
 
-export async function getSharedSecret(pub, priv) {
-	return await window.manageKeys.getSharedSecret(pub, priv);
+export async function getSharedSecret(priv, pub) {
+	let intPriv = Base64.toUint8Array(priv);
+	let intPub = Base64.toUint8Array(pub);
+
+	return Base64.fromUint8Array(secp256k1.getSharedSecret(intPriv, intPub));
 }
 
 export async function verifySig(sig, signedContent, pub) {
-	return await window.manageKeys.verifySig(sig, signedContent, pub);
+	return secp256k1.verify(
+		{
+			r: BigInt(sig.r),
+			s: BigInt(sig.s),
+		},
+		Base64.toUint8Array(signedContent),
+		Base64.toUint8Array(pub),
+	);
 }
 
 export async function hkdf(input, info) {
@@ -42,7 +65,7 @@ export async function checkPreKeyBundles() {
 	let keyBundle = [];
 
 	for (let i = 0; i < 100; i++) {
-		let key = await window.manageKeys.createKeyPair();
+		let key = await createKeyPair();
 		keyBundle.push({
 			...key,
 			id: uuid(),
