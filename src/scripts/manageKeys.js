@@ -100,6 +100,7 @@ export async function checkPreKeyBundles() {
 	addKeyBundle(pubKeyBundle);
 }
 
+//TODO fix and implement this function
 export async function requestPreKeyBundle(userId) {
 	let req = await requestPreKeyBundleReq(userId);
 	if (req.status !== "successful") return null;
