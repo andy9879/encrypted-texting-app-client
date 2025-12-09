@@ -34,6 +34,8 @@ export default defineConfig(() => {
 		},
 		build: {
 			minify: false,
+			outDir: "./www",
+			emptyOutDir: true, // also necessary
 		},
 	};
 });

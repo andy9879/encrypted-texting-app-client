@@ -27,6 +27,7 @@
 		"bootstrap": "4",
 		"bootstrap-icons": "^1.11.3",
 		"bootstrap-vue": "^2.23.1",
+		"cordova-electron": "^4.0.1-nightly.20251125002453809.sha.e1252657",
 		"crypto": "^1.0.1",
 		"crypto-js": "^4.2.0",
 		"fs": "^0.0.1-security",
@@ -47,14 +48,6 @@
 		"vue-router": "^4.3.0"
 	},
 	"devDependencies": {
-		"@electron-forge/cli": "^7.3.1",
-		"@electron-forge/maker-deb": "^7.3.1",
-		"@electron-forge/maker-rpm": "^7.3.1",
-		"@electron-forge/maker-squirrel": "^7.3.1",
-		"@electron-forge/maker-zip": "^7.3.1",
-		"@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
-		"@electron-forge/plugin-fuses": "^7.3.1",
-		"@electron/fuses": "^1.8.0",
 		"@vitejs/plugin-vue": "^5.0.4",
 		"@vitejs/plugin-vue-jsx": "^3.1.0",
 		"@vue/compiler-sfc": "^3.1.0",
@@ -64,5 +57,13 @@
 		"sass": "^1.74.1",
 		"sass-loader": "^14.1.1",
 		"vite": "^5.2.8"
+	},
+	"keywords": [
+		"ecosystem:cordova"
+	],
+	"cordova": {
+		"platforms": [
+			"electron"
+		]
 	}
 }

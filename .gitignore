@@ -39,3 +39,6 @@ certs
 
 userData
 test.js
+www/
+/plugins/
+/platforms/
