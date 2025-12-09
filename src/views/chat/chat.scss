@@ -28,11 +28,17 @@ $resultIconSize: 50px;
     justify-items: left;
 }
 
-.server-icon-col-wrapper {
+.server-icon-col {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.server-icon-col-wrapper {
+    height: 100vh;
+    margin-top: -15px;
+    padding-top: 15px;
 }
 
 .direct-message-wrapper {
@@ -50,4 +56,16 @@ $resultIconSize: 50px;
     width: 100%;
     height: 100%;
     padding: 10px;
+}
+
+.serverIcon {
+    img {
+        border-radius: 10px;
+        width: 48px;
+        height: 48px;
+        cursor: pointer;
+    }
+
+    margin-bottom: 15px;
+
 }
