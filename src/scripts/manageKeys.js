@@ -1,6 +1,9 @@
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { Base64 } from "js-base64";
 import scrypt from "scrypt-js";
+import { xchacha20poly1305 } from "@noble/ciphers/chacha.js";
+import { randomBytes } from "@noble/ciphers/utils.js";
+
 import { addKeyBundle } from "./serverApi";
 import { useClientDataStore } from "@/stores/clientData";
 import { v4 as uuid } from "uuid";
@@ -58,11 +61,26 @@ export async function hkdf(input, info) {
 }
 
 export async function encrypt(hash, text) {
-	return await window.manageKeys.encrypt(hash, text);
+	const nonce = randomBytes(24);
+	const chacha = xchacha20poly1305(Base64.toUint8Array(hash), nonce);
+
+	const data = new TextEncoder().encode(text);
+	const ciphertext = chacha.encrypt(data);
+	return [Base64.fromUint8Array(ciphertext), Base64.fromUint8Array(nonce)].join(
+		":",
+	);
 }
 
 export async function decrypt(hash, text) {
-	return await window.manageKeys.decrypt(hash, text);
+	let [ciphertext, nonce] = text.split(":");
+	const chacha = xchacha20poly1305(
+		Base64.toUint8Array(hash),
+		Base64.toUint8Array(nonce),
+	);
+
+	const data_ = chacha.decrypt(Base64.toUint8Array(ciphertext));
+
+	return new TextDecoder().decode(data_);
 }
 
 export async function checkPreKeyBundles() {

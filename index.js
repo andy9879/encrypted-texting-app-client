@@ -118,50 +118,6 @@ function changeUsername(event, username) {
 		".json";
 }
 
-function encrypt(event, hash, text) {
-	let key = Base64.toUint8Array(hash);
-
-	let iv = Buffer.alloc(16);
-	iv = new Uint8Array(randomFillSync(iv));
-
-	const cipher = createCipheriv("aes-256-cbc", key, iv);
-
-	let encrypted = cipher.update(text, "utf8", "base64");
-
-	encrypted += cipher.final("base64");
-
-	return (encrypted = Base64.fromUint8Array(iv) + ":" + encrypted);
-}
-
-function decrypt(event, hash, text) {
-	return new Promise((resolve) => {
-		let key = Base64.toUint8Array(hash);
-
-		let encriptedDataArr = text.split(":");
-
-		let iv = Base64.toUint8Array(encriptedDataArr[0]);
-		let encrypted = encriptedDataArr[1];
-
-		const decipher = createDecipheriv("aes-256-cbc", key, iv);
-
-		let decrypted = "";
-
-		decipher.on("readable", () => {
-			let chunk;
-			while (null !== (chunk = decipher.read())) {
-				decrypted += chunk.toString("utf8");
-			}
-		});
-
-		decipher.write(encrypted, "base64");
-		decipher.end();
-
-		decipher.on("end", () => {
-			resolve(decrypted);
-		});
-	});
-}
-
 function createNotification(event, title, body) {
 	console.log("notification");
 	new Notification({

@@ -12,10 +12,6 @@ contextBridge.exposeInMainWorld("manageFiles", {
 
 	// we can also expose variables, not just functions
 });
-contextBridge.exposeInMainWorld("manageKeys", {
-	encrypt: (hash, text) => ipcRenderer.invoke("encrypt", hash, text),
-	decrypt: (hash, text) => ipcRenderer.invoke("decrypt", hash, text),
-});
 
 contextBridge.exposeInMainWorld("notification", {
 	createNotification: (title, body) =>
