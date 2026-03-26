@@ -909,6 +909,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@kumarshanu/string-to-boolean@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@kumarshanu/string-to-boolean/-/string-to-boolean-1.0.6.tgz#56d46a7a3304c7867bf5bb2800fdb2334dbccd35"
+  integrity sha512-RLsZAIor7WxpA3mRt7eS0Fr8AxU1mI7/ZUYftI1cRMWxU3OIpooEepIQG/3im7PMDb3e+honDzBOew6MikMDqA==
+
 "@listr2/prompt-adapter-inquirer@^2.0.22":
   version "2.0.22"
   resolved "https://registry.yarnpkg.com/@listr2/prompt-adapter-inquirer/-/prompt-adapter-inquirer-2.0.22.tgz#95f7730de62089be79a87a80aa333f5f4644f3c5"

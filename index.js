@@ -16,17 +16,18 @@ const {
 
 let { secp256k1 } = require("@noble/curves/secp256k1");
 const { Base64 } = require("js-base64");
+import stringToBoolean from "@kumarshanu/string-to-boolean"
 
 //TODO make dotenv files only included in building
 require("dotenv").config();
 
-if (process.env.ignoreCertificate) {
+if (stringToBoolean(process.env.ignoreCertificate)) {
 	app.commandLine.appendSwitch("ignore-certificate-errors");
 }
 
 let dataPath = null;
 
-if (process.env.localData) {
+if (stringToBoolean(process.env.localData)) {
 	dataPath = path.join(__dirname, "userData");
 } else {
 	dataPath = app.getPath("userData");
@@ -43,7 +44,7 @@ dataPath = path.join(dataPath, "userData.json");
 function getUserData(event, hash) {
 	return new Promise((resolve) => {
 		if (fs.existsSync(dataPath)) {
-			if (process.env.NoEncryptData) {
+			if (stringToBoolean(process.env.NoEncryptData)) {
 				resolve(
 					JSON.parse(fs.readFileSync(dataPath, { flag: "r", encoding: "utf-8" })),
 				);
@@ -102,7 +103,7 @@ function writeUserData(event, data, hash) {
 
 	fs.writeFileSync(
 		dataPath,
-		!process.env.NoEncryptData ? encrypted : JSON.stringify(data),
+		!stringToBoolean(process.env.NoEncryptData) ? encrypted : JSON.stringify(data),
 		{
 			flag: "w",
 		},

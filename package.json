@@ -17,6 +17,7 @@
 	},
 	"license": "ISC",
 	"dependencies": {
+		"@kumarshanu/string-to-boolean": "^1.0.6",
 		"@noble/curves": "^1.4.0",
 		"@noble/hashes": "^1.4.0",
 		"@primeuix/themes": "^2.0.1",
