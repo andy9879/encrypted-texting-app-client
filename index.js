@@ -16,7 +16,7 @@ const {
 
 let { secp256k1 } = require("@noble/curves/secp256k1");
 const { Base64 } = require("js-base64");
-import stringToBoolean from "@kumarshanu/string-to-boolean"
+const stringToBoolean = require("@kumarshanu/string-to-boolean");
 
 //TODO make dotenv files only included in building
 require("dotenv").config();
