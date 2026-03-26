@@ -1,5 +1,6 @@
 let serverUrl = null;
 let serverPort = null;
+const useHttps = import.meta.env.useHttps;
 
 export { serverUrl as url };
 export { serverPort as port };
@@ -7,7 +8,7 @@ export { serverPort as port };
 import { useServerDataStore } from "@/stores/serverData";
 
 function createUrl() {
-	return `https://${serverUrl}:${serverPort}`;
+	return `${useHttps ? "https" : "http"}://${serverUrl}:${serverPort}`;
 }
 
 function authHeader() {

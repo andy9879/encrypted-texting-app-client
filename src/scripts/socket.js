@@ -15,6 +15,8 @@ import {
 
 import { sanitize } from "./sanitize";
 
+const useHttps = import.meta.env.useHttps;
+
 let socketInstance = null;
 
 function socketGlobalListeners() {
@@ -31,7 +33,7 @@ function socketGlobalListeners() {
 		for (let type in req) {
 			for (let request of req[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username,
+					request.username
 				);
 			}
 		}
@@ -50,7 +52,7 @@ function socketGlobalListeners() {
 		friends.forEach((friend) => {
 			if (
 				clientData.data.friends.findIndex(
-					(clientFriend) => clientFriend.username == friend.username,
+					(clientFriend) => clientFriend.username == friend.username
 				) < 0
 			) {
 				clientData.data.friends.push({
@@ -73,7 +75,7 @@ function socketGlobalListeners() {
 
 		socket.emit(
 			"receivedFriendUpdate",
-			friends.map((friend) => friend.id),
+			friends.map((friend) => friend.id)
 		);
 
 		console.log("Updated Friends");
@@ -116,7 +118,7 @@ function socketGlobalListeners() {
 				sharedSecretArr.reduce((newSecret, secret) => {
 					return newSecret + secret;
 				}),
-				oK.id,
+				oK.id
 			);
 
 			incoming.decryptedMessageIds.push(message.id);
@@ -147,7 +149,7 @@ function updateAll() {
 export function socketInit() {
 	let serverData = useServerDataStore();
 
-	socketInstance = io("https://" + url + ":" + port, {
+	socketInstance = io((useHttps ? "https" : "http") + "://" + url + ":" + port, {
 		extraHeaders: {
 			authorization: `bearer ${serverData.jwt}`,
 		},

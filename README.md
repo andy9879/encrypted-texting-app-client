@@ -7,7 +7,7 @@ https://www.npmjs.com/package/vue-advanced-chat
 ## Environment Variables
 
 ```
-ignoreCertificate
+useHttps=false
 localData
 NoEncryptData
 ```
