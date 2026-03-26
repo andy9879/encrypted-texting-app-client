@@ -11,7 +11,7 @@ import { useClientDataStore } from "@/stores/clientData";
 let clientData = useClientDataStore();
 
 import { socket, socketInit, socketGlobalListeners } from "@/scripts/socket";
-import * as serverApi from "@/scripts/serverApi";
+import * as serverApi from "@/scripts/apis/serverApi";
 
 import {
 	createKeyPair,

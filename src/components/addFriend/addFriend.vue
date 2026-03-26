@@ -4,7 +4,7 @@ import searchInput from "@/components/searchInput/searchInput.vue";
 import { socket, socketGlobalListeners } from "@/scripts/socket";
 
 import { useServerDataStore } from "@/stores/serverData";
-import { findUser } from "@/scripts/serverApi";
+import { findUser } from "@/scripts/apis/serverApi";
 
 let serverData = useServerDataStore();
 

@@ -4,10 +4,10 @@ import scrypt from "scrypt-js";
 import { xchacha20poly1305 } from "@noble/ciphers/chacha.js";
 import { randomBytes } from "@noble/ciphers/utils.js";
 
-import { addKeyBundle } from "./serverApi";
+import { addKeyBundle } from "./apis/serverApi";
 import { useClientDataStore } from "@/stores/clientData";
 import { v4 as uuid } from "uuid";
-import { requestPreKeyBundle as requestPreKeyBundleReq } from "@/scripts/serverApi.js";
+import { requestPreKeyBundle as requestPreKeyBundleReq } from "@/scripts/apis/serverApi.js";
 
 export async function createKeyPair() {
 	//TODO Check on deprecated function

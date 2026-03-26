@@ -4,7 +4,7 @@ import { useClientDataStore } from "@/stores/clientData";
 
 import { useServerDataStore } from "@/stores/serverData";
 
-import { url, port } from "@/scripts/serverApi";
+import { url, port } from "@/scripts/apis/serverApi";
 
 import {
 	getSharedSecret,
@@ -33,7 +33,7 @@ function socketGlobalListeners() {
 		for (let type in req) {
 			for (let request of req[type]) {
 				request.profilePicture = await serverData.otherUserProfilePicture(
-					request.username
+					request.username,
 				);
 			}
 		}
@@ -52,7 +52,7 @@ function socketGlobalListeners() {
 		friends.forEach((friend) => {
 			if (
 				clientData.data.friends.findIndex(
-					(clientFriend) => clientFriend.username == friend.username
+					(clientFriend) => clientFriend.username == friend.username,
 				) < 0
 			) {
 				clientData.data.friends.push({
@@ -75,7 +75,7 @@ function socketGlobalListeners() {
 
 		socket.emit(
 			"receivedFriendUpdate",
-			friends.map((friend) => friend.id)
+			friends.map((friend) => friend.id),
 		);
 
 		console.log("Updated Friends");
@@ -118,7 +118,7 @@ function socketGlobalListeners() {
 				sharedSecretArr.reduce((newSecret, secret) => {
 					return newSecret + secret;
 				}),
-				oK.id
+				oK.id,
 			);
 
 			incoming.decryptedMessageIds.push(message.id);

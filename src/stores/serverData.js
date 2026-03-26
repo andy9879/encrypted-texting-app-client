@@ -1,6 +1,6 @@
 // stores/counter.js
 import { defineStore } from "pinia";
-import { getUserProfilePic } from "@/scripts/serverApi";
+import { getUserProfilePic } from "@/scripts/apis/serverApi";
 import getStream from "get-stream";
 
 import { useClientDataStore } from "./clientData";

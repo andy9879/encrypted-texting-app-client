@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 import { useClientDataStore } from "@/stores/clientData";
 
 import chatInterface from "@/components/chatInterface/chatInterface.vue";
-import { requestPreKeyBundle } from "@/scripts/serverApi.js";
+import { requestPreKeyBundle } from "@/scripts/apis/serverApi.js";
 import {
 	getSharedSecret,
 	verifySig,

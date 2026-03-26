@@ -14,5 +14,6 @@ NoEncryptData
 
 ## cordova commands
 
+- `cordova prepare`
 - `cordova platform add electron`
 - `cordova platform add android`

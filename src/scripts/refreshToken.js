@@ -1,5 +1,5 @@
 import { useServerDataStore } from "@/stores/serverData";
-import { refreshToken as refreshTokenReq } from "@/scripts/serverApi";
+import { refreshToken as refreshTokenReq } from "@/scripts/apis/serverApi";
 import { refreshTokenHeader } from "@/scripts/socket";
 import { checkPreKeyBundles } from "@/scripts/manageKeys";
 
