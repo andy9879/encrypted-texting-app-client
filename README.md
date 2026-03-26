@@ -4,8 +4,15 @@ openssl req -nodes -new -x509 -keyout client.key -out client.cert
 
 https://www.npmjs.com/package/vue-advanced-chat
 
-Environment Variables
+## Environment Variables
 
+```
 ignoreCertificate
 localData
 NoEncryptData
+```
+
+## cordova commands
+
+- `cordova platform add electron`
+- `cordova platform add android`
