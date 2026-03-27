@@ -18,6 +18,7 @@ import profileInfo from "@/components/profileInfo/profileInfo.vue";
 import chatFriendsList from "@/components/chatFriendsList/chatFriendsList.vue";
 import { sanitize } from "@/scripts/sanitize";
 import chatChannelList from "@/components/chatChannelList/chatChannelList.vue";
+import addServer from "@/components/addServer/addServer.vue";
 
 let clientData = useClientDataStore();
 
@@ -179,7 +180,7 @@ const outgoingMessages = computed(() => {
 								<div class="serverIcon">
 									<img class="" src="@/assets/testIcon5.png" />
 								</div>
-								<div class="serverIcon">
+								<div class="serverIcon" v-b-modal.addServer>
 									<b-icon
 										icon="plus"
 										scale="3"
@@ -214,6 +215,17 @@ const outgoingMessages = computed(() => {
 					style="width: 100%; height: 100%"
 				></chat-interface>
 			</div>
+		</div>
+
+		<div>
+			<b-modal
+				@ok="null"
+				id="addServer"
+				size="lg"
+				title="Add Server"
+			>
+				<addServer></addServer>
+			</b-modal>
 		</div>
 	</div>
 </template>
