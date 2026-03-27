@@ -1,92 +1,92 @@
 <script setup>
-import { ref, computed, watch } from "vue";
-import { v4 as uuid } from "uuid";
+import { ref, computed, watch } from 'vue'
+import { v4 as uuid } from 'uuid'
 
-import { useClientDataStore } from "@/stores/clientData";
+import { useClientDataStore } from '@/stores/clientData'
 
-import chatInterface from "@/components/chatInterface/chatInterface.vue";
-import { requestPreKeyBundle } from "@/scripts/serverApi.js";
+import chatInterface from '@/components/chatInterface/chatInterface.vue'
+import { requestPreKeyBundle } from '@/scripts/serverApi.js'
 import {
 	getSharedSecret,
 	verifySig,
 	createKeyPair,
 	hkdf,
-	encrypt,
-} from "@/scripts/manageKeys.js";
-import { socket } from "@/scripts/socket";
-import profileInfo from "@/components/profileInfo/profileInfo.vue";
-import chatFriendsList from "@/components/chatFriendsList/chatFriendsList.vue";
-import { sanitize } from "@/scripts/sanitize";
-import chatChannelList from "@/components/chatChannelList/chatChannelList.vue";
-import addServer from "@/components/addServer/addServer.vue";
+	encrypt
+} from '@/scripts/manageKeys.js'
+import { socket } from '@/scripts/socket'
+import profileInfo from '@/components/profileInfo/profileInfo.vue'
+import chatFriendsList from '@/components/chatFriendsList/chatFriendsList.vue'
+import { sanitize } from '@/scripts/sanitize'
+import chatChannelList from '@/components/chatChannelList/chatChannelList.vue'
+import addServer from '@/components/addServer/addServer.vue'
 
-let clientData = useClientDataStore();
+let clientData = useClientDataStore()
 
-let showServer = ref(true);
-let selectedFriendId = ref(null);
+let showServer = ref(true)
+let selectedFriendId = ref(null)
 
 const selectedFriend = computed(() => {
-	if (selectedFriendId.value === null) return null;
+	if (selectedFriendId.value === null) return null
 
 	let friend = clientData.data.friends.find(
-		(friend) => friend.id === selectedFriendId.value,
-	);
+		friend => friend.id === selectedFriendId.value
+	)
 
-	return friend ?? null;
-});
+	return friend ?? null
+})
 
 watch(selectedFriendId, () => {
 	let friend = clientData.data.friends.find(
-		(friend) => friend.id === selectedFriendId.value,
-	);
+		friend => friend.id === selectedFriendId.value
+	)
 
-	if (friend === undefined) return;
+	if (friend === undefined) return
 
-	friend.privetMessage.incoming.unread = 0;
+	friend.privetMessage.incoming.unread = 0
 
-	clientData.writeData();
-});
+	clientData.writeData()
+})
 
-async function send(text) {
+async function send (text) {
 	//TODO better error handling when friendId is null
-	if (!showServer || selectedFriendId === null) return;
+	if (!showServer || selectedFriendId === null) return
 
 	let friend = clientData.data.friends.find(
-		(friend) => friend.id === selectedFriendId.value,
-	);
+		friend => friend.id === selectedFriendId.value
+	)
 
-	let outgoing = friend.privetMessage.outgoing;
+	let outgoing = friend.privetMessage.outgoing
 
-	let secret = null;
+	let secret = null
 
 	//TODO add error handling when request preKey Bundle fails
-	let keyBundle = (await requestPreKeyBundle(friend.id)).bundle;
+	let keyBundle = (await requestPreKeyBundle(friend.id)).bundle
 
-	let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK);
+	let verify = await verifySig(keyBundle.sK.sig, keyBundle.sK.pub, friend.iK)
 
 	//TODO Better error handling when verify fails
-	if (!verify) return;
+	if (!verify) return
 
-	let eK = await createKeyPair();
+	let eK = await createKeyPair()
 
 	let sharedSecretArr = await Promise.all([
 		getSharedSecret(eK.priv, friend.iK),
 		getSharedSecret(clientData.data.iK.priv, keyBundle.sK.pub),
 		getSharedSecret(eK.priv, keyBundle.sK.pub),
-		getSharedSecret(eK.priv, keyBundle.oK.pub),
-	]);
+		getSharedSecret(eK.priv, keyBundle.oK.pub)
+	])
 
 	secret = await hkdf(
 		sharedSecretArr.reduce((newSecret, secret) => {
-			return newSecret + secret;
+			return newSecret + secret
 		}),
-		keyBundle.oK.id,
-	);
+		keyBundle.oK.id
+	)
 
-	let encryptedText = await encrypt(secret, text);
+	let encryptedText = await encrypt(secret, text)
 
-	let time = Date.now();
-	let messageId = uuid();
+	let time = Date.now()
+	let messageId = uuid()
 
 	let message = {
 		id: messageId,
@@ -94,61 +94,61 @@ async function send(text) {
 		eK: eK?.pub ?? null,
 		oKId: keyBundle?.oK?.id ?? null,
 		to: friend.id,
-		time,
-	};
+		time
+	}
 
 	outgoing.messages.push({
 		text: sanitize(text),
 		time,
-		id: messageId,
-	});
+		id: messageId
+	})
 
-	clientData.writeData();
+	clientData.writeData()
 
-	socket.emit("sendPrivateMessage", message);
+	socket.emit('sendPrivateMessage', message)
 }
 
-function deleteChat() {
+function deleteChat () {
 	//TODO possibly deleted the recorded of decrypted ids to
 	let friend = clientData.data.friends.find(
-		(friend) => friend.id === selectedFriendId.value,
-	);
+		friend => friend.id === selectedFriendId.value
+	)
 
-	if (friend === undefined) return;
+	if (friend === undefined) return
 
-	friend.privetMessage.incoming.messages = [];
-	friend.privetMessage.outgoing.messages = [];
+	friend.privetMessage.incoming.messages = []
+	friend.privetMessage.outgoing.messages = []
 
-	clientData.writeData();
+	clientData.writeData()
 }
 
 const incomingMessages = computed(() => {
 	if (selectedFriend.value === null) {
-		return [];
+		return []
 	}
 
-	return selectedFriend.value.privetMessage.incoming.messages.map((message) => {
+	return selectedFriend.value.privetMessage.incoming.messages.map(message => {
 		return {
 			...message,
 			userId: selectedFriend.value.id,
-			username: selectedFriend.value.username,
-		};
-	});
-});
+			username: selectedFriend.value.username
+		}
+	})
+})
 
 const outgoingMessages = computed(() => {
 	if (selectedFriend.value === null) {
-		return [];
+		return []
 	}
 
-	return selectedFriend.value.privetMessage.outgoing.messages.map((message) => {
+	return selectedFriend.value.privetMessage.outgoing.messages.map(message => {
 		return {
 			...message,
 			userId: clientData.data.id,
-			username: clientData.data.username,
-		};
-	});
-});
+			username: clientData.data.username
+		}
+	})
+})
 </script>
 
 <template>
@@ -181,10 +181,7 @@ const outgoingMessages = computed(() => {
 									<img class="" src="@/assets/testIcon5.png" />
 								</div>
 								<div class="serverIcon" v-b-modal.addServer>
-									<b-icon
-										icon="plus"
-										scale="3"
-									></b-icon>
+									<b-icon icon="plus" scale="3"></b-icon>
 								</div>
 							</div>
 						</div>
@@ -218,18 +215,14 @@ const outgoingMessages = computed(() => {
 		</div>
 
 		<div>
-			<b-modal
-				@ok="null"
-				id="addServer"
-				size="lg"
-				title="Add Server"
-			>
+			<b-modal @ok="null" id="addServer" size="lg" title="Add Server">
 				<addServer></addServer>
+				<template #modal-footer></template>
 			</b-modal>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-@import "chat.scss";
+@import 'chat.scss';
 </style>
