@@ -63,9 +63,16 @@ $resultIconSize: 50px;
         border-radius: 10px;
         width: 48px;
         height: 48px;
-        cursor: pointer;
     }
 
-    margin-bottom: 15px;
+    cursor: pointer;
 
+    display: flex;
+    width: 48px;
+    height: 48px;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+    background-color: $primary;
 }

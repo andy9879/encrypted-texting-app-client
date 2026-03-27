@@ -10,5 +10,5 @@ refreshTokenTimer();
 </template>
 
 <style>
-@import "@/assets/main.scss";
+@import "@/assets/styles/main.scss";
 </style>

@@ -165,19 +165,25 @@ const outgoingMessages = computed(() => {
 									></span>
 								</div>
 								<div class="serverIcon">
-									<img class="" width="48px" src="@/assets/testIcon.jpg" />
+									<img class="" src="@/assets/testIcon.jpg" />
 								</div>
 								<div class="serverIcon">
-									<img class="" width="48px" src="@/assets/testIcon2.jpg" />
+									<img class="" src="@/assets/testIcon2.jpg" />
 								</div>
 								<div class="serverIcon">
-									<img class="" width="48px" src="@/assets/testIcon3.png" />
+									<img class="" src="@/assets/testIcon3.png" />
 								</div>
 								<div class="serverIcon">
-									<img class="" width="48px" src="@/assets/testIcon4.jpg" />
+									<img class="" src="@/assets/testIcon4.jpg" />
 								</div>
 								<div class="serverIcon">
-									<img class="" width="48px" src="@/assets/testIcon5.png" />
+									<img class="" src="@/assets/testIcon5.png" />
+								</div>
+								<div class="serverIcon">
+									<b-icon
+										icon="plus"
+										scale="3"
+									></b-icon>
 								</div>
 							</div>
 						</div>
