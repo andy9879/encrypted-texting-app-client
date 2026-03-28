@@ -89,14 +89,3 @@ export async function findUser (username) {
 		})
 	).json()
 }
-
-export async function createServer (serverName) {
-	return await (
-		await fetch(`${createUrl()}/server/create/${serverName}`, {
-			headers: {
-				...authHeader()
-			},
-			method: 'GET'
-		})
-	).json()
-}

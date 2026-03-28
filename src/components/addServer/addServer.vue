@@ -1,13 +1,13 @@
 <script setup>
 import { ref, defineEmits } from 'vue'
-import { createServer as createServerReq } from '@/scripts/serverApi.js'
+import { socket } from '@/scripts/socket'
 
 let serverName = ref('')
 
 const emit = defineEmits(['close'])
 
 async function createServer () {
-	let res = await createServerReq(serverName.value)
+	socket.emit('createServer', serverName.value)
 	emit('close')
 }
 </script>
