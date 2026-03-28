@@ -1,91 +1,102 @@
-let serverUrl = null;
-let serverPort = null;
+let serverUrl = null
+let serverPort = null
 
-export { serverUrl as url };
-export { serverPort as port };
+export { serverUrl as url }
+export { serverPort as port }
 
-import { useServerDataStore } from "@/stores/serverData";
+import { useServerDataStore } from '@/stores/serverData'
 
-function createUrl() {
-	return `https://${serverUrl}:${serverPort}`;
+function createUrl () {
+	return `https://${serverUrl}:${serverPort}`
 }
 
-function authHeader() {
-	let serverData = useServerDataStore();
-	return { authorization: `Bearer ${serverData.jwt}` };
+function authHeader () {
+	let serverData = useServerDataStore()
+	return { authorization: `Bearer ${serverData.jwt}` }
 }
 
-export async function refreshToken() {
-	let serverData = useServerDataStore();
+export async function refreshToken () {
+	let serverData = useServerDataStore()
 
 	return await (
 		await fetch(`${createUrl()}/account/refreshJwt`, {
 			headers: {
-				"Content-Type": "application/json",
-				...authHeader(),
+				'Content-Type': 'application/json',
+				...authHeader()
 			},
 			body: JSON.stringify({
-				refreshToken: serverData.refreshToken,
+				refreshToken: serverData.refreshToken
 			}),
-			method: "POST",
+			method: 'POST'
 		})
-	).json();
+	).json()
 }
 
-export async function getUserProfilePic(username) {
-	let res = await fetch(`${createUrl()}/users/profilePicture/${username}/`);
-	return res.body;
+export async function getUserProfilePic (username) {
+	let res = await fetch(`${createUrl()}/users/profilePicture/${username}/`)
+	return res.body
 }
 
-export async function createAccount(data) {
+export async function createAccount (data) {
 	return await fetch(`${createUrl()}/account/createAccount`, {
 		headers: {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(data),
-		method: "POST",
-	});
+		method: 'POST'
+	})
 }
 
-export async function login(data) {
+export async function login (data) {
 	return await fetch(`${createUrl()}/account/login`, {
 		headers: {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(data),
-		method: "POST",
-	});
+		method: 'POST'
+	})
 }
 
-export async function addKeyBundle(bundle) {
+export async function addKeyBundle (bundle) {
 	return await fetch(`${createUrl()}/account/addKeyBundle`, {
 		headers: {
-			"Content-Type": "application/json",
-			...authHeader(),
+			'Content-Type': 'application/json',
+			...authHeader()
 		},
 		body: JSON.stringify({ bundle }),
-		method: "POST",
-	});
+		method: 'POST'
+	})
 }
 
-export async function requestPreKeyBundle(userId) {
+export async function requestPreKeyBundle (userId) {
 	return await (
 		await fetch(`${createUrl()}/users/requestPreKeyBundle/${userId}`, {
 			headers: {
-				...authHeader(),
+				...authHeader()
 			},
-			method: "GET",
+			method: 'GET'
 		})
-	).json();
+	).json()
 }
 
-export async function findUser(username) {
+export async function findUser (username) {
 	return await (
 		await fetch(`${createUrl()}/users/findUser/${username}`, {
 			headers: {
-				...authHeader(),
+				...authHeader()
 			},
-			method: "GET",
+			method: 'GET'
 		})
-	).json();
+	).json()
+}
+
+export async function createServer (serverName) {
+	return await (
+		await fetch(`${createUrl()}/server/create/${serverName}`, {
+			headers: {
+				...authHeader()
+			},
+			method: 'GET'
+		})
+	).json()
 }

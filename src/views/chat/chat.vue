@@ -24,6 +24,7 @@ let clientData = useClientDataStore()
 
 let showServer = ref(true)
 let selectedFriendId = ref(null)
+let showAddServer = ref(false)
 
 const selectedFriend = computed(() => {
 	if (selectedFriendId.value === null) return null
@@ -215,8 +216,9 @@ const outgoingMessages = computed(() => {
 		</div>
 
 		<div>
-			<b-modal @ok="null" id="addServer" size="lg" title="Add Server">
-				<addServer></addServer>
+			<b-modal v-model="showAddServer" id="addServer" size="lg" title="Add Server">
+				{{ showAddServer }}
+				<addServer @close="showAddServer = false" />
 				<template #modal-footer></template>
 			</b-modal>
 		</div>
