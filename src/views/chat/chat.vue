@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { v4 as uuid } from 'uuid'
 
 import { useClientDataStore } from '@/stores/clientData'
+import { useServerDataStore } from '@/stores/serverData'
 
 import chatInterface from '@/components/chatInterface/chatInterface.vue'
 import { requestPreKeyBundle } from '@/scripts/serverApi.js'
@@ -21,6 +22,7 @@ import chatChannelList from '@/components/chatChannelList/chatChannelList.vue'
 import addServer from '@/components/addServer/addServer.vue'
 
 let clientData = useClientDataStore()
+let serverData = useServerDataStore()
 
 let showServer = ref(true)
 let selectedFriendId = ref(null)
@@ -166,20 +168,9 @@ const outgoingMessages = computed(() => {
 										class="pi pi-users direct-message"
 									></span>
 								</div>
-								<div class="serverIcon">
+								<div class="serverIcon" v-for="server of serverData.servers">
 									<img class="" src="@/assets/testIcon.jpg" />
-								</div>
-								<div class="serverIcon">
-									<img class="" src="@/assets/testIcon2.jpg" />
-								</div>
-								<div class="serverIcon">
-									<img class="" src="@/assets/testIcon3.png" />
-								</div>
-								<div class="serverIcon">
-									<img class="" src="@/assets/testIcon4.jpg" />
-								</div>
-								<div class="serverIcon">
-									<img class="" src="@/assets/testIcon5.png" />
+									<div>{{ server.title }}</div>
 								</div>
 								<div class="serverIcon" v-b-modal.addServer>
 									<b-icon icon="plus" scale="3"></b-icon>

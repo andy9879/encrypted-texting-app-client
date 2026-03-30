@@ -138,6 +138,10 @@ function socketGlobalListeners () {
 			clientData.writeData()
 		})
 	})
+
+	socket.on('updateServer', async server => {
+		serverData.servers[server.id] = server
+	})
 }
 
 function updateAll () {

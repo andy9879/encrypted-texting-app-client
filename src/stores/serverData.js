@@ -1,35 +1,36 @@
 // stores/counter.js
-import { defineStore } from "pinia";
-import { getUserProfilePic } from "@/scripts/serverApi";
-import getStream from "get-stream";
+import { defineStore } from 'pinia'
+import { getUserProfilePic } from '@/scripts/serverApi'
+import getStream from 'get-stream'
 
-import { useClientDataStore } from "./clientData";
+import { useClientDataStore } from './clientData'
 
-export const useServerDataStore = defineStore("ServerDataStore", {
+export const useServerDataStore = defineStore('ServerDataStore', {
 	state: () => ({
-		profilePicture: "",
+		profilePicture: '',
 		friendRequests: {
 			incoming: [],
-			outgoing: [],
+			outgoing: []
 		},
 		incomingMessages: [],
 		otherUsersProfilePictures: {},
 		refreshToken: null,
 		jwt: null,
+		servers: {}
 	}),
 	actions: {
-		async otherUserProfilePicture(username) {
-			let clientData = useClientDataStore();
+		async otherUserProfilePicture (username) {
+			let clientData = useClientDataStore()
 			if (clientData.data.username === username) {
-				return this.profilePicture;
+				return this.profilePicture
 			} else if (this.otherUsersProfilePictures[username] == undefined) {
-				let stream = await getUserProfilePic(username);
-				let picture = await getStream(stream);
-				this.otherUsersProfilePictures[username] = picture;
-				return picture;
+				let stream = await getUserProfilePic(username)
+				let picture = await getStream(stream)
+				this.otherUsersProfilePictures[username] = picture
+				return picture
 			} else {
-				return this.otherUsersProfilePictures[username];
+				return this.otherUsersProfilePictures[username]
 			}
-		},
-	},
-});
+		}
+	}
+})
