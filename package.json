@@ -9,6 +9,7 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
+		"tauri": "tauri",
 		"make": "vite build && electron-forge make"
 	},
 	"author": {
@@ -44,7 +45,9 @@
 		"uuid": "^13.0.0",
 		"vue": "^3.1.0",
 		"vue-click-outside-element": "^3.1.2",
-		"vue-router": "^4.3.0"
+		"vue-router": "^4.3.0",
+		"@tauri-apps/api": "^2",
+		"@tauri-apps/plugin-opener": "^2"
 	},
 	"devDependencies": {
 		"@electron-forge/cli": "^7.3.1",
@@ -62,6 +65,7 @@
 		"electron-squirrel-startup": "^1.0.0",
 		"sass": "^1.74.1",
 		"sass-loader": "^14.1.1",
-		"vite": "^5.2.8"
+		"vite": "^5.2.8",
+		"@tauri-apps/cli": "^2"
 	}
 }
